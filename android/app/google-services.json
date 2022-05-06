@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "169731905594",
+    "firebase_url": "https://urla-balikliova-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "urla-balikliova",
+    "storage_bucket": "urla-balikliova.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169731905594:android:c4366575aa1487c3677d03",
+        "android_client_info": {
+          "package_name": "com.example.myapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "169731905594-5t8rl180biskcje0oedagrd4slqh1d0d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhUUVJnJIYXfyJAxX_sIMlx2Nep9U3bXU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "169731905594-5t8rl180biskcje0oedagrd4slqh1d0d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

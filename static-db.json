@@ -1,0 +1,21 @@
+{
+    "Cooperative_Crew":{
+        "id":{"id":123123,
+        "Customer_IDs":0,
+        "Crew_Member_IDs":123}
+    },
+    "Customer":{
+
+    },
+    "Cooperative_Crew_Member":{
+
+
+    },
+    "Sale":{
+
+    },
+    "Cooperative_Member":{
+
+    }
+    
+}
