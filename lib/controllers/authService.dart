@@ -6,6 +6,7 @@ import 'package:myapp/models/user.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final ref = FirebaseDatabase.instance.ref();
 
   GeneralUser _userFromFirebaseUser(User user) {
     return GeneralUser(uid: user.uid);
@@ -50,17 +51,17 @@ class AuthService {
         message = "Address is not in the range. Try registration again";
       }
       else{
-        UserCredential cred = await _auth.signInWithEmailAndPassword(email: email+"@abc.com", password: password);
-        models.GeneralUserData _user = models.GeneralUserData(
-          username: username,
+        UserCredential cred = await _auth.createUserWithEmailAndPassword(email: email+"@abc.com", password: password);
+        Customer _user = Customer(
+          username: email,
           uid: cred.user!.uid,
-          photoUrl: photoUrl,
-          email: email,
-          bio: bio,
-          followers: [],
-          following: [],
+          name: name,
+          password: password,
+          surname: surname,
+          address: address,
+          phoneNumber: phone_number
         );
-
+        // add user to database will be implemented
 
       }
     } catch(err){
@@ -69,6 +70,29 @@ class AuthService {
 
     return message;
   }
+
+   Future<String> login({
+    required String email,
+    required String password,
+  }) async {
+    String res = "Some error Occurred";
+    try {
+      if (email.isNotEmpty || password.isNotEmpty) {
+        // logging in user with email and password
+        await _auth.signInWithEmailAndPassword(
+          email: email+"@abc.com",
+          password: password,
+        );
+        res = "success";
+      } else {
+        res = "Please enter all the fields";
+      }
+    } catch (err) {
+      return err.toString();
+    }
+    return res;
+  }
+
 
   Future signOut() async {
     try {
@@ -79,29 +103,6 @@ class AuthService {
     }
   }
 
-  Future registerWithEmailAndPassword(String email, String password) async {
-    try {
-      UserCredential cred = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-
-      return [cred, _userFromFirebaseUser(cred)];
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
-
-  Future realRegister(String email, String password, String displayName) async {
-    var val = await registerWithEmailAndPassword(email, password);
-    if (val != null) {
-      DataBaseConnection.setUser(val[0].uid, email, displayName);
-      print("buraaassıı hoştur");
-      print(val[0].displayName);
-      DataBaseConnection.setUserDisplayName(val[0].uid, displayName);
-      return val[1];
-    } else {
-      return val;
-    }
-  }
+  
 }
 
