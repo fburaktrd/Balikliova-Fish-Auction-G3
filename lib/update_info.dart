@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:myapp/models/database.dart';
 
 
 class Screen extends StatelessWidget {
@@ -262,13 +263,21 @@ class _InformationScreenState extends State<InformationScreen> {
   }
 
   bool checkUsernameExists(String newUsername) {
-    //username sistemde daha önceden var mı kontrol eder.
-    return false; //returns false if user doesn't exist
+    if(newUsername is in ref){//If username is in ref instance of database return true
+      return true;
+    }
+    else(){
+      return false; //returns false if user doesn't exist
+    }
   }
 
   bool checkPhoneExists(String newPhone) {
-    //phone sistemde daha önceden var mı kontrol eder.
-    return false; //returns false if user doesn't exist
+    if(newPhone is in ref){//If phone number is in ref instance of database return true
+      return true;
+    }
+    else(){
+      return false; //returns false if user doesn't exist
+    }
   }
 
   List<String> getAddresses() {
