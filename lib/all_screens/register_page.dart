@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -8,11 +9,18 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final fullName = TextEditingController();
+  final username = TextEditingController();
+  final password = TextEditingController();
+  final address = TextEditingController();
+  final phoneNumber = TextEditingController();
+  final error = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Padding(
+         const Padding(
           padding: EdgeInsets.only(top: 10),
           child: Center(
             child: Icon(
@@ -21,38 +29,44 @@ class _SignUpState extends State<SignUp> {
             ),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.only(left: 50, right: 50),
+         Padding(
+          padding: const EdgeInsets.only(left: 50, right: 50),
           child: TextField(
-            decoration: InputDecoration(
+            
+            controller: fullName,
+            decoration: const InputDecoration(
                 border: OutlineInputBorder(), labelText: "Full Name"),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.only(top: 10, left: 50, right: 50),
+         Padding(
+          padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
           child: TextField(
-            decoration: InputDecoration(
+            controller:  username,
+            decoration: const InputDecoration(
                 border: OutlineInputBorder(), labelText: "User Name"),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.only(top: 10, left: 50, right: 50),
+         Padding(
+          padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
           child: TextField(
-            decoration: InputDecoration(
+            controller: address,
+            decoration: const InputDecoration(
                 border: OutlineInputBorder(), labelText: "Address"),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.only(top: 10, left: 50, right: 50),
+         Padding(
+          padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
           child: TextField(
-            decoration: InputDecoration(
+            controller: phoneNumber,
+            decoration: const InputDecoration(
                 border: OutlineInputBorder(), labelText: "Phone Number"),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.only(top: 10, left: 50, right: 50, bottom: 25),
+         Padding(
+          padding: const EdgeInsets.only(top: 10, left: 50, right: 50, bottom: 25),
           child: TextField(
-            decoration: InputDecoration(
+            controller: password,
+            decoration: const InputDecoration(
                 border: OutlineInputBorder(), labelText: "Password"),
           ),
         ),
@@ -61,9 +75,21 @@ class _SignUpState extends State<SignUp> {
             "Continue",
             style: TextStyle(fontSize: 20),
           ),
-          onPressed: () {},
+          onPressed: () {
+            signIn(context, fullName,password,phoneNumber,address,username);
+          },
         ),
       ],
     );
   }
+}
+
+Future signIn(context, fullName,password,phoneNumber,address,username) async {
+  showDialog(
+      context: context,
+      builder: (contex) {
+        return AlertDialog(
+          content: Text("${fullName.text} ${phoneNumber.text} ${username.text} ${address.text} ${password.text}")
+        );
+      });
 }
