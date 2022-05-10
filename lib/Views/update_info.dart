@@ -1,27 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-
-
-class Screen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: InformationScreen(),
-          ),
-        ),
-      ),
-      title: 'Online Fish Auction',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-    );
-  }
-}
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class DeliveryOption {
   String deliveryAddress;
@@ -30,6 +8,8 @@ class DeliveryOption {
 }
 
 class InformationScreen extends StatefulWidget {
+  const InformationScreen({Key? key}) : super(key: key);
+
   @override
   State<InformationScreen> createState() => _InformationScreenState();
 }
@@ -65,170 +45,180 @@ class _InformationScreenState extends State<InformationScreen> {
     } else {
       visibleDeleteAddress = true;
     }
-    return Form(
-      child: Column(
-        children: [
-          SizedBox(
-            height: 6,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "Name: ${getName()}",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 23.0,
-                ),
-              ),
-              ElevatedButton.icon(
-                onPressed: () {
-                  setState(() {
-                    updateNameAlertDialog(context);
-                  });
-                },
-                icon: Icon(Icons.edit),
-                label: Text("Edit"),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "Username: ${getUsername()}",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 23.0,
-                ),
-              ),
-              ElevatedButton.icon(
-                onPressed: () {
-                  setState(() {
-                    updateUsernameAlertDialog(context);
-                  });
-                },
-                icon: Icon(Icons.edit),
-                label: Text("Edit"),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "Phone: ${getPhoneNumber()}",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 23.0,
-                ),
-              ),
-              ElevatedButton.icon(
-                onPressed: () {
-                  setState(() {
-                    //updatePhoneAlertDialog(context);
-                  });
-                },
-                icon: Icon(Icons.edit),
-                label: Text("Edit"),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () {
-                  setState(() {
-                    updatePasswordAlertDialog(context);
-                  });
-                },
-                icon: Icon(Icons.lock_rounded),
-                label: Text("Update Password"),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                "Delivery Options",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.underline,
-                  decorationThickness: 1.8,
-                  fontSize: 20.0,
-                ),
-              ),
-              Visibility(
-                visible: visibleAddAddress,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      addNewAddressAlertDialog(context);
-                    });
-                  },
-                  icon: Icon(Icons.add_location_alt),
-                  label: Text("Add new address"),
-                ),
-              ),
-            ],
-          ),
-          Container(
-            child: Column(
-              children: getDeliveryOptions()
-                  .map(
-                    (data) => RadioListTile(
-                      title: Text("${data.deliveryAddress}"),
-                      groupValue: id,
-                      value: data.index,
-                      onChanged: (val) {
-                        setState(
-                          () {
-                            id = data.index;
+    return MaterialApp(
+      home: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            child: Form(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 6,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Name: ${getName()}",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 23.0,
+                        ),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            updateNameAlertDialog(context);
+                          });
+                        },
+                        icon: Icon(Icons.edit),
+                        label: Text("Edit"),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Username: ${getUsername()}",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 23.0,
+                        ),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            updateUsernameAlertDialog(context);
+                          });
+                        },
+                        icon: Icon(Icons.edit),
+                        label: Text("Edit"),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Phone: ${getPhoneNumber()}",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 23.0,
+                        ),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            updatePhoneAlertDialog(context);
+                          });
+                        },
+                        icon: Icon(Icons.edit),
+                        label: Text("Edit"),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            updatePasswordAlertDialog(context);
+                          });
+                        },
+                        icon: Icon(Icons.lock_rounded),
+                        label: Text("Update Password"),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Delivery Options",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                          decorationThickness: 1.8,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                      Visibility(
+                        visible: visibleAddAddress,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              addNewAddressAlertDialog(context);
+                            });
                           },
-                        );
-                      },
+                          icon: Icon(Icons.add_location_alt),
+                          label: Text("Add new address"),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    child: Column(
+                      children: getDeliveryOptions()
+                          .map(
+                            (data) => RadioListTile(
+                              title: Text("${data.deliveryAddress}"),
+                              groupValue: id,
+                              value: data.index,
+                              onChanged: (val) {
+                                setState(
+                                  () {
+                                    id = data.index;
+                                  },
+                                );
+                              },
+                            ),
+                          )
+                          .toList(),
                     ),
-                  )
-                  .toList(),
+                  ),
+                  Visibility(
+                    visible: visibleDeleteAddress,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          deleteChosenOption(id);
+                        });
+                      },
+                      icon: Icon(Icons.delete_rounded),
+                      label: Text("Delete chosen option"),
+                    ),
+                  ),
+                  Visibility(
+                    visible: visibleDeleteAddress,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          setChosenAddress(id);
+                          id = 0;
+                        });
+                      },
+                      icon: Icon(Icons.save),
+                      label: Text("Save chosen as delivery option"),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-          Visibility(
-            visible: visibleDeleteAddress,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                setState(() {
-                  deleteChosenOption(id);
-                });
-              },
-              icon: Icon(Icons.delete_rounded),
-              label: Text("Delete chosen option"),
-            ),
-          ),
-          Visibility(
-            visible: visibleDeleteAddress,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                setState(() {
-                  setChosenAddress(id);
-                  id = 0;
-                });
-              },
-              icon: Icon(Icons.save),
-              label: Text("Save chosen as delivery option"),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -286,56 +276,56 @@ class _InformationScreenState extends State<InformationScreen> {
     return deliveryOptions;
   }
 
-  // void updatePhoneAlertDialog(BuildContext context) {
-  //   PhoneNumber TRphoneCode = PhoneNumber(isoCode: 'TR');
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: new Text("Update Phone"),
-  //         content: InternationalPhoneNumberInput(
-  //           inputDecoration: InputDecoration(
-  //             hintText: "5xx xxx xx xx",
-  //           ),
-  //           onInputChanged: (PhoneNumber number) {},
-  //           onInputValidated: (bool value) {},
-  //           maxLength: 13,
-  //           autoValidateMode: AutovalidateMode.disabled,
-  //           initialValue: TRphoneCode,
-  //           formatInput: true,
-  //           keyboardType:
-  //               TextInputType.numberWithOptions(signed: true, decimal: true),
-  //           inputBorder: OutlineInputBorder(),
-  //           onSaved: (PhoneNumber number) {},
-  //           textFieldController: _phone,
-  //         ),
-  //         actions: <Widget>[
-  //           new ElevatedButton.icon(
-  //             icon: Icon(Icons.cancel),
-  //             label: Text("Cancel"),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //           new ElevatedButton.icon(
-  //             icon: Icon(Icons.save),
-  //             label: Text("Save"),
-  //             onPressed: () {
-  //               if (checkPhone(context, _phone.text)) {
-  //                 setPhoneNumber(_phone.text);
-  //                 Navigator.of(context).pop();
-  //                 displaySuccessMessage(
-  //                     context, "Phone number succesfully updated.");
-  //               }
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   ).then((_) {
-  //     setState(() {});
-  //   });
-  // }
+  void updatePhoneAlertDialog(BuildContext context) {
+    PhoneNumber TRphoneCode = PhoneNumber(isoCode: 'TR');
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Update Phone"),
+          content: InternationalPhoneNumberInput(
+            inputDecoration: InputDecoration(
+              hintText: "5xx xxx xx xx",
+            ),
+            onInputChanged: (PhoneNumber number) {},
+            onInputValidated: (bool value) {},
+            maxLength: 13,
+            autoValidateMode: AutovalidateMode.disabled,
+            initialValue: TRphoneCode,
+            formatInput: true,
+            keyboardType:
+                TextInputType.numberWithOptions(signed: true, decimal: true),
+            inputBorder: OutlineInputBorder(),
+            onSaved: (PhoneNumber number) {},
+            textFieldController: _phone,
+          ),
+          actions: <Widget>[
+            new ElevatedButton.icon(
+              icon: Icon(Icons.cancel),
+              label: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new ElevatedButton.icon(
+              icon: Icon(Icons.save),
+              label: Text("Save"),
+              onPressed: () {
+                if (checkPhone(context, _phone.text)) {
+                  setPhoneNumber(_phone.text);
+                  Navigator.of(context).pop();
+                  displaySuccessMessage(
+                      context, "Phone number succesfully updated.");
+                }
+              },
+            ),
+          ],
+        );
+      },
+    ).then((_) {
+      setState(() {});
+    });
+  }
 
   void updatePasswordAlertDialog(BuildContext context) {
     showDialog(
