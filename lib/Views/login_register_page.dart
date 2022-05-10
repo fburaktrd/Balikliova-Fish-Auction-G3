@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/all_screens/login_page.dart';
-import 'package:myapp/all_screens/register_page.dart';
+import 'package:myapp/Views/login_page.dart';
+import 'package:myapp/Views/register_page.dart';
 
 
 class MainPage extends StatefulWidget {

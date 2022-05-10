@@ -1,20 +1,12 @@
-class GeneralUser {
+class GeneralUser{
   final String uid;
-  
-  GeneralUser({ required this.uid });
+  String? name;
+  String? username;
+  String? phoneNumber;
 
-}
-
-class GeneralUserData{
-  final String uid;
-  String name;
-  String username;
-  String password;
-  String phoneNumber;
-
-  GeneralUserData({ required this.uid,
-                    required this.name,
-                    required this.username, 
-                    required this.password, 
-                    required this.phoneNumber});
+  GeneralUser( {required this.uid, 
+  required this.username,
+  this.name,
+  this.phoneNumber,
+  });
 }

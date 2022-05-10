@@ -1,5 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/controllers/authService.dart';
+import 'package:myapp/models/customer.dart';
+
+bool checkAddress(String address) {
+  List<String> acceptedAdresses = <String>[
+    "MORDOĞAN",
+    "BALIKLIOVA",
+    "URLA",
+    "ILDIR"
+  ];
+
+  bool found = false;
+  final splitted = address.split(" ");
+
+  for (var i = 0; i < splitted.length; i++) {
+    if (acceptedAdresses.contains(splitted[i].toUpperCase())) {
+      found = true;
+    }
+  }
+  return found;
+}
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -77,25 +97,52 @@ class _SignUpState extends State<SignUp> {
             style: TextStyle(fontSize: 20),
           ),
           onPressed: () async {
-            String res = await _auth.signUp(
-                password: password.text,
-                email: username.text,
-                name: fullName.text,
-                address: address.text,
-                phoneNumber: phoneNumber.text);
+            //Address checking
+            bool found = checkAddress(address.text);
+            //Address checking
 
-              showDialog(
-              context: context,
-              builder: (contex) {
-                return AlertDialog(
-                  content: Text(res),
-                );
-              });
+            if (password.text.isEmpty ||
+                username.text.isEmpty ||
+                fullName.text.isEmpty ||
+                address.text.isEmpty ||
+                phoneNumber.text.isEmpty) {
+              showMessage(context, "Please fill the all input boxes.");
+            } else if (found) {
+              var customer = await _auth.signUp(
+                  password: password.text,
+                  email: username.text,
+                  name: fullName.text,
+                  address: address.text,
+                  phoneNumber: phoneNumber.text);
+
+              if (customer != null) {
+                showMessage(context,
+                    "You have successfully registered. Welcome ${username.text} !");
+              } else {
+                // server exception
+
+                showMessage(
+                    context, "Something went wrong. Please try again later.");
+              }
+            } else {
+              showMessage(context,
+                  "Your address is not in the range.(Addresses that are in the range: Urla,Balıklıova,Mordoğan,Ildır");
+            }
           },
         ),
       ],
     );
   }
+}
+
+void showMessage(contex, String message) {
+  showDialog(
+      context: contex,
+      builder: (contex) {
+        return AlertDialog(
+          content: Text(message),
+        );
+      });
 }
 
 Future signIn(

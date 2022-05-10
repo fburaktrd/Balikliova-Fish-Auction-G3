@@ -4,72 +4,51 @@ import 'package:myapp/models/customer.dart';
 import 'package:myapp/models/user.dart';
 
 class AuthService {
-  
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final ref = FirebaseDatabase.instance.ref();
 
-  GeneralUser _userFromFirebaseUser(User user) {
-    return GeneralUser(uid: user.uid);
+  GeneralUser _getUser(User? user) {
+    return GeneralUser(uid: user!.uid, username: user.email!.split("@gmail.com")[0]);
   }
 
-  Future<String> signUp(
+  GeneralUser _userFromFirebaseUser(User user) {
+    return GeneralUser(uid: user.uid, username: user.displayName);
+  }
+
+  Stream<GeneralUser?> get onAuthStateChanged =>
+      _auth.authStateChanges().map(_getUser);
+
+  Future<dynamic> signUp(
       {required String password,
       required String
           email, //aslında username fakat flutter usernamele kayıt yapmıyor
       required String name, //usernameden sonra @abc.com eklenecek
       required String address,
       required String phoneNumber}) async {
-    String message = "Cannot register at the moment please try again later";
-
-    List<String> acceptedAdresses = <String>[
-      "Mordoğan",
-      "Balıklıova",
-      "Urla",
-      "Ildır"
-    ];
-
-    bool found = false;
-    final splitted = address.split(" ");
-
-    for (var i = 0; i < splitted.length; i++) {
-      if (acceptedAdresses.contains(splitted[i])) {
-        found = true;
-      }
-    }
-
     try {
-      if (password.isEmpty ||
-          email.isEmpty ||
-          name.isEmpty ||
-          address.isEmpty ||
-          phoneNumber.isEmpty) {
-        message = "Please fill all input boxes";
-      } else if (!found) {
-        message = "Address is not in the range. Try registration again";
-      } else {
-        UserCredential cred = await _auth.createUserWithEmailAndPassword(
-            email: email + "@gmail.com", password: password);
-        Customer _user = Customer(
-            username: email,
-            uid: cred.user!.uid,
-            name: name,
-            password: password,
-            address: address,
-            phoneNumber: phoneNumber);
-        //setting to the database the values
-        ref
-            .child("Customer")
-            .child(_user.uid)
-            .set({"username": _user.username, "uid": _user.uid, "phoneNumber":phoneNumber,"name":name,"address":address});
-        ref.child("UserNames").child(_user.uid).set(_user.username);
-        // add user to database will be implemented
-        message = "You have successfully registered ${_user.name}!";
-      }
-    } catch (err) {
-      return err.toString();
-    }
+      UserCredential cred = await _auth.createUserWithEmailAndPassword(
+          email: email + "@gmail.com", password: password);
 
-    return message;
+      GeneralUser _user = GeneralUser(
+          username: email,
+          uid: cred.user!.uid,
+          name: name,
+          phoneNumber: phoneNumber);
+
+      //setting to the database the values
+      ref.child("Customer").child(_user.uid).set({
+        "username": _user.username,
+        "uid": _user.uid,
+        "phoneNumber": phoneNumber,
+        "name": name,
+        "address": address
+      });
+      ref.child("UserNames").child(_user.uid).set(_user.username);
+      // add user to database will be implemented
+      return _user;
+    } catch (err) {
+      return null;
+    }
   }
 
   Future<String> login({
