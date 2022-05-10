@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Views/login_register_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:myapp/controllers/authService.dart';
+import 'package:myapp/models/user.dart';
+import 'package:myapp/widgets/auth_widget.dart';
+import 'package:myapp/widgets/auth_widget_builder.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
-runApp(const MyApp());
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -17,9 +22,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MainPage(),
+    return MultiProvider(
+      providers: [
+        Provider(
+          create: (_) => AuthService(),
+        )
+      ],
+      child: AuthWidgetBuilder(
+        onPageBuilder: (context, AsyncSnapshot<GeneralUser?> snapShot) =>  MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: AuthWidget(snapshot: snapShot),
+        ),
+      ),
     );
   }
 }

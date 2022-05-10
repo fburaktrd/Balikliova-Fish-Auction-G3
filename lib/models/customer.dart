@@ -5,7 +5,6 @@ class Customer extends GeneralUser {
   Customer({required String uid, 
             required String name, 
             required String username, 
-            required String password, 
             required String phoneNumber,
             required String address }) 
             : _address = address,

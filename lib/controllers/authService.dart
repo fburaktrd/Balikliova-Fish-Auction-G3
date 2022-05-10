@@ -29,9 +29,10 @@ class AuthService {
       UserCredential cred = await _auth.createUserWithEmailAndPassword(
           email: email + "@gmail.com", password: password);
 
-      GeneralUser _user = GeneralUser(
+      Customer _user = Customer(
           username: email,
           uid: cred.user!.uid,
+          address: address,
           name: name,
           phoneNumber: phoneNumber);
 

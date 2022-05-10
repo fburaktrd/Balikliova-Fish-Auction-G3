@@ -108,7 +108,7 @@ class _SignUpState extends State<SignUp> {
                 phoneNumber.text.isEmpty) {
               showMessage(context, "Please fill the all input boxes.");
             } else if (found) {
-              var customer = await _auth.signUp(
+              var  customer = await _auth.signUp(
                   password: password.text,
                   email: username.text,
                   name: fullName.text,
