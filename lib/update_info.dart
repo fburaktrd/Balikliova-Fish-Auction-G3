@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+//import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 
 class Screen extends StatelessWidget {
@@ -129,7 +129,7 @@ class _InformationScreenState extends State<InformationScreen> {
               ElevatedButton.icon(
                 onPressed: () {
                   setState(() {
-                    updatePhoneAlertDialog(context);
+                    //updatePhoneAlertDialog(context);
                   });
                 },
                 icon: Icon(Icons.edit),
@@ -286,56 +286,56 @@ class _InformationScreenState extends State<InformationScreen> {
     return deliveryOptions;
   }
 
-  void updatePhoneAlertDialog(BuildContext context) {
-    PhoneNumber TRphoneCode = PhoneNumber(isoCode: 'TR');
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: new Text("Update Phone"),
-          content: InternationalPhoneNumberInput(
-            inputDecoration: InputDecoration(
-              hintText: "5xx xxx xx xx",
-            ),
-            onInputChanged: (PhoneNumber number) {},
-            onInputValidated: (bool value) {},
-            maxLength: 13,
-            autoValidateMode: AutovalidateMode.disabled,
-            initialValue: TRphoneCode,
-            formatInput: true,
-            keyboardType:
-                TextInputType.numberWithOptions(signed: true, decimal: true),
-            inputBorder: OutlineInputBorder(),
-            onSaved: (PhoneNumber number) {},
-            textFieldController: _phone,
-          ),
-          actions: <Widget>[
-            new ElevatedButton.icon(
-              icon: Icon(Icons.cancel),
-              label: Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            new ElevatedButton.icon(
-              icon: Icon(Icons.save),
-              label: Text("Save"),
-              onPressed: () {
-                if (checkPhone(context, _phone.text)) {
-                  setPhoneNumber(_phone.text);
-                  Navigator.of(context).pop();
-                  displaySuccessMessage(
-                      context, "Phone number succesfully updated.");
-                }
-              },
-            ),
-          ],
-        );
-      },
-    ).then((_) {
-      setState(() {});
-    });
-  }
+  // void updatePhoneAlertDialog(BuildContext context) {
+  //   PhoneNumber TRphoneCode = PhoneNumber(isoCode: 'TR');
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: new Text("Update Phone"),
+  //         content: InternationalPhoneNumberInput(
+  //           inputDecoration: InputDecoration(
+  //             hintText: "5xx xxx xx xx",
+  //           ),
+  //           onInputChanged: (PhoneNumber number) {},
+  //           onInputValidated: (bool value) {},
+  //           maxLength: 13,
+  //           autoValidateMode: AutovalidateMode.disabled,
+  //           initialValue: TRphoneCode,
+  //           formatInput: true,
+  //           keyboardType:
+  //               TextInputType.numberWithOptions(signed: true, decimal: true),
+  //           inputBorder: OutlineInputBorder(),
+  //           onSaved: (PhoneNumber number) {},
+  //           textFieldController: _phone,
+  //         ),
+  //         actions: <Widget>[
+  //           new ElevatedButton.icon(
+  //             icon: Icon(Icons.cancel),
+  //             label: Text("Cancel"),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //           new ElevatedButton.icon(
+  //             icon: Icon(Icons.save),
+  //             label: Text("Save"),
+  //             onPressed: () {
+  //               if (checkPhone(context, _phone.text)) {
+  //                 setPhoneNumber(_phone.text);
+  //                 Navigator.of(context).pop();
+  //                 displaySuccessMessage(
+  //                     context, "Phone number succesfully updated.");
+  //               }
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   ).then((_) {
+  //     setState(() {});
+  //   });
+  // }
 
   void updatePasswordAlertDialog(BuildContext context) {
     showDialog(

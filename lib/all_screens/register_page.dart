@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:myapp/controllers/authService.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -9,6 +9,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final AuthService _auth = AuthService();
   final fullName = TextEditingController();
   final username = TextEditingController();
   final password = TextEditingController();
@@ -20,7 +21,7 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-         const Padding(
+        const Padding(
           padding: EdgeInsets.only(top: 10),
           child: Center(
             child: Icon(
@@ -29,24 +30,23 @@ class _SignUpState extends State<SignUp> {
             ),
           ),
         ),
-         Padding(
+        Padding(
           padding: const EdgeInsets.only(left: 50, right: 50),
           child: TextField(
-            
             controller: fullName,
             decoration: const InputDecoration(
                 border: OutlineInputBorder(), labelText: "Full Name"),
           ),
         ),
-         Padding(
+        Padding(
           padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
           child: TextField(
-            controller:  username,
+            controller: username,
             decoration: const InputDecoration(
                 border: OutlineInputBorder(), labelText: "User Name"),
           ),
         ),
-         Padding(
+        Padding(
           padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
           child: TextField(
             controller: address,
@@ -54,7 +54,7 @@ class _SignUpState extends State<SignUp> {
                 border: OutlineInputBorder(), labelText: "Address"),
           ),
         ),
-         Padding(
+        Padding(
           padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
           child: TextField(
             controller: phoneNumber,
@@ -62,8 +62,9 @@ class _SignUpState extends State<SignUp> {
                 border: OutlineInputBorder(), labelText: "Phone Number"),
           ),
         ),
-         Padding(
-          padding: const EdgeInsets.only(top: 10, left: 50, right: 50, bottom: 25),
+        Padding(
+          padding:
+              const EdgeInsets.only(top: 10, left: 50, right: 50, bottom: 25),
           child: TextField(
             controller: password,
             decoration: const InputDecoration(
@@ -75,8 +76,21 @@ class _SignUpState extends State<SignUp> {
             "Continue",
             style: TextStyle(fontSize: 20),
           ),
-          onPressed: () {
-            signIn(context, fullName,password,phoneNumber,address,username);
+          onPressed: () async {
+            String res = await _auth.signUp(
+                password: password.text,
+                email: username.text,
+                name: fullName.text,
+                address: address.text,
+                phoneNumber: phoneNumber.text);
+
+              showDialog(
+              context: context,
+              builder: (contex) {
+                return AlertDialog(
+                  content: Text(res),
+                );
+              });
           },
         ),
       ],
@@ -84,12 +98,13 @@ class _SignUpState extends State<SignUp> {
   }
 }
 
-Future signIn(context, fullName,password,phoneNumber,address,username) async {
-  showDialog(
-      context: context,
-      builder: (contex) {
-        return AlertDialog(
-          content: Text("${fullName.text} ${phoneNumber.text} ${username.text} ${address.text} ${password.text}")
-        );
-      });
+Future signIn(
+    context, fullName, password, phoneNumber, address, username) async {
+  // showDialog(
+  //     context: context,
+  //     builder: (contex) {
+  //       return AlertDialog(
+  //         content: Text("${fullName.text} ${phoneNumber.text} ${username.text} ${address.text} ${password.text}")
+  //       );
+  //     });
 }
