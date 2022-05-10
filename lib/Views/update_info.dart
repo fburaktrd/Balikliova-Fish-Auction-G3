@@ -47,6 +47,7 @@ class _InformationScreenState extends State<InformationScreen> {
     }
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(title: const Text("Change Information")),
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(
