@@ -9,11 +9,11 @@ class AuthWidget extends StatelessWidget {
   const AuthWidget({Key? key, required this.snapshot}) : super(key: key);
 
   final AsyncSnapshot<GeneralUser?> snapshot;
-  //LandingPage(snapshot: snapshot)
+  //const InformationScreen()
   @override
   Widget build(BuildContext context) {
     if (snapshot.connectionState == ConnectionState.active) {
-      return snapshot.hasData ?  const InformationScreen() : const MainPage();
+      return snapshot.hasData ?  LandingPage(snapshot: snapshot) : const MainPage();
     }
     return const ErrorPage();
   }
