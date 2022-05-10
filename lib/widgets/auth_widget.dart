@@ -13,7 +13,7 @@ class AuthWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (snapshot.connectionState == ConnectionState.active) {
-      return snapshot.hasData ? const LandingPage() : const MainPage();
+      return snapshot.hasData ?  LandingPage(snapshot: snapshot) : const MainPage();
     }
     return const ErrorPage();
   }
