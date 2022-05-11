@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/controllers/LandingPageCustomerController.dart';
 import 'package:myapp/controllers/authService.dart';
+import 'package:myapp/locator.dart';
 import 'package:myapp/models/user.dart';
 import 'package:provider/provider.dart';
 
-class LandingPage extends StatelessWidget {
-  const LandingPage({Key? key, required this.snapshot}) : super(key: key);
-  final AsyncSnapshot<GeneralUser?> snapshot;
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     final _authService = Provider.of<AuthService>(context, listen: false);
+    var user = getIt<LandingPageCustomerController>().getCustomer;
     String? name;
-    if (snapshot.hasData) {
-      name = snapshot.data!.username;
+    if (user != null) {
+      name = user.username;
     } else {
       name = "";
     }
+    //getIt<LandingPageCustomerController>().getCustomer; user'ı alıyoruz.
     return Scaffold(
         appBar: AppBar(title: const Text("Home Page")),
         body: Center(

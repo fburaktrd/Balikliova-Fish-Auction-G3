@@ -7,15 +7,24 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final ref = FirebaseDatabase.instance.ref();
 
+  String role = "CUSTOMER";
+
+  Future<String?> getRole(User? user) async {
+    var res = await ref.child("Roles").child(user!.uid).get();
+    print("prev: " + role);
+    role = res.value.toString();
+    print("last: " + role);
+  }
+
   GeneralUser _getUser(User? user) {
-    return GeneralUser(uid: user!.uid, username: user.email!.split("@gmail.com")[0]);
+    print("Role: " +  role);
+    return GeneralUser(
+        uid: user!.uid,
+        username: user.email!.split("@gmail.com")[0],
+        role: role);
   }
 
-  GeneralUser _userFromFirebaseUser(User user) {
-    return GeneralUser(uid: user.uid, username: user.displayName);
-  }
-
-  Stream<GeneralUser?> get onAuthStateChanged =>
+  Stream<GeneralUser> get onAuthStateChanged =>
       _auth.authStateChanges().map(_getUser);
 
   Future<dynamic> signUp(
@@ -42,10 +51,12 @@ class AuthService {
         "uid": _user.uid,
         "phoneNumber": phoneNumber,
         "name": name,
+        "role": "CUSTOMER",
         "address": address
       });
-      ref.child("UserNames").child(_user.uid).set(_user.username);
+      ref.child("Roles").child(_user.uid).set("CUSTOMER");
       // add user to database will be implemented
+      role = "CUSTOMER";
       return _user;
     } catch (err) {
       return null;
@@ -60,10 +71,11 @@ class AuthService {
     try {
       if (email.isNotEmpty || password.isNotEmpty) {
         // logging in user with email and password
-        await _auth.signInWithEmailAndPassword(
+        var authRes = await _auth.signInWithEmailAndPassword(
           email: email + "@gmail.com",
           password: password,
         );
+        await getRole(authRes.user);
         res = "success";
       } else {
         res = "Please enter all the fields";

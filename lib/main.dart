@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Views/login_register_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:myapp/controllers/authService.dart';
+import 'package:myapp/locator.dart';
 import 'package:myapp/models/user.dart';
 import 'package:myapp/widgets/auth_widget.dart';
 import 'package:myapp/widgets/auth_widget_builder.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    setupLocators();
     return MultiProvider(
       providers: [
         Provider(
@@ -29,7 +31,8 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: AuthWidgetBuilder(
-        onPageBuilder: (context, AsyncSnapshot<GeneralUser?> snapShot) =>  MaterialApp(
+        onPageBuilder: (context, AsyncSnapshot<GeneralUser?> snapShot) =>
+            MaterialApp(
           debugShowCheckedModeBanner: false,
           home: AuthWidget(snapshot: snapShot),
         ),

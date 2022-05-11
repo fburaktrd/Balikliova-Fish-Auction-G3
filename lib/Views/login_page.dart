@@ -45,13 +45,13 @@ class _LoginState extends State<Login> {
         onPressed: () async {
           String res =
               await _auth.login(email: username.text, password: password.text);
-              showDialog(
-              context: context,
-              builder: (contex) {
-                return AlertDialog(
-                  content: Text(res),
-                );
-              });
+              // showDialog(
+              // context: context,
+              // builder: (contex) {
+              //   return AlertDialog(
+              //     content: Text(res),
+              //   );
+              // });
         },
       ),
     ]);
