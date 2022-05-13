@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Views/navBar.dart';
 import 'package:myapp/controllers/LandingPageCustomerController.dart';
 import 'package:myapp/controllers/authService.dart';
 import 'package:myapp/locator.dart';
-import 'package:myapp/models/user.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     final _authService = Provider.of<AuthService>(context, listen: false);
@@ -21,6 +21,7 @@ class HomePage extends StatelessWidget {
     //getIt<LandingPageCustomerController>().getCustomer; user'ı alıyoruz.
     return Scaffold(
         appBar: AppBar(title: const Text("Home Page")),
+        drawer: navBar(),
         body: Center(
             child: MaterialButton(
                 onPressed: () {
