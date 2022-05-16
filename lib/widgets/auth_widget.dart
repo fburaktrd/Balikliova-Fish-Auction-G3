@@ -10,42 +10,31 @@ import 'package:myapp/controllers/LandingPageCustomerController.dart';
 import 'package:myapp/models/user.dart';
 import 'package:myapp/widgets/error_page.dart';
 
-class AuthWidget extends StatefulWidget {
+class AuthWidget extends StatelessWidget {
   const AuthWidget({Key? key, required this.snapshot}) : super(key: key);
 
   final AsyncSnapshot<GeneralUser?> snapshot;
 
-  @override
-  State<AuthWidget> createState() => _AuthWidgetState();
-}
-
-class _AuthWidgetState extends State<AuthWidget> {
   //TODO -> role göre kullanıcı verisi alınıp provider ile widgetlare pass edilecek (Getit flutter)
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    
-    Future.delayed(Duration(milliseconds: 1500)).then((value) => setState(() {
-    }));
-  }
 
+  //LandingPage(snapshot: snapshot)
   @override
   Widget build(BuildContext context) {
     //print("Inside auth widget ${snapshot.data!.role}");
-    if (widget.snapshot.hasData) {
+    if (snapshot.hasData) {
       return FutureBuilder(
         builder: (context, userData) {
-          if (widget.snapshot.data!.role == "CUSTOMER") {
+          
+          if (snapshot.data!.role == "CUSTOMER") {
             //Sayfa yönlendirmeleri.... LandingPageCustomer()..
             return const HomePage();
-          } else if (widget.snapshot.data!.role == "Coop Head") {}
-          return  MainPage();
+          } else if (snapshot.data!.role == "Coop Head") {}
+          return const MainPage();
         },
-        future: getUser(widget.snapshot.data!),
+        future: getUser(snapshot.data!),
       );
     }
-    return  MainPage();
+    return const MainPage();
   }
 
   dynamic getUser(GeneralUser user) async {

@@ -4,103 +4,18 @@
         "Customer_IDs":0,
         "Crew_Member_IDs":123}
     },
-    "Cooperative_Member":{
-        "id":{"id":1,
-        "name":"Ahmet",
-        "surname":"KK",
-        "seafood_product_IDs":{"id":"id"},
-        "IBAN":"TR8789798",
-        "boat_name":"AHMEEĞT",
-        "username":"ahmt"}
-    },
     "Customer":{
-        "uid":{"uid":1,
-        "name":"Ahmet",
-        "surname":"KK",
-        "phone_number":846,
-        "adress":"URLA",
-        "username":"ahmt",
-        "password":123,
-        "seafood_product_IDs":{"id":"id"}}
+
     },
     "Cooperative_Crew_Member":{
-        "id":{"id":1,
-        "name":"Mehmet",
-        "surname":"KK",
-        "phone_number":543,
-        "username":"mhmt"
-        }
+
 
     },
-    "Cooperative_Head":{
-        "id":{"id":1,
-        "name":"Mehmet",
-        "surname":"KK",
-        "phone_number":543,
-        "username":"mhmt",
-        "auction_table_IDs":{"auction_id":1}
-        }
-
-    },
-    "Payroll":{
-        "id":{
-            "id":1,
-        "head_ID":1,
-        "cooperative_member_ID":2,
-        "payment_option":"In-Cash",
-        "price":100,
-        "date":"21/04/2022",
-        "status":"status"}
-    }
-    ,
     "Sale":{
-        "sale_id":{
-            "customer_ID":1,
-            "crew_ID":2,
-            "delivery_address":"asdasd",
-            "cooperative_member_ID":123,
-            "status":"status",
-            "cooperative_crew_ID":213213
-        }
+
     },
-    
-    "Seafood_Product":{
-        "id":{"id":1,
-        "product_name":"Balık",
-        "product_type":"fish",
-        "price":123,
-        "quantity":5}
-    },
-    "Auction":{
-        "id":{
-            "id":1,
-            "date":"21/04/2022",
-            "bid_ids":{
-                "bid_id1":123,
-                "bid_id2":1234
-            },
-            "auction_table_ID":1,
-            "status":1
-        }
-    },
-    "Bid":{
-        "id":{
-            "id":1,
-            "customer_ID":1,
-            "price":100,
-            "seafood_product_ID":1,
-            "cooperative_crew_ID":1
-        }
-    },
-    "Auction_Table":{
-        "id":{
-            "id": 1,
-            "seafood_product_IDs":{"id":1},
-            "cooperative_member_IDs":{"uid1":"1"},
-            "base_price":1,
-            "quantity":78,
-            "sold_price":0
-        }
+    "Cooperative_Member":{
+
     }
     
 }

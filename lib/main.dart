@@ -22,31 +22,32 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  //This widget is the root of your application.
+  // This widget is the root of your application.
+//   @override
+//   Widget build(BuildContext context) {
+//     setupLocators();
+//     return MultiProvider(
+//       providers: [
+//         Provider(
+//           create: (_) => AuthService(),
+//         )
+//       ],
+//       child: AuthWidgetBuilder(
+//         onPageBuilder: (context, AsyncSnapshot<GeneralUser?> snapShot) =>
+//             MaterialApp(
+//           debugShowCheckedModeBanner: false,
+//           home: AuthWidget(snapshot: snapShot),
+//         ),
+//       ),
+//     );
+//   }
+// }
   @override
   Widget build(BuildContext context) {
-    setupLocators();
-    return MultiProvider(
-      providers: [
-        Provider(
-          create: (_) => AuthService(),
-        )
-      ],
-      child: AuthWidgetBuilder(
-        onPageBuilder: (context, AsyncSnapshot<GeneralUser?> snapShot) =>
-            MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: AuthWidget(snapshot: snapShot),
-        ),
-      ),
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData.light(),
+      home: const AuctionTableScreen(),
     );
   }
-  // @override
-  // Widget build(BuildContext context) {
-  //   return MaterialApp(
-  //     title: 'Flutter Demo',
-  //     theme: ThemeData.light(),
-  //     home: const AuctionTableScreen(),
-  //   );
-  // }
 }

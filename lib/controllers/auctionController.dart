@@ -14,9 +14,9 @@ class AuctionController{
         return db.ref.child("Auctions").child(auctionID);
     }
 
-    // Auction startAuction(){
-    //     //devam edecek,tam da anlamadım
-    // }
+    Auction startAuction(){
+        //devam edecek,tam da anlamadım
+    }
 
     void deleteAuction(auctionID){
         FirebaseDatabase.instance.ref().child("Auctions").child(auctionID).remove();

@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:myapp/Views/navBar.dart';
+import 'package:myapp/main.dart';
 import "package:myapp/controllers/auctionTableController.dart";
 
 class AuctionTableScreen extends StatefulWidget {
@@ -25,7 +25,6 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
       home: Scaffold(
         appBar: AppBar(
             title: const Text("Create Auction Table"), centerTitle: true),
-        drawer: navBar(),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
