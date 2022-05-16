@@ -4,7 +4,7 @@ import 'package:myapp/models/customer.dart';
 import 'package:get_it/get_it.dart';
 
 class UserController extends GetxController {
-  Customer? _user;
+  dynamic _user;
 
   UserController();
 
