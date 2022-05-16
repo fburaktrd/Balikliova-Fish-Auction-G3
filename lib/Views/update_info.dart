@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:myapp/models/database.dart';
 
 import 'navBar.dart';
 
@@ -35,6 +36,26 @@ class _InformationScreenState extends State<InformationScreen> {
   String password = "oldPassword";
   bool visibleAddAddress = true;
   bool visibleDeleteAddress = true;
+  var user_info;
+
+  @override
+  void initState() async {
+    var role = await Database()
+        .ref
+        .child("Roles")
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+        //ROLES: CUSTOMER, COOP_HEAD, COOP_CREW, COOP_CREW_MEMBER
+    //role -> Customer -> CUSTOMER
+    user_info = await Database()
+        .ref
+        .child(role == "CUSTOMER" ? "Customer":"Cooperative_Head")
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (getDeliveryOptions().length > 4) {
