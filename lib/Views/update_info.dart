@@ -318,7 +318,7 @@ class _InformationScreenState extends State<InformationScreen> {
               onPressed: () {
                 if (checkPhone(context, _phone.text)) {
                   var user = FirebaseAuth.instance.currentUser;
-                  //user?.updatePhoneNumber(_phone.text);
+                  user?.updatePhoneNumber(_phone.text);
                   Navigator.of(context).pop();
                   displaySuccessMessage(
                       context, "Phone number succesfully updated.");

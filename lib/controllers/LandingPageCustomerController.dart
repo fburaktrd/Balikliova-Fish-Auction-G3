@@ -3,15 +3,15 @@ import 'package:get/get.dart';
 import 'package:myapp/models/customer.dart';
 import 'package:get_it/get_it.dart';
 
-class UserController extends GetxController {
-  Customer? _user;
+class LandingPageCustomerController extends GetxController {
+  Customer? _customer;
 
-  UserController();
+  LandingPageCustomerController();
 
-  fetchCust(dynamic user) {
-    _user = user;
+  fetchCust(Customer user) {
+    _customer = user;
     refresh();
   }
 
-  Customer? get getUser => _user;
+  Customer? get getCustomer => _customer;
 }
