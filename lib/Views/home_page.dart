@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Views/navBar.dart';
-import 'package:myapp/controllers/LandingPageCustomerController.dart';
+import 'package:myapp/controllers/UserController.dart';
 import 'package:myapp/controllers/authService.dart';
 import 'package:myapp/locator.dart';
 import 'package:provider/provider.dart';

@@ -13,5 +13,5 @@ class UserController extends GetxController {
     refresh();
   }
 
-  Customer? get getUser => _user;
+  dynamic get getUser => _user;
 }
