@@ -1,14 +1,18 @@
+class AuctionTable{
+  final String uid;
+  List<String>? products;
+  List<int>? basePrices;
+  List<int>? quantities;
+  List<int>? soldPrices;
+  List<String>? rowID;
 
-abstract class AuctionTable{
-
-    auctionTable({
-      required String uid,
-      required List <String> products,
-      required List <int> basePrices,
-      required List <int> quantities,
-      required List <int> soldPrices,
-      required List <String> auctionTableID,
-      required String coopMemberName,
-      required String coopMemberID});
+  AuctionTable({
+      required this.uid,
+      required this.products,
+      required this.basePrices,
+      required this.quantities,
+      required this.soldPrices,
+      required this.rowID
+      });
 
 }

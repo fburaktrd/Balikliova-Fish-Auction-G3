@@ -1,4 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:myapp/main.dart';
@@ -13,16 +12,11 @@ class AuctionTableScreen extends StatefulWidget {
 
 class _AuctionTableScreenState extends State<AuctionTableScreen> {
   late AuctionTableController controller;
-  List<int> noList = [];
-  List<String> nameList = [];
-  List<String> quantityList = [];
-  List<String> basePriceList = [];
+  Map<String,Map<String,dynamic>> auct_form = {};
 
   final _productNameController = TextEditingController();
   final _quantityController = TextEditingController();
   final _basePriceController = TextEditingController();
-
-  double _formProgress = 0;
   int rowNo = 0;
 
   @override
@@ -65,7 +59,6 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                LinearProgressIndicator(value: _formProgress),
                 const Text('Auction Table'),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -105,14 +98,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                   if (!isNameEmpty(context, _productNameController.text) &&
                       !isQuantityEmpty(context, _quantityController.text) &&
                       !isPriceEmpty(context, _basePriceController.text)) {
-                    noList.add(rowNo);
-                    rowNo++;
-                    nameList.add(_productNameController.text); //deneme için
-                    quantityList.add(_quantityController.text);
-                    basePriceList.add(_basePriceController.text);
-                    Navigator.of(context).popUntil(ModalRoute.withName('/'));
-                    printRows(noList, nameList, quantityList, basePriceList);
-                    controller.addAuctionTable();
+                        controller.addAuctionTable(auct_form);  
                   }
                 },
               ),
@@ -123,24 +109,22 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                     if (!isNameEmpty(context, _productNameController.text) &&
                         !isQuantityEmpty(context, _quantityController.text) &&
                         !isPriceEmpty(context, _basePriceController.text)) {
-                      noList.add(rowNo);
-                      rowNo++;
-                      nameList.add(_productNameController.text);
-                      quantityList.add(_quantityController.text);
-                      basePriceList.add(_basePriceController.text);
-                      addAuctionTableAlert(context);
+                          auct_form[rowNo.toString()] = {"name" : _productNameController.text};
+                          auct_form[rowNo.toString()] = {"quantity": int.parse(_quantityController.text)};
+                          auct_form[rowNo.toString()] = {"basePrice": int.parse(_basePriceController.text)};
+                          auct_form[rowNo.toString()] = {"SoldPrice": 0};
+                          _productNameController.text = "";
+                          _basePriceController.text = "";
+                          _quantityController.text = "";
+                        
                     }
                   }),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.navigate_before),
-                label: const Text("Previous"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
+            
             ],
           );
-        });
+        }).then((_) {
+      setState(() {});
+    });
   }
 
   bool isNameEmpty(BuildContext context, String productName) {
@@ -153,13 +137,5 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
 
   bool isPriceEmpty(BuildContext context, String price) {
     return price.isEmpty;
-  }
-
-  void printRows(List<int> noList, List<String> nameList,
-      List<String> quantityList, List<String> basePriceList) {
-    for (var i = 0; i < noList.length; i++) {
-      print(
-          "${noList[i]}, ${nameList[i]}, ${quantityList[i]}, ${basePriceList[i]}");
-    }
   }
 }
