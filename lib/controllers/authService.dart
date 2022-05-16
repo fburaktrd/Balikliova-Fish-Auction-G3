@@ -7,21 +7,17 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final ref = FirebaseDatabase.instance.ref();
 
-  String role = "CUSTOMER";
-
-  Future<String?> getRole(User? user) async {
+  Future setRole(User? user, GeneralUser gUser) async {
     var res = await ref.child("Roles").child(user!.uid).get();
-    print("prev: " + role);
-    role = res.value.toString();
-    print("last: " + role);
+
+    gUser.role = res.value.toString();
   }
 
   GeneralUser _getUser(User? user) {
-    print("Role: " +  role);
-    return GeneralUser(
-        uid: user!.uid,
-        username: user.email!.split("@gmail.com")[0],
-        role: role);
+    var appUser = GeneralUser(
+        uid: user!.uid, username: user.email!.split("@gmail.com")[0],role: "null");
+    setRole(user, appUser);
+    return appUser;
   }
 
   Stream<GeneralUser> get onAuthStateChanged =>
@@ -56,7 +52,7 @@ class AuthService {
       });
       ref.child("Roles").child(_user.uid).set("CUSTOMER");
       // add user to database will be implemented
-      role = "CUSTOMER";
+      //role = "CUSTOMER";
       return _user;
     } catch (err) {
       return null;
@@ -75,7 +71,7 @@ class AuthService {
           email: email + "@gmail.com",
           password: password,
         );
-        await getRole(authRes.user);
+        //await getRole(authRes.user);
         res = "success";
       } else {
         res = "Please enter all the fields";

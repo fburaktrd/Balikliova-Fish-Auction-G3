@@ -2,22 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Views/login_page.dart';
 import 'package:myapp/Views/register_page.dart';
 
-
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
-
+  MainPage({Key? key, this.isLoading = false}) : super(key: key);
+  bool? isLoading = false;
   @override
   State<MainPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<MainPage> {
   int _currentIndex = 0;
-  final List<StatefulWidget> screens = [
-    const Login(),
-    const SignUp(),
-  ];
+  List<StatefulWidget> screens = [];
 
   final appBarText = ["Login", "Sign Up"];
+  @override
+  void initState() {
+    // TODO: implement initState
+      screens = [
+      Login(widget.isLoading),
+      const SignUp(),
+    ];
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
