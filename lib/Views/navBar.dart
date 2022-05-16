@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Views/auctionTableScreen.dart';
+import 'package:myapp/Views/update_info.dart';
 
 class navBar extends StatefulWidget {
   const navBar({Key? key}) : super(key: key);
@@ -97,9 +99,7 @@ class _navBarState extends State<navBar> {
                       horizontalTitleGap: 1,
                       title: Text('Create Auction Table'),
                       onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
+                        const AuctionTableScreen();
                         Navigator.pop(context);
                       },
                     ),
@@ -112,6 +112,7 @@ class _navBarState extends State<navBar> {
                       horizontalTitleGap: 1,
                       title: Text('View Auction Tables'),
                       onTap: () {
+                        const AuctionTableScreen();
                         Navigator.pop(context);
                       },
                     ),
@@ -153,9 +154,7 @@ class _navBarState extends State<navBar> {
                       horizontalTitleGap: 1,
                       title: Text('View Auction Table'),
                       onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
+                        const AuctionTableScreen();
                         Navigator.pop(context);
                       },
                     ),
@@ -198,9 +197,7 @@ class _navBarState extends State<navBar> {
                       horizontalTitleGap: 1,
                       title: Text('Profile Settings'),
                       onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
+                        const InformationScreen();
                         Navigator.pop(context);
                       },
                     ),
