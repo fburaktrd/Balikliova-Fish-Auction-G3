@@ -8,7 +8,7 @@ GetIt getIt = GetIt.instance;
 
 //SharedPreferences sharedPreferences;
 setupLocators() {
-  getIt.registerLazySingleton(() => LandingPageCustomerController());
+  getIt.registerLazySingleton(() => UserController());
   
 }
 

@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _authService = Provider.of<AuthService>(context, listen: false);
-    var user = getIt<LandingPageCustomerController>().getCustomer;
+    var user = getIt<UserController>().getUser;
     String? name;
     if (user != null) {
       name = user.username;
