@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:myapp/controllers/authService.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
-
+  Login(this.isLoading, {Key? key}) : super(key: key);
+  bool? isLoading;
   @override
   State<Login> createState() => _LoginState();
 }
@@ -37,23 +37,24 @@ class _LoginState extends State<Login> {
               border: OutlineInputBorder(), labelText: 'Password'),
         ),
       ),
-      TextButton(
-        child: const Text(
-          "Login",
-          style: TextStyle(fontSize: 20),
-        ),
-        onPressed: () async {
-          String res =
-              await _auth.login(email: username.text, password: password.text);
-              // showDialog(
-              // context: context,
-              // builder: (contex) {
-              //   return AlertDialog(
-              //     content: Text(res),
-              //   );
-              // });
-        },
-      ),
+      widget.isLoading == false
+          ? TextButton(
+              child: const Text(
+                "Login",
+                style: TextStyle(fontSize: 20),
+              ),
+              onPressed: () async {
+                setState(() {
+                  widget.isLoading = true;
+                });
+                String res = await _auth.login(
+                    email: username.text, password: password.text);
+                
+              },
+            )
+          : CircularProgressIndicator(
+              color: Colors.red[800],
+            ),
     ]);
   }
 }

@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+
+import 'navBar.dart';
 
 class DeliveryOption {
   String deliveryAddress;
@@ -49,6 +52,7 @@ class _InformationScreenState extends State<InformationScreen> {
       home: Scaffold(
         appBar: AppBar(title: const Text("Change Information")),
         resizeToAvoidBottomInset: false,
+        drawer: navBar(),
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -313,7 +317,8 @@ class _InformationScreenState extends State<InformationScreen> {
               label: Text("Save"),
               onPressed: () {
                 if (checkPhone(context, _phone.text)) {
-                  setPhoneNumber(_phone.text);
+                  var user = FirebaseAuth.instance.currentUser;
+                  user?.updatePhoneNumber(_phone.text);
                   Navigator.of(context).pop();
                   displaySuccessMessage(
                       context, "Phone number succesfully updated.");
@@ -405,7 +410,8 @@ class _InformationScreenState extends State<InformationScreen> {
               label: Text("Save"),
               onPressed: () {
                 if (checkUsername(context, _username.text)) {
-                  setUsername(_username.text);
+                  var user = FirebaseAuth.instance.currentUser;
+                  user?.updateDisplayName(_username.text);
                   Navigator.of(context).pop();
                   displaySuccessMessage(
                       context, "Username successfully updated.");
@@ -451,7 +457,8 @@ class _InformationScreenState extends State<InformationScreen> {
               label: Text("Save"),
               onPressed: () {
                 if (checkName(context, _name.text)) {
-                  setName(_name.text);
+                  var user = FirebaseAuth.instance.currentUser;
+                  user?.updateDisplayName(_name.text);
                   Navigator.of(context).pop();
                   displaySuccessMessage(context, "Name successfully updated.");
                 }

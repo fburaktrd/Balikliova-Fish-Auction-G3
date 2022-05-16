@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/Views/auctionTableScreen.dart';
+import 'package:myapp/Views/update_info.dart';
 
 class navBar extends StatefulWidget {
   const navBar({Key? key}) : super(key: key);
@@ -97,10 +99,10 @@ class _navBarState extends State<navBar> {
                       horizontalTitleGap: 1,
                       title: Text('Create Auction Table'),
                       onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
                         Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                AuctionTableScreen()));
                       },
                     ),
                   ),
@@ -113,6 +115,9 @@ class _navBarState extends State<navBar> {
                       title: Text('View Auction Tables'),
                       onTap: () {
                         Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                AuctionTableScreen()));
                       },
                     ),
                   ),
@@ -153,10 +158,10 @@ class _navBarState extends State<navBar> {
                       horizontalTitleGap: 1,
                       title: Text('View Auction Table'),
                       onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
                         Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                AuctionTableScreen()));
                       },
                     ),
                   ),
@@ -198,10 +203,10 @@ class _navBarState extends State<navBar> {
                       horizontalTitleGap: 1,
                       title: Text('Profile Settings'),
                       onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
                         Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                InformationScreen()));
                       },
                     ),
                   ),
