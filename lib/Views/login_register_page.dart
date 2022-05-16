@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Views/login_page.dart';
+import 'package:myapp/Views/navBar.dart';
 import 'package:myapp/Views/register_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -17,7 +18,7 @@ class _LoginPageState extends State<MainPage> {
   @override
   void initState() {
     // TODO: implement initState
-      screens = [
+    screens = [
       Login(widget.isLoading),
       const SignUp(),
     ];
@@ -31,7 +32,7 @@ class _LoginPageState extends State<MainPage> {
       appBar: AppBar(
         title: Text(appBarText[_currentIndex]),
       ),
-      drawer: const Drawer(),
+      drawer: navBar(),
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

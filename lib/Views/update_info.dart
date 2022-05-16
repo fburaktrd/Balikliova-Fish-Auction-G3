@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
+import 'navBar.dart';
+
 class DeliveryOption {
   String deliveryAddress;
   int index;
@@ -50,6 +52,7 @@ class _InformationScreenState extends State<InformationScreen> {
       home: Scaffold(
         appBar: AppBar(title: const Text("Change Information")),
         resizeToAvoidBottomInset: false,
+        drawer: navBar(),
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -315,7 +318,7 @@ class _InformationScreenState extends State<InformationScreen> {
               onPressed: () {
                 if (checkPhone(context, _phone.text)) {
                   var user = FirebaseAuth.instance.currentUser;
-                  //user?.updatePhoneNumber(_phone.text);
+                  user?.updatePhoneNumber(_phone.text);
                   Navigator.of(context).pop();
                   displaySuccessMessage(
                       context, "Phone number succesfully updated.");

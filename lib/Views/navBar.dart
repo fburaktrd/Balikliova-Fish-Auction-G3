@@ -99,8 +99,10 @@ class _navBarState extends State<navBar> {
                       horizontalTitleGap: 1,
                       title: Text('Create Auction Table'),
                       onTap: () {
-                        const AuctionTableScreen();
                         Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                AuctionTableScreen()));
                       },
                     ),
                   ),
@@ -112,8 +114,10 @@ class _navBarState extends State<navBar> {
                       horizontalTitleGap: 1,
                       title: Text('View Auction Tables'),
                       onTap: () {
-                        const AuctionTableScreen();
                         Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                AuctionTableScreen()));
                       },
                     ),
                   ),
@@ -154,8 +158,10 @@ class _navBarState extends State<navBar> {
                       horizontalTitleGap: 1,
                       title: Text('View Auction Table'),
                       onTap: () {
-                        const AuctionTableScreen();
                         Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                AuctionTableScreen()));
                       },
                     ),
                   ),
@@ -197,8 +203,10 @@ class _navBarState extends State<navBar> {
                       horizontalTitleGap: 1,
                       title: Text('Profile Settings'),
                       onTap: () {
-                        const InformationScreen();
                         Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                InformationScreen()));
                       },
                     ),
                   ),
