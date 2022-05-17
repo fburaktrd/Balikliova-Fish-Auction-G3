@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:myapp/Views/navBar.dart';
 import "package:myapp/controllers/auctionTableController.dart";
@@ -12,7 +11,7 @@ class AuctionTableScreen extends StatefulWidget {
 
 class _AuctionTableScreenState extends State<AuctionTableScreen> {
   late AuctionTableController controller;
-  Map<String,Map<String,dynamic>> auct_form = {};
+  Map<String, Map<String, dynamic>> auct_form = {};
 
   final _productNameController = TextEditingController();
   final _quantityController = TextEditingController();
@@ -96,13 +95,13 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                 icon: const Icon(Icons.save),
                 label: const Text("Complete"),
                 onPressed: () {
-                  if (!isNameEmpty(context, _productNameController.text) &&
-                      !isQuantityEmpty(context, _quantityController.text) &&
-                      !isPriceEmpty(context, _basePriceController.text)) {
-                      
-                        
-                        
-                        
+                  // if (!isNameEmpty(context, _productNameController.text) &&
+                  //     !isQuantityEmpty(context, _quantityController.text) &&
+                  //     !isPriceEmpty(context, _basePriceController.text)) {
+
+                  // }
+                  for (var key in auct_form.keys) {
+                    print(auct_form);
                   }
                 },
               ),
@@ -113,20 +112,24 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                     if (!isNameEmpty(context, _productNameController.text) &&
                         !isQuantityEmpty(context, _quantityController.text) &&
                         !isPriceEmpty(context, _basePriceController.text)) {
-                          setState(() {
-                            auct_form[rowNo.toString()] = {"name" : _productNameController.text};
-                            auct_form[rowNo.toString()] = {"quantity": int.parse(_quantityController.text)};
-                            auct_form[rowNo.toString()] = {"basePrice": int.parse(_basePriceController.text)};
-                            auct_form[rowNo.toString()] = {"SoldPrice": 0};
-                            _productNameController.clear();
-                            _basePriceController.clear();
-                            _quantityController.clear();
-                          });
+                      setState(() {
+                        auct_form[rowNo.toString()] = {};
+                        auct_form[rowNo.toString()]!["name"] =
+                            _productNameController.text;
 
-                        
+                        auct_form[rowNo.toString()]!["quantity"] =
+                            int.parse(_quantityController.text);
+
+                        auct_form[rowNo.toString()]!["basePrice"] =
+                            int.parse(_basePriceController.text);
+                        auct_form[rowNo.toString()]!["SoldPrice"] = 0;
+                        _productNameController.clear();
+                        _basePriceController.clear();
+                        _quantityController.clear();
+                        rowNo++;
+                      });
                     }
                   }),
-            
             ],
           );
         }).then((_) {
