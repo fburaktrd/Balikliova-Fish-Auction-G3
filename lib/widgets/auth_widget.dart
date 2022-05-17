@@ -7,6 +7,7 @@ import 'package:myapp/locator.dart';
 import 'package:myapp/models/coopHead.dart';
 import 'package:myapp/models/customer.dart';
 import 'package:myapp/controllers/UserController.dart';
+import 'package:myapp/models/database.dart';
 import 'package:myapp/models/user.dart';
 import 'package:myapp/widgets/error_page.dart';
 
@@ -25,9 +26,9 @@ class _AuthWidgetState extends State<AuthWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    
-    Future.delayed(Duration(milliseconds: 1500)).then((value) => setState(() {
-    }));
+
+    Future.delayed(Duration(milliseconds: 1000))
+        .then((value) => setState(() {}));
   }
 
   @override
@@ -39,34 +40,48 @@ class _AuthWidgetState extends State<AuthWidget> {
           if (widget.snapshot.data!.role == "CUSTOMER") {
             //Sayfa yönlendirmeleri.... User()..
             return const HomePage();
-          } else if (widget.snapshot.data!.role == "Coop Head") {}
-          return  MainPage();
+          } else if (widget.snapshot.data!.role == "COOP_HEAD") {
+            return const HomePage();
+          }
+          return MainPage(isLoading: false);
         },
         future: getUser(widget.snapshot.data!),
       );
     }
-    return  MainPage();
+    return MainPage();
   }
 
   dynamic getUser(GeneralUser user) async {
     //providing the user instance with getit
     //istek atıldı.
     var res;
+    var inScopeUser = user.uid;
     switch (user.role) {
-      case "Customer":
+      case "CUSTOMER":
+        res = await Database().ref.child("Customer").child(inScopeUser).get();
+        res = res.value;
         var user = Customer(
-            uid: res.uid,
-            name: res.name,
-            username: res.username,
-            phoneNumber: res.phoneNumber,
-            address: res.address);
+            uid: res["uid"],
+            name: res["name"],
+            username: res["username"],
+            phoneNumber: res["phoneNumber"],
+            address: res["address"]);
         getIt<UserController>().fetchCust(user);
 
         return user;
-        //TODO customer node'undan bilgi çekilecek...
-        break;
-      case "Coop Head":
-        break;
+      //TODO customer node'undan bilgi çekilecek...
+
+      case "COOP_HEAD":
+        res = await Database().ref.child("Cooperative_Head").child(inScopeUser).get();
+        res = res.value;
+         var user = CoopHead(
+            uid: res["uid"],
+            name: res["name"],
+            username: res["username"],
+            phoneNumber: res["phoneNumber"]);
+        getIt<UserController>().fetchCust(user);
+        return user;
+        
     }
   }
 }
