@@ -17,6 +17,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
   final _quantityController = TextEditingController();
   final _basePriceController = TextEditingController();
   int rowNo = 0;
+  bool show_auct_table = false;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +43,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                       },
                     ),
                   ),
+                  show_auct_table == true ? Text("table created") : Text("You have no auction table...")
                 ],
               ),
             ),
@@ -95,11 +97,24 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                 icon: const Icon(Icons.save),
                 label: const Text("Complete"),
                 onPressed: () {
-                  // if (!isNameEmpty(context, _productNameController.text) &&
-                  //     !isQuantityEmpty(context, _quantityController.text) &&
-                  //     !isPriceEmpty(context, _basePriceController.text)) {
+                  if (!isNameEmpty(context, _productNameController.text) &&
+                      !isQuantityEmpty(context, _quantityController.text) &&
+                      !isPriceEmpty(context, _basePriceController.text)) {
+                    auct_form[rowNo.toString()] = {};
+                    auct_form[rowNo.toString()]!["name"] =
+                        _productNameController.text;
 
-                  // }
+                    auct_form[rowNo.toString()]!["quantity"] =
+                        int.parse(_quantityController.text);
+
+                    auct_form[rowNo.toString()]!["basePrice"] =
+                        int.parse(_basePriceController.text);
+                    auct_form[rowNo.toString()]!["SoldPrice"] = 0;
+                  }
+                  setState(() {
+                    show_auct_table = true;
+                  });
+
                   for (var key in auct_form.keys) {
                     print(auct_form);
                   }
