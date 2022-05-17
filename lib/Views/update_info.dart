@@ -274,13 +274,18 @@ class _InformationScreenState extends State<InformationScreen> {
   }
 
   bool checkUsernameExists(String newUsername) {
-    //username sistemde daha önceden var mı kontrol eder.
-    return false; //returns false if user doesn't exist
+    if(user_info.child(newUsername)!) {
+      return true;
+    }
+    else{return false;}
   }
 
   bool checkPhoneExists(String newPhone) {
-    //phone sistemde daha önceden var mı kontrol eder.
-    return false; //returns false if user doesn't exist
+    if(user_info.child(newPhone)!) {
+      return true;
+    }
+    else{
+    return true;}
   }
 
   List<String> getAddresses() {
@@ -334,7 +339,8 @@ class _InformationScreenState extends State<InformationScreen> {
               label: Text("Save"),
               onPressed: () {
                 if (checkPhone(context, _phone.text)) {
-                  setPhoneNumber(_phone.text);
+                  if(checkPhoneExists(_phone.text)){
+                  setPhoneNumber(_phone.text);}
                   Navigator.of(context).pop();
                   displaySuccessMessage(
                       context, "Phone number succesfully updated.");
@@ -426,7 +432,8 @@ class _InformationScreenState extends State<InformationScreen> {
               label: Text("Save"),
               onPressed: () {
                 if (checkUsername(context, _username.text)) {
-                  setUsername(_username.text);
+                  if(checkUsernameExists(_username.text)){
+                  setUsername(_username.text);}
                   Navigator.of(context).pop();
                   displaySuccessMessage(
                       context, "Username successfully updated.");
