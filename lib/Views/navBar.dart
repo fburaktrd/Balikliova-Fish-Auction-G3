@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Views/home_page.dart';
 import 'package:myapp/Views/update_info.dart';
 
+import 'AuctionTablePage.dart';
+
 class navBar extends StatefulWidget {
   const navBar({Key? key}) : super(key: key);
 
@@ -103,7 +105,7 @@ class _navBarState extends State<navBar> {
                         Navigator.pop(context);
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                HomePage()));//AuctionTableScreen() olamlı
+                                AuctionTableScreen()));// olamlı
                       },
                     ),
                   ),

@@ -99,7 +99,10 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                   if (!isNameEmpty(context, _productNameController.text) &&
                       !isQuantityEmpty(context, _quantityController.text) &&
                       !isPriceEmpty(context, _basePriceController.text)) {
-                        //controller.addAuctionTable(auct_form);  
+                      
+                        
+                        
+                        
                   }
                 },
               ),
@@ -110,13 +113,16 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                     if (!isNameEmpty(context, _productNameController.text) &&
                         !isQuantityEmpty(context, _quantityController.text) &&
                         !isPriceEmpty(context, _basePriceController.text)) {
-                          auct_form[rowNo.toString()] = {"name" : _productNameController.text};
-                          auct_form[rowNo.toString()] = {"quantity": int.parse(_quantityController.text)};
-                          auct_form[rowNo.toString()] = {"basePrice": int.parse(_basePriceController.text)};
-                          auct_form[rowNo.toString()] = {"SoldPrice": 0};
-                          _productNameController.text = "";
-                          _basePriceController.text = "";
-                          _quantityController.text = "";
+                          setState(() {
+                            auct_form[rowNo.toString()] = {"name" : _productNameController.text};
+                            auct_form[rowNo.toString()] = {"quantity": int.parse(_quantityController.text)};
+                            auct_form[rowNo.toString()] = {"basePrice": int.parse(_basePriceController.text)};
+                            auct_form[rowNo.toString()] = {"SoldPrice": 0};
+                            _productNameController.clear();
+                            _basePriceController.clear();
+                            _quantityController.clear();
+                          });
+
                         
                     }
                   }),
