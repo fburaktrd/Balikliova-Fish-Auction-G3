@@ -37,21 +37,31 @@ class _InformationScreenState extends State<InformationScreen> {
   bool visibleAddAddress = true;
   bool visibleDeleteAddress = true;
   var user_info;
-
+  var role;
   @override
-  void initState() async {
-    var role = await Database()
+  void initState() {
+    Database()
         .ref
         .child("Roles")
         .child(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-        //ROLES: CUSTOMER, COOP_HEAD, COOP_CREW, COOP_CREW_MEMBER
+        .get()
+        .then((res) {
+      Database()
+          .ref
+          .child(res.value == "CUSTOMER" ? "Customer" : "Cooperative_Head")
+          .child(FirebaseAuth.instance.currentUser!.uid)
+          .get()
+          .then((userRes) {
+        user_info = userRes.value;
+        print(FirebaseAuth.instance.currentUser!.uid);
+        setState(() {
+          print(user_info);
+        });
+      });
+    });
+
+    //ROLES: CUSTOMER, COOP_HEAD, COOP_CREW, COOP_CREW_MEMBER
     //role -> Customer -> CUSTOMER
-    user_info = await Database()
-        .ref
-        .child(role == "CUSTOMER" ? "Customer":"Cooperative_Head")
-        .child(FirebaseAuth.instance.currentUser!.uid)
-        .get();
 
     super.initState();
   }
