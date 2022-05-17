@@ -94,7 +94,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
               ),
               ElevatedButton.icon(
                 icon: const Icon(Icons.save),
-                label: const Text("Complete"),
+                label: const Text("Add item"),
                 onPressed: () {
                   if (!isNameEmpty(context, _productNameController.text) &&
                       !isQuantityEmpty(context, _quantityController.text) &&
@@ -133,31 +133,6 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                       
                 },
               ),
-              ElevatedButton.icon(
-                  icon: const Icon(Icons.navigate_next),
-                  label: const Text("Next"),
-                  onPressed: () {
-                    if (!isNameEmpty(context, _productNameController.text) &&
-                        !isQuantityEmpty(context, _quantityController.text) &&
-                        !isPriceEmpty(context, _basePriceController.text)) {
-                      setState(() {
-                        auct_form[rowNo.toString()] = {};
-                        auct_form[rowNo.toString()]!["name"] =
-                            _productNameController.text;
-
-                        auct_form[rowNo.toString()]!["quantity"] =
-                            int.parse(_quantityController.text);
-
-                        auct_form[rowNo.toString()]!["basePrice"] =
-                            int.parse(_basePriceController.text);
-                        auct_form[rowNo.toString()]!["SoldPrice"] = 0;
-                        _productNameController.clear();
-                        _basePriceController.clear();
-                        _quantityController.clear();
-                        rowNo++;
-                      });
-                    }
-                  }),
             ],
           );
         }).then((_) {
@@ -190,48 +165,18 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
     DataColumn(label: Text(column))
     ).toList();
 
-  DataTable showAuctionTable(List<List<dynamic>> oneTable) {
+  Row showAuctionTable(List<List<dynamic>> oneTable) {
     final columns = ["No", "Product Name", "Quantity", "Base Price", "Sold Price"];
 
-    DataTable auct_table = DataTable(
+    Row card = Row(
+      children: [
+        Expanded(
+              child: DataTable(
               columns: getColumns(columns),
-              rows: getRows(oneTable),);
-    return auct_table;
+              rows: getRows(oneTable),),),]);
+    return card;
   }
 
-  Container showAuctionTables(List<List<List<dynamic>>> tables){
-      Container lists = Container(child: 
-       ListView.separated(
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(8),
-            separatorBuilder: (context,_){
-              return Divider(
-                height: 5,
-                color: Colors.black,
-              );
-            },
-            itemCount: tables.length,
-            itemBuilder: (context,index){
-              return Container(
-                child: 
-                  ElevatedButton.icon(
-                    icon: Icon(Icons.add),
-                    label: Text("AuctionTable"),
-                    onPressed: (){
-                      setState(() {
-                        showAuctionTable(tables[index]);
-                      });
-                    }
-                  ),
-              );
-            },
-    ),
-      );
-    return lists;
-    
-            
-
-  }
 
 }
 
