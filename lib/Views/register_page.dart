@@ -52,44 +52,24 @@ class _SignUpState extends State<SignUp> {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 50, right: 50),
-          child: TextField(
-            controller: fullName,
-            decoration: const InputDecoration(
-                border: OutlineInputBorder(), labelText: "Full Name"),
-          ),
+          child: buildFormFullName(),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
-          child: TextField(
-            controller: username,
-            decoration: const InputDecoration(
-                border: OutlineInputBorder(), labelText: "User Name"),
-          ),
+          child: buildUserName(),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
-          child: TextField(
-            controller: address,
-            decoration: const InputDecoration(
-                border: OutlineInputBorder(), labelText: "Address"),
-          ),
+          child: buildFormAdress(),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
-          child: TextField(
-            controller: phoneNumber,
-            decoration: const InputDecoration(
-                border: OutlineInputBorder(), labelText: "Phone Number"),
-          ),
+          child: buildFormPhoneNumber(),
         ),
         Padding(
           padding:
               const EdgeInsets.only(top: 10, left: 50, right: 50, bottom: 25),
-          child: TextField(
-            controller: password,
-            decoration: const InputDecoration(
-                border: OutlineInputBorder(), labelText: "Password"),
-          ),
+          child: buildFormPassword(),
         ),
         TextButton(
           child: const Text(
@@ -108,7 +88,7 @@ class _SignUpState extends State<SignUp> {
                 phoneNumber.text.isEmpty) {
               showMessage(context, "Please fill the all input boxes.");
             } else if (found) {
-              var  customer = await _auth.signUp(
+              var customer = await _auth.signUp(
                   password: password.text,
                   email: username.text,
                   name: fullName.text,
@@ -131,6 +111,96 @@ class _SignUpState extends State<SignUp> {
           },
         ),
       ],
+    );
+  }
+
+  Form buildFormAdress() {
+    return Form(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      child: TextFormField(
+        validator: (value) {
+          return value!.isNotEmpty &
+                  value.contains(RegExp(r'^[a-zA-Z0-9._ :/]*$'))
+              ? null
+              : "Invalid Adress.";
+        },
+        controller: address,
+        keyboardType: TextInputType.streetAddress,
+        decoration: const InputDecoration(
+            border: OutlineInputBorder(), labelText: "Address"),
+      ),
+    );
+  }
+
+  Form buildUserName() {
+    return Form(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      child: TextFormField(
+        validator: (value) {
+          return value!.isNotEmpty &
+                  value.contains(RegExp(r'^(?=.{8,20}$)[a-zA-Z0-9._]+$'))
+              ? null
+              : "Invalid User Name. Username should be 8-20 characters long and should only contain letters, numbers, underscore(_) or a dot (.)";
+        },
+        controller: username,
+        keyboardType: TextInputType.name,
+        decoration: const InputDecoration(
+            border: OutlineInputBorder(), labelText: "User Name"),
+      ),
+    );
+  }
+
+  Form buildFormFullName() {
+    return Form(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      child: TextFormField(
+        validator: (value) {
+          return value!.isNotEmpty &
+                  value.contains(RegExp(r'^[a-zA-Z ğüşöçİĞÜŞÖÇı]+$'))
+              ? null
+              : "Invalid Full Name. Your should be consists of letters (A-Z). Turkish characters are supported";
+        },
+        controller: fullName,
+        keyboardType: TextInputType.name,
+        decoration: const InputDecoration(
+            border: OutlineInputBorder(), labelText: "Full Name"),
+      ),
+    );
+  }
+
+  Form buildFormPhoneNumber() {
+    return Form(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      child: TextFormField(
+        validator: (value) {
+          return value!.isNotEmpty & value.contains(RegExp(r'^[0-9]{10}$'))
+              ? null
+              : "Invalid phone number. Example: 5386491750";
+        },
+        controller: phoneNumber,
+        keyboardType: TextInputType.phone,
+        decoration: const InputDecoration(
+            border: OutlineInputBorder(), labelText: "Phone Number"),
+      ),
+    );
+  }
+
+  Form buildFormPassword() {
+    return Form(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      child: TextFormField(
+        validator: (value) {
+          return value!.isNotEmpty &
+                  value.contains(RegExp(
+                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'))
+              ? null
+              : "Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (?=.*?[#?!@\$%^&*-])";
+        },
+        obscureText: true,
+        controller: password,
+        decoration: const InputDecoration(
+            border: OutlineInputBorder(), labelText: "Password"),
+      ),
     );
   }
 }
