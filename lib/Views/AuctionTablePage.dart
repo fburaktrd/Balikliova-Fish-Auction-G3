@@ -12,13 +12,15 @@ class AuctionTableScreen extends StatefulWidget {
 class _AuctionTableScreenState extends State<AuctionTableScreen> {
   late AuctionTableController controller;
   Map<String, Map<String, dynamic>> auct_form = {};
+  List<List<List<dynamic>>> tablesList = [];
+  List<List<dynamic>> oneTable = [];
 
   final _productNameController = TextEditingController();
   final _quantityController = TextEditingController();
   final _basePriceController = TextEditingController();
   int rowNo = 0;
   bool show_auct_table = false;
-
+  Map<String, Map<String,Map<String,dynamic>>> tables = {"tables": {}};
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -43,7 +45,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                       },
                     ),
                   ),
-                  show_auct_table == true ? Text("table created") : Text("You have no auction table...")
+                  show_auct_table == true ? showAuctionTables(tablesList) : Text("You have no auction table...")
                 ],
               ),
             ),
@@ -109,8 +111,16 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
 
                     auct_form[rowNo.toString()]!["basePrice"] =
                         int.parse(_basePriceController.text);
-                    auct_form[rowNo.toString()]!["SoldPrice"] = 0;
-                  }
+                    auct_form[rowNo.toString()]!["soldPrice"] = 0;
+
+                    oneTable.add([rowNo.toString(), 
+                                  _productNameController.text,
+                                  int.parse(_quantityController.text), 
+                                  int.parse(_basePriceController.text),
+                                  0]);
+                    tablesList.add(oneTable);
+                    
+                    
                   setState(() {
                     show_auct_table = true;
                   });
@@ -118,6 +128,8 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                   for (var key in auct_form.keys) {
                     print(auct_form);
                   }
+                  Navigator.of(context).pop();
+                      }
                 },
               ),
               ElevatedButton.icon(
@@ -163,4 +175,56 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
   bool isPriceEmpty(BuildContext context, String price) {
     return price.isEmpty;
   }
+
+  List<DataRow> getRows(List<List<dynamic>> table) =>
+  table.map((row) => 
+  DataRow(cells: getCells(row))).toList();
+
+  List<DataCell> getCells(List<dynamic> row) =>
+    row.map((cell) => 
+    DataCell(Text('${cell}'))).toList();
+
+  List<DataColumn> getColumns(List<String> columns) =>
+    columns.map((column) => 
+    DataColumn(label: Text(column))
+    ).toList();
+
+  DataTable showAuctionTable(List<List<dynamic>> table) {
+    final columns = ["No", "Product Name", "Quantity", "Base Price", "Sold Price"];
+
+    DataTable auct_table = DataTable(
+              columns: getColumns(columns),
+              rows: getRows(table),);
+    return auct_table;
+  }
+
+  ListView showAuctionTables(List<List<List<dynamic>>> tables){
+    ListView auctionTablesList = ListView.separated(
+            padding: const EdgeInsets.all(8),
+            separatorBuilder: (context,_){
+              return Divider(
+                height: 5,
+                color: Colors.black,
+              );
+            },
+            itemCount: tables.length,
+            itemBuilder: (context,index){
+              return ListTile(
+                title: Text("Auction Table"),
+                leading: Icon(Icons.add),
+                
+                onLongPress: (){
+                  setState(() {
+                    showAuctionTable(tables[index]);
+                  });
+                },
+              );
+            },
+          );  
+        
+    return auctionTablesList;
+
+  }
+
 }
+
