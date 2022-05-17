@@ -16,7 +16,7 @@ class Database{
     ref
         .child("Users")
         .child(username)
-        .set({"email": username, "name": name, "uid": uid, "phone_number": phone_number, "address": address, "surname": surname});
+        .set({"username": username, "name": name, "uid": uid, "phone_number": phone_number, "address": address, "surname": surname});
     ref.child("Usernames").child(uid).set(username);
   }
 

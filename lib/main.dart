@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/Views/auctionTableScreen.dart';
+
 import 'package:myapp/Views/login_register_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:myapp/controllers/authService.dart';
@@ -9,7 +9,6 @@ import 'package:myapp/widgets/auth_widget.dart';
 import 'package:myapp/widgets/auth_widget_builder.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'package:myapp/Views/auctionTableScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
