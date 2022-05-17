@@ -3,14 +3,14 @@ import 'package:get/get.dart';
 import 'package:myapp/models/customer.dart';
 import 'package:get_it/get_it.dart';
 
-class UserController extends GetxController {
+class UserController extends ChangeNotifier {
   dynamic _user;
 
   UserController();
 
   fetchCust(dynamic user) {
     _user = user;
-    refresh();
+    notifyListeners();
   }
 
   dynamic get getUser => _user;
