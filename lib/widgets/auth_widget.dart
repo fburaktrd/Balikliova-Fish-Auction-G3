@@ -6,7 +6,7 @@ import 'package:myapp/Views/update_info.dart';
 import 'package:myapp/locator.dart';
 import 'package:myapp/models/coopHead.dart';
 import 'package:myapp/models/customer.dart';
-import 'package:myapp/controllers/LandingPageCustomerController.dart';
+import 'package:myapp/controllers/UserController.dart';
 import 'package:myapp/models/user.dart';
 import 'package:myapp/widgets/error_page.dart';
 
@@ -37,7 +37,7 @@ class _AuthWidgetState extends State<AuthWidget> {
       return FutureBuilder(
         builder: (context, userData) {
           if (widget.snapshot.data!.role == "CUSTOMER") {
-            //Sayfa yönlendirmeleri.... LandingPageCustomer()..
+            //Sayfa yönlendirmeleri.... User()..
             return const HomePage();
           } else if (widget.snapshot.data!.role == "Coop Head") {}
           return  MainPage();
@@ -60,7 +60,7 @@ class _AuthWidgetState extends State<AuthWidget> {
             username: res.username,
             phoneNumber: res.phoneNumber,
             address: res.address);
-        getIt<LandingPageCustomerController>().fetchCust(user);
+        getIt<UserController>().fetchCust(user);
 
         return user;
         //TODO customer node'undan bilgi çekilecek...

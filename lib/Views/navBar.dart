@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/Views/auctionTableScreen.dart';
+//import 'package:myapp/Views/auctionTableScreen.dart';
+import 'package:myapp/Views/home_page.dart';
 import 'package:myapp/Views/update_info.dart';
 
 class navBar extends StatefulWidget {
@@ -102,7 +103,7 @@ class _navBarState extends State<navBar> {
                         Navigator.pop(context);
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                AuctionTableScreen()));
+                                HomePage()));//AuctionTableScreen() olamlı
                       },
                     ),
                   ),
@@ -117,7 +118,7 @@ class _navBarState extends State<navBar> {
                         Navigator.pop(context);
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                AuctionTableScreen()));
+                                HomePage()));//AuctionTableScreen()
                       },
                     ),
                   ),
@@ -161,7 +162,7 @@ class _navBarState extends State<navBar> {
                         Navigator.pop(context);
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                AuctionTableScreen()));
+                                HomePage()));//AuctionTableScreen()
                       },
                     ),
                   ),

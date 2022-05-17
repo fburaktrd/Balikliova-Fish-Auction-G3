@@ -99,7 +99,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                   if (!isNameEmpty(context, _productNameController.text) &&
                       !isQuantityEmpty(context, _quantityController.text) &&
                       !isPriceEmpty(context, _basePriceController.text)) {
-                        controller.addAuctionTable(auct_form);  
+                        //controller.addAuctionTable(auct_form);  
                   }
                 },
               ),
