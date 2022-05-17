@@ -21,6 +21,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
   int rowNo = 0;
   bool show_auct_table = false;
   Map<String, Map<String,Map<String,dynamic>>> tables = {"tables": {}};
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,28 +30,24 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
             title: const Text("Create Auction Table"), centerTitle: true),
         drawer: navBar(),
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Form(
+          child: 
+            Padding(padding: EdgeInsets.symmetric(horizontal: 10.0),
               child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: FloatingActionButton(
-                      child: const Icon(Icons.add),
-                      onPressed: () {
-                        setState(() {
-                          addAuctionTableAlert(context);
-                        });
-                      },
-                    ),
-                  ),
-                  show_auct_table == true ? showAuctionTables(tablesList) : Text("You have no auction table...")
-                ],
-              ),
+          children: [    
+            FloatingActionButton(
+              child: const Icon(Icons.add),
+              onPressed: () {
+                setState(() {
+                  addAuctionTableAlert(context);
+                });
+              },
             ),
-          ),
+            show_auct_table == true ? showAuctionTable(oneTable) : Text("You have no auction table...")
+          ],
         ),
+        
+      ),
+    ),
       ),
     );
   }
@@ -123,6 +120,9 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                     
                   setState(() {
                     show_auct_table = true;
+                    _productNameController.clear();
+                    _basePriceController.clear();
+                    _quantityController.clear();
                   });
 
                   for (var key in auct_form.keys) {
@@ -130,6 +130,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                   }
                   Navigator.of(context).pop();
                       }
+                      
                 },
               ),
               ElevatedButton.icon(
@@ -189,17 +190,19 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
     DataColumn(label: Text(column))
     ).toList();
 
-  DataTable showAuctionTable(List<List<dynamic>> table) {
+  DataTable showAuctionTable(List<List<dynamic>> oneTable) {
     final columns = ["No", "Product Name", "Quantity", "Base Price", "Sold Price"];
 
     DataTable auct_table = DataTable(
               columns: getColumns(columns),
-              rows: getRows(table),);
+              rows: getRows(oneTable),);
     return auct_table;
   }
 
-  ListView showAuctionTables(List<List<List<dynamic>>> tables){
-    ListView auctionTablesList = ListView.separated(
+  Container showAuctionTables(List<List<List<dynamic>>> tables){
+      Container lists = Container(child: 
+       ListView.separated(
+            shrinkWrap: true,
             padding: const EdgeInsets.all(8),
             separatorBuilder: (context,_){
               return Divider(
@@ -209,20 +212,24 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
             },
             itemCount: tables.length,
             itemBuilder: (context,index){
-              return ListTile(
-                title: Text("Auction Table"),
-                leading: Icon(Icons.add),
-                
-                onLongPress: (){
-                  setState(() {
-                    showAuctionTable(tables[index]);
-                  });
-                },
+              return Container(
+                child: 
+                  ElevatedButton.icon(
+                    icon: Icon(Icons.add),
+                    label: Text("AuctionTable"),
+                    onPressed: (){
+                      setState(() {
+                        showAuctionTable(tables[index]);
+                      });
+                    }
+                  ),
               );
             },
-          );  
-        
-    return auctionTablesList;
+    ),
+      );
+    return lists;
+    
+            
 
   }
 
