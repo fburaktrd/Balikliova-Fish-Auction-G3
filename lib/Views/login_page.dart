@@ -52,13 +52,13 @@ class _LoginState extends State<Login> {
     return Form(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: TextFormField(
-        validator: (value) {
-          return value!.isNotEmpty &
-                  value.contains(RegExp(
-                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'))
-              ? null
-              : "Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (?=.*?[#?!@\$%^&*-])";
-        },
+        // validator: (value) {
+        //   return value!.isNotEmpty &
+        //           value.contains(RegExp(
+        //               r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$'))
+        //       ? null
+        //       : "Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (?=.*?[#?!@\$%^&*-])";
+        // },
         controller: password,
         obscureText: true,
         decoration: const InputDecoration(
@@ -71,12 +71,12 @@ class _LoginState extends State<Login> {
     return Form(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: TextFormField(
-        validator: (value) {
-          return value!.isNotEmpty &
-                  value.contains(RegExp(r'^(?=.{8,20}$)[a-zA-Z0-9._]+$'))
-              ? null
-              : "Invalid User Name. Username should be 8-20 characters long and should only contain letters, numbers, underscore(_) or a dot (.)";
-        },
+        // validator: (value) {
+        //   return value!.isNotEmpty &
+        //           value.contains(RegExp(r'^(?=.{8,20}$)[a-zA-Z0-9._]+$'))
+        //       ? null
+        //       : "Invalid User Name. Username should be 8-20 characters long and should only contain letters, numbers, underscore(_) or a dot (.)";
+        // },
         controller: username,
         decoration: const InputDecoration(
             border: OutlineInputBorder(), labelText: "Username"),

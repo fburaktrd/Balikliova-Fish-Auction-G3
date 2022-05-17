@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 //import 'package:myapp/Views/auctionTableScreen.dart';
 import 'package:myapp/Views/home_page.dart';
 import 'package:myapp/Views/update_info.dart';
+import 'package:myapp/controllers/authService.dart';
 import 'package:myapp/models/database.dart';
 
 import 'AuctionTablePage.dart';
@@ -266,6 +267,7 @@ class _navBarState extends State<navBar> {
                                   // Update the state of the app
                                   // ...
                                   // Then close the drawer
+                                  AuthService().signOut();
                                   Navigator.pop(context);
                                 },
                               ),
@@ -320,17 +322,14 @@ class _navBarState extends State<navBar> {
   }
 
   String getUserType() {
-    return "COOP_HEAD";
-    // return (userInfo != null
-    //     ? userInfo["role"]
-    //     : "");
+    // return "COOP_HEAD";
+    return (userInfo != null
+        ? userInfo["role"]
+        : "");
   }
 
   bool checkUserType(String userType) {
-    print("-----------------");
-    print(getUserType());
-    print(userType);
-    print("-----------------");
+   
     if (getUserType() == userType) {
       return true;
     } else {
