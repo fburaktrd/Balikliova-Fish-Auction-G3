@@ -40,6 +40,8 @@ class _navBarState extends State<navBar> {
           .then((userRes) {
         userInfo = userRes.value;
         print(FirebaseAuth.instance.currentUser!.uid);
+        checkUserTypes();
+        print(_coopHead);
         setState(() {
           loading = false;
           print(userInfo);
@@ -55,13 +57,13 @@ class _navBarState extends State<navBar> {
     return Container(
       width: 250,
       child: Drawer(
-              // Add a ListView to the drawer. This ensures the user can scroll
-              // through the options in the drawer if there isn't enough vertical
-              // space to fit everything.
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
 
-              child: (loading == true
-          ? const CircularProgressIndicator(color: Colors.blue)
-          : Column(
+        child: (loading == true
+            ? const CircularProgressIndicator(color: Colors.blue)
+            : Column(
                 children: <Widget>[
                   Expanded(
                     child: ListView(
@@ -275,7 +277,7 @@ class _navBarState extends State<navBar> {
                   )
                 ],
               )),
-            ),
+      ),
     );
   }
 
@@ -318,10 +320,17 @@ class _navBarState extends State<navBar> {
   }
 
   String getUserType() {
-    return "Cooperative Head";  //(userInfo != null ? userInfo["role"]: "");
+    return "COOP_HEAD";
+    // return (userInfo != null
+    //     ? userInfo["role"]
+    //     : "");
   }
 
   bool checkUserType(String userType) {
+    print("-----------------");
+    print(getUserType());
+    print(userType);
+    print("-----------------");
     if (getUserType() == userType) {
       return true;
     } else {
@@ -330,11 +339,11 @@ class _navBarState extends State<navBar> {
   }
 
   bool checkUserTypeCustomer() {
-    return checkUserType("Customer");
+    return checkUserType("CUSTOMER");
   }
 
   bool checkUserTypeCoopHead() {
-    return checkUserType("Cooperative Head");
+    return checkUserType("COOP_HEAD");
   }
 
   bool checkUserTypeCoopCrew() {

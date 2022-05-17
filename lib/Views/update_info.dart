@@ -27,13 +27,16 @@ class _InformationScreenState extends State<InformationScreen> {
   bool _valid_username = false;
   bool _valid_phone = false;
   bool _valid_password = false;
+  bool _isLoading = true;
   int id = 0;
 
-  String name = "Ayça";
-  String username = "ayca_22";
-  String phone = "555 666 77 88";
+  String name = "";
+  String username = "";
+  String phone = "";
   List<String> addresses = ["Take-Away", "Urla", "İzmir"];
-  String password = "oldPassword";
+  String password = "";
+  String role_node = "";
+
   bool visibleAddAddress = true;
   bool visibleDeleteAddress = true;
   var user_info;
@@ -54,7 +57,18 @@ class _InformationScreenState extends State<InformationScreen> {
           .then((userRes) {
         user_info = userRes.value;
         print(FirebaseAuth.instance.currentUser!.uid);
+        name = user_info["name"];
+        phone = user_info["phoneNumber"];
+        username = user_info["username"];
+
+        if (user_info["role"] == "CUSTOMER") {
+          role_node = "Customer";
+        } else if (user_info["role"] == "COOP_HEAD") {
+          role_node = "Cooperative_Head";
+        }
+
         setState(() {
+          _isLoading = false;
           print(user_info);
         });
       });
@@ -87,172 +101,174 @@ class _InformationScreenState extends State<InformationScreen> {
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: Form(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Name: ${getName()}",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 23.0,
-                        ),
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          setState(() {
-                            updateNameAlertDialog(context);
-                          });
-                        },
-                        icon: Icon(Icons.edit),
-                        label: Text("Edit"),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Username: ${getUsername()}",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 23.0,
-                        ),
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          setState(() {
-                            updateUsernameAlertDialog(context);
-                          });
-                        },
-                        icon: Icon(Icons.edit),
-                        label: Text("Edit"),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Phone: ${getPhoneNumber()}",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 23.0,
-                        ),
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          setState(() {
-                            updatePhoneAlertDialog(context);
-                          });
-                        },
-                        icon: Icon(Icons.edit),
-                        label: Text("Edit"),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          setState(() {
-                            updatePasswordAlertDialog(context);
-                          });
-                        },
-                        icon: Icon(Icons.lock_rounded),
-                        label: Text("Update Password"),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Delivery Options",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
-                          decorationThickness: 1.8,
-                          fontSize: 20.0,
-                        ),
-                      ),
-                      Visibility(
-                        visible: visibleAddAddress,
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            setState(() {
-                              addNewAddressAlertDialog(context);
-                            });
-                          },
-                          icon: Icon(Icons.add_location_alt),
-                          label: Text("Add new address"),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(
+            child: (_isLoading == true
+                ? const CircularProgressIndicator(color: Colors.blue)
+                : Form(
                     child: Column(
-                      children: getDeliveryOptions()
-                          .map(
-                            (data) => RadioListTile(
-                              title: Text("${data.deliveryAddress}"),
-                              groupValue: id,
-                              value: data.index,
-                              onChanged: (val) {
-                                setState(
-                                  () {
-                                    id = data.index;
-                                  },
-                                );
-                              },
+                      children: [
+                        const SizedBox(
+                          height: 6,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Name: ${getName()}",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: 23.0,
+                              ),
                             ),
-                          )
-                          .toList(),
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                setState(() {
+                                  updateNameAlertDialog(context);
+                                });
+                              },
+                              icon: Icon(Icons.edit),
+                              label: Text("Edit"),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Username: ${getUsername()}",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: 23.0,
+                              ),
+                            ),
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                setState(() {
+                                  updateUsernameAlertDialog(context);
+                                });
+                              },
+                              icon: Icon(Icons.edit),
+                              label: Text("Edit"),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Phone: ${getPhoneNumber()}",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: 23.0,
+                              ),
+                            ),
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                setState(() {
+                                  updatePhoneAlertDialog(context);
+                                });
+                              },
+                              icon: Icon(Icons.edit),
+                              label: Text("Edit"),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                setState(() {
+                                  updatePasswordAlertDialog(context);
+                                });
+                              },
+                              icon: Icon(Icons.lock_rounded),
+                              label: Text("Update Password"),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Delivery Options",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                                decorationThickness: 1.8,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                            Visibility(
+                              visible: visibleAddAddress,
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  setState(() {
+                                    addNewAddressAlertDialog(context);
+                                  });
+                                },
+                                icon: Icon(Icons.add_location_alt),
+                                label: Text("Add new address"),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          child: Column(
+                            children: getDeliveryOptions()
+                                .map(
+                                  (data) => RadioListTile(
+                                    title: Text("${data.deliveryAddress}"),
+                                    groupValue: id,
+                                    value: data.index,
+                                    onChanged: (val) {
+                                      setState(
+                                        () {
+                                          id = data.index;
+                                        },
+                                      );
+                                    },
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ),
+                        Visibility(
+                          visible: visibleDeleteAddress,
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              setState(() {
+                                deleteChosenOption(id);
+                              });
+                            },
+                            icon: Icon(Icons.delete_rounded),
+                            label: Text("Delete chosen option"),
+                          ),
+                        ),
+                        Visibility(
+                          visible: visibleDeleteAddress,
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              setState(() {
+                                setChosenAddress(id);
+                                id = 0;
+                              });
+                            },
+                            icon: Icon(Icons.save),
+                            label: Text("Save chosen as delivery option"),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Visibility(
-                    visible: visibleDeleteAddress,
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        setState(() {
-                          deleteChosenOption(id);
-                        });
-                      },
-                      icon: Icon(Icons.delete_rounded),
-                      label: Text("Delete chosen option"),
-                    ),
-                  ),
-                  Visibility(
-                    visible: visibleDeleteAddress,
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        setState(() {
-                          setChosenAddress(id);
-                          id = 0;
-                        });
-                      },
-                      icon: Icon(Icons.save),
-                      label: Text("Save chosen as delivery option"),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                  )),
           ),
         ),
       ),
@@ -312,15 +328,24 @@ class _InformationScreenState extends State<InformationScreen> {
     return deliveryOptions;
   }
 
+  void setInfoDb(String role_node, String info_label, String value) {
+    Database()
+        .ref
+        .child(role_node)
+        .child(user_info["uid"])
+        .child(info_label)
+        .set(value);
+  }
+
   void updatePhoneAlertDialog(BuildContext context) {
     PhoneNumber TRphoneCode = PhoneNumber(isoCode: 'TR');
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Update Phone"),
+          title: const Text("Update Phone"),
           content: InternationalPhoneNumberInput(
-            inputDecoration: InputDecoration(
+            inputDecoration: const InputDecoration(
               hintText: "5xx xxx xx xx",
             ),
             onInputChanged: (PhoneNumber number) {},
@@ -336,20 +361,20 @@ class _InformationScreenState extends State<InformationScreen> {
             textFieldController: _phone,
           ),
           actions: <Widget>[
-            new ElevatedButton.icon(
+            ElevatedButton.icon(
               icon: Icon(Icons.cancel),
               label: Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            new ElevatedButton.icon(
+            ElevatedButton.icon(
               icon: Icon(Icons.save),
               label: Text("Save"),
               onPressed: () {
                 if (checkPhone(context, _phone.text)) {
-                  var user = FirebaseAuth.instance.currentUser;
-                  //user?.updatePhoneNumber(_phone.text);
+                  phone = _phone.text;
+                  setInfoDb(role_node, "phoneNumber", phone);
                   Navigator.of(context).pop();
                   displaySuccessMessage(
                       context, "Phone number succesfully updated.");
@@ -369,10 +394,10 @@ class _InformationScreenState extends State<InformationScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Update Password"),
+          title: const Text("Update Password"),
           content: TextFormField(
             obscureText: true,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               prefixIcon: Icon(Icons.lock),
               labelText: "New Password",
               hintText: "Enter new password here..",
@@ -384,14 +409,14 @@ class _InformationScreenState extends State<InformationScreen> {
             controller: _password,
           ),
           actions: <Widget>[
-            new ElevatedButton.icon(
+            ElevatedButton.icon(
               icon: Icon(Icons.cancel),
               label: Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            new ElevatedButton.icon(
+            ElevatedButton.icon(
               icon: Icon(Icons.save),
               label: Text("Save"),
               onPressed: () {
@@ -416,9 +441,9 @@ class _InformationScreenState extends State<InformationScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Update Userame"),
+          title: const Text("Update Userame"),
           content: TextFormField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               prefixIcon: Icon(Icons.drive_file_rename_outline),
               labelText: "Username",
               hintText: "Enter username here..",
@@ -429,20 +454,20 @@ class _InformationScreenState extends State<InformationScreen> {
             controller: _username,
           ),
           actions: <Widget>[
-            new ElevatedButton.icon(
+            ElevatedButton.icon(
               icon: Icon(Icons.cancel),
               label: Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            new ElevatedButton.icon(
+            ElevatedButton.icon(
               icon: Icon(Icons.save),
               label: Text("Save"),
               onPressed: () {
                 if (checkUsername(context, _username.text)) {
-                  var user = FirebaseAuth.instance.currentUser;
-                  user?.updateDisplayName(_username.text);
+                  username = _username.text;
+                  setInfoDb(role_node, "username", username);
                   Navigator.of(context).pop();
                   displaySuccessMessage(
                       context, "Username successfully updated.");
@@ -462,10 +487,10 @@ class _InformationScreenState extends State<InformationScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Update Name"),
+          title: const Text("Update Name"),
           content: TextFormField(
             maxLength: 15,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               prefixIcon: Icon(Icons.person),
               labelText: "Name",
               hintText: "Enter name here..",
@@ -476,20 +501,22 @@ class _InformationScreenState extends State<InformationScreen> {
             controller: _name,
           ),
           actions: <Widget>[
-            new ElevatedButton.icon(
+            ElevatedButton.icon(
               icon: Icon(Icons.cancel),
               label: Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            new ElevatedButton.icon(
+            ElevatedButton.icon(
               icon: Icon(Icons.save),
               label: Text("Save"),
               onPressed: () {
                 if (checkName(context, _name.text)) {
-                  var user = FirebaseAuth.instance.currentUser;
-                  user?.updateDisplayName(_name.text);
+                  name = _name.text;
+
+                  //Setting user name to db
+                  setInfoDb(role_node, "name", name);
                   Navigator.of(context).pop();
                   displaySuccessMessage(context, "Name successfully updated.");
                 }
@@ -597,10 +624,10 @@ class _InformationScreenState extends State<InformationScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("${title}"),
-          content: new Text("${message}."),
+          title: Text("${title}"),
+          content: Text("${message}."),
           actions: <Widget>[
-            new ElevatedButton(
+            ElevatedButton(
               child: new Text("OK"),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -617,10 +644,10 @@ class _InformationScreenState extends State<InformationScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("New Address"),
+          title: const Text("New Address"),
           content: TextFormField(
             maxLines: 8, //or null
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               prefixIcon: Icon(Icons.location_pin),
               labelText: "Address",
               hintText: "Enter address here..",
@@ -631,18 +658,19 @@ class _InformationScreenState extends State<InformationScreen> {
             controller: _address,
           ),
           actions: <Widget>[
-            new ElevatedButton.icon(
+            ElevatedButton.icon(
               icon: Icon(Icons.cancel),
               label: Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            new ElevatedButton.icon(
+            ElevatedButton.icon(
               icon: Icon(Icons.save),
               label: Text("Save"),
               onPressed: () {
                 if (checkAddress(context, _address.text)) {
+                  //Think about it... Burak
                   addNewAddress(_address.text);
                   Navigator.of(context).pop();
                   displaySuccessMessage(context, "Address added successfully.");
