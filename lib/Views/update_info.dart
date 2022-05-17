@@ -33,7 +33,7 @@ class _InformationScreenState extends State<InformationScreen> {
   String name = "";
   String username = "";
   String phone = "";
-  List<String> addresses = ["Take-Away", "Urla", "İzmir"];
+  List<String> addresses = ["MORDOĞAN", "BALIKLIOVA", "URLA", "ILDIR"];
   String password = "";
   String role_node = "";
 
@@ -592,7 +592,9 @@ class _InformationScreenState extends State<InformationScreen> {
   }
 
   bool checkAddressRange(String newAddress) {
-    //Adres range ini kontrol eder.
+    if (!(addresses.contains(newAddress))) {
+      return false;
+    }
     return true; //Adres range içerisindeyse true, değilse false return eder.
   }
 
