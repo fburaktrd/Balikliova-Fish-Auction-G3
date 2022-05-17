@@ -32,7 +32,6 @@ class _LoginPageState extends State<MainPage> {
       appBar: AppBar(
         title: Text(appBarText[_currentIndex]),
       ),
-      drawer: navBar(),
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
