@@ -152,7 +152,6 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                     },
                     onChanged: (value) => setState(() => basePrice = value),
                   ),
-                
               ],
             ),
             actions: <Widget>[
