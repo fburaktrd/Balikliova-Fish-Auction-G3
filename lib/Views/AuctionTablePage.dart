@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:myapp/Views/navBar.dart';
 import 'package:myapp/controllers/AuctionTableGetItController.dart';
 import "package:myapp/controllers/auctionTableController.dart";
@@ -12,17 +13,35 @@ class AuctionTableScreen extends StatefulWidget {
 }
 
 class _AuctionTableScreenState extends State<AuctionTableScreen> {
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+
   late AuctionTableController controller;
   Map<String, Map<String, dynamic>> auct_form = {};
   List<List<List<dynamic>>> tablesList = [];
   List<List<dynamic>> oneTable = getIt<AuctionTableGetItController>().getTable;
 
-  final _productNameController = TextEditingController();
-  final _quantityController = TextEditingController();
-  final _basePriceController = TextEditingController();
-  int rowNo = 0;
+   final _productNameController = TextEditingController();
+   final _quantityController = TextEditingController();
+   final _basePriceController = TextEditingController();
+
+
+
+   String productName = '';
+   String quantity = '';
+   String basePrice = '';
+
+   @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    _productNameController.dispose();
+    _basePriceController.dispose();
+    _quantityController.dispose();
+    super.dispose();
+  }
+  int rowNo = 1;
   bool show_auct_table=false;
-  Map<String, Map<String, Map<String, dynamic>>> tables = {"tables": {}};
+
   @override
   void initState() {
     show_auct_table = oneTable.length == 0 ? false : true;
@@ -31,6 +50,8 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
     });
     super.initState();
   }
+
+
   @override
   Widget build(BuildContext context) {
     
@@ -39,8 +60,9 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
         appBar: AppBar(
             title: const Text("Create Auction Table"), centerTitle: true),
         drawer: navBar(),
-        body: SafeArea(
-          child: Padding(
+        body: Form(
+            key: _key,
+            child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             child: Column(
               children: [
@@ -60,6 +82,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
           ),
         ),
       ),
+  
     );
   }
 
@@ -72,27 +95,64 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text('Auction Table'),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
+                TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: _productNameController,
-                    decoration: const InputDecoration(hintText: 'Product Name'),
+                    decoration: const InputDecoration(labelText: 'Product Name'),
+                    validator: (value) {
+                      
+                      if (value!.isEmpty || !RegExp(r'a-zA-Z').hasMatch(value)) {
+                        return 'Please enter a product name with letters';}
+                      else{
+                        return null;}
+                    },
+                    onSaved: (value){
+                      setState(() {
+                        auct_form[rowNo.toString()]!["name"] = value!;
+                      });
+                    },
+                     onChanged: (value) => setState(() => productName = value)
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
+                
+                TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: _quantityController,
-                    decoration: const InputDecoration(hintText: 'Quantity'),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
+                    decoration: const InputDecoration(labelText: 'Quantity'),
+                    validator: (value) {
+                      if (value!.isEmpty || !RegExp(r'0-9').hasMatch(value)) {
+                        return 'Please enter a quantity with numbers';}
+                      else{
+                        return null;}
+                      
+                    },
+                    onSaved: (value){
+                      setState(() {
+                        auct_form[rowNo.toString()]!["quantity"] = int.parse(value!);
+                      });
+                    },
+                    onChanged: (value) => setState(() => quantity = value)
+                      
+                    ),            
+                
+                
+                TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: _basePriceController,
-                    decoration: const InputDecoration(hintText: 'Base Price'),
+                    decoration: const InputDecoration(labelText: 'Base Price'),
+                    validator: (value) {
+                      if (value!.isEmpty || !RegExp(r'0-9').hasMatch(value)) {
+                        return 'Please enter a base price with numbers';}
+                      else{
+                        return null;}
+                    },
+                    onSaved: (value){
+                      setState(() {
+                        auct_form[rowNo.toString()]!["basePrice"] = int.parse(value!);
+                      });
+                    },
+                    onChanged: (value) => setState(() => basePrice = value),
                   ),
-                ),
+                
               ],
             ),
             actions: <Widget>[
@@ -100,32 +160,26 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                 icon: const Icon(Icons.cancel),
                 label: const Text("Cancel"),
                 onPressed: () {
-                  Navigator.of(context).popUntil(ModalRoute.withName('/'));
+                  Navigator.of(context).pop();
                 },
               ),
               ElevatedButton.icon(
                 icon: const Icon(Icons.save),
                 label: const Text("Add item"),
                 onPressed: () {
-                  if (!isNameEmpty(context, _productNameController.text) &&
-                      !isQuantityEmpty(context, _quantityController.text) &&
-                      !isPriceEmpty(context, _basePriceController.text)) {
-                    auct_form[rowNo.toString()] = {};
-                    auct_form[rowNo.toString()]!["name"] =
-                        _productNameController.text;
-
-                    auct_form[rowNo.toString()]!["quantity"] =
-                        int.parse(_quantityController.text);
-
-                    auct_form[rowNo.toString()]!["basePrice"] =
-                        int.parse(_basePriceController.text);
-                    auct_form[rowNo.toString()]!["soldPrice"] = 0;
+                  if (_key.currentState!.validate()){
+                    _key.currentState!.save();
+                    
+                    for (var key in auct_form.keys) {
+                      auct_form[key]!["soldPrice"] = 0;
+                      
+                    }
 
                     oneTable.add([
                       rowNo.toString(),
-                      _productNameController.text,
-                      int.parse(_quantityController.text),
-                      int.parse(_basePriceController.text),
+                      productName,
+                      int.parse(quantity),
+                      int.parse(basePrice),
                       0
                     ]);
                     getIt<AuctionTableGetItController>().fetchTable(oneTable);
@@ -153,17 +207,9 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
     });
   }
 
-  bool isNameEmpty(BuildContext context, String productName) {
-    return productName.isEmpty;
-  }
 
-  bool isQuantityEmpty(BuildContext context, String quantity) {
-    return quantity.isEmpty;
-  }
 
-  bool isPriceEmpty(BuildContext context, String price) {
-    return price.isEmpty;
-  }
+
 
   List<DataRow> getRows(List<List<dynamic>> table) =>
       table.map((row) => DataRow(cells: getCells(row))).toList();
