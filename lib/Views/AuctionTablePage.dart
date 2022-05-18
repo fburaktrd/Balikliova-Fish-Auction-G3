@@ -226,7 +226,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
   List<DataColumn> getColumns(List<String> columns) =>
       columns.map((column) => DataColumn(label: Text(column))).toList();
 
-  Row showAuctionTable(List<List<dynamic>> oneTable) {
+  Container showAuctionTable(List<List<dynamic>> oneTable) {
     final columns = [
       "No",
       "Product Name",
@@ -235,14 +235,16 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
       "Sold Price"
     ];
 
-    Row card = Row(children: [
-      Expanded(
+    Container container = Container(
+      child: SingleChildScrollView(child: SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      
         child: DataTable(
           columns: getColumns(columns),
           rows: getRows(oneTable),
         ),
       ),
-    ]);
-    return card;
+    ),);
+    return container;
   }
 }
