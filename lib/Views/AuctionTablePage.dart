@@ -86,6 +86,13 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
     );
   }
 
+  bool _isNumeric(String str) {
+    if(str == null) {
+      return false;
+    }
+    return double.tryParse(str) != null;
+  }
+
   void addAuctionTableAlert(BuildContext context) {
     showDialog(
         context: context,
@@ -101,7 +108,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                     decoration: const InputDecoration(labelText: 'Product Name'),
                     validator: (value) {
                       
-                      if (value!.isEmpty || !RegExp(r'a-zA-Z').hasMatch(value)) {
+                      if (value!.isEmpty || _isNumeric(value)) {
                         return 'Please enter a product name with letters';}
                       else{
                         return null;}
@@ -119,7 +126,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                     controller: _quantityController,
                     decoration: const InputDecoration(labelText: 'Quantity'),
                     validator: (value) {
-                      if (value!.isEmpty || !RegExp(r'0-9').hasMatch(value)) {
+                      if (value!.isEmpty || !(_isNumeric(value))) {
                         return 'Please enter a quantity with numbers';}
                       else{
                         return null;}
@@ -140,7 +147,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                     controller: _basePriceController,
                     decoration: const InputDecoration(labelText: 'Base Price'),
                     validator: (value) {
-                      if (value!.isEmpty || !RegExp(r'0-9').hasMatch(value)) {
+                      if (value!.isEmpty || !(_isNumeric(value))) {
                         return 'Please enter a base price with numbers';}
                       else{
                         return null;}
