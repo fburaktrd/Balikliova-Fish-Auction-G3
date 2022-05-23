@@ -35,7 +35,6 @@ class AuctionTableController {
   //   List<int> basePrices = [];
   //   List<int> quantities = [];
   //   List<int> soldPrices = [];
-    
 
   //   for (int i = 0; i < auct_table.length; i++) {
   //     rowIds.add(rowNo.toString());
@@ -48,13 +47,13 @@ class AuctionTableController {
   //   }
 
   //   AuctionTable table = AuctionTable(uid, //rastgele bir id mi gelecek?
-  //                                     products: products, 
-  //                                     basePrices: basePrices, 
-  //                                     quantities: quantities, 
-  //                                     soldPrices: soldPrices, 
+  //                                     products: products,
+  //                                     basePrices: basePrices,
+  //                                     quantities: quantities,
+  //                                     soldPrices: soldPrices,
   //                                     rowID: rowIds);
   //   return table;
-    
+
   // }
 
   void deleteAuctionTable(String auctionTableID) {

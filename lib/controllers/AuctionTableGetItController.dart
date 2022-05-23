@@ -5,9 +5,10 @@ class AuctionTableGetItController extends ChangeNotifier {
   List<List<dynamic>> _table = [];
   AuctionTableGetItController();
 
-  fetchTable(dynamic table){
+  fetchTable(dynamic table) {
     _table = table;
     notifyListeners();
   }
-   dynamic get getTable => _table;
+
+  dynamic get getTable => _table;
 }

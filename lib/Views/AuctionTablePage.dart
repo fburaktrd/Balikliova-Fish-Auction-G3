@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:myapp/Views/navBar.dart';
@@ -20,17 +22,18 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
   List<List<List<dynamic>>> tablesList = [];
   List<List<dynamic>> oneTable = getIt<AuctionTableGetItController>().getTable;
 
-   final _productNameController = TextEditingController();
-   final _quantityController = TextEditingController();
-   final _basePriceController = TextEditingController();
+  final _productNameController = TextEditingController();
+  final _quantityController = TextEditingController();
+  final _basePriceController = TextEditingController();
 
+  String productName = '';
+  String quantity = '';
+  String basePrice = '';
 
+  static set deleteButton(TextButton deleteButton) {}
+  static set publishButton(TextButton publishButton) {}
 
-   String productName = '';
-   String quantity = '';
-   String basePrice = '';
-
-   @override
+  @override
   void dispose() {
     // Clean up the controller when the widget is removed from the
     // widget tree.
@@ -39,33 +42,32 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
     _quantityController.dispose();
     super.dispose();
   }
+
   int rowNo = 1;
-  bool show_auct_table=false;
+  bool show_auct_table = false;
 
   @override
   void initState() {
     show_auct_table = oneTable.length == 0 ? false : true;
-    setState(() {
-      
-    });
+    setState(() {});
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
             title: const Text("Create Auction Table"), centerTitle: true),
         drawer: navBar(),
         body: Form(
-            key: _key,
-            child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
+          key: _key,
+          child: Center(
             child: Column(
               children: [
+                show_auct_table == true
+                    ? showAuctionTable(oneTable)
+                    : Text("You have no auction table..."),
                 FloatingActionButton(
                   child: const Icon(Icons.add),
                   onPressed: () {
@@ -74,20 +76,42 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                     });
                   },
                 ),
-                show_auct_table == true
-                    ? showAuctionTable(oneTable)
-                    : Text("You have no auction table...")
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    deleteButton = TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.blue),
+                      ),
+                      onPressed: () {
+                        oneTable.clear();
+                        rowNo = 1;
+                        show_auct_table = false;
+                        setState(() {});
+                      },
+                      child: Text('Delete Table'),
+                    ),
+                    publishButton = TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.blue),
+                      ),
+                      onPressed: () {},
+                      child: Text('Add Table to the library'),
+                    )
+                  ],
+                ) //if (oneTable.isNotEmpty) buttonRow
               ],
             ),
           ),
         ),
       ),
-  
     );
   }
 
   bool _isNumeric(String str) {
-    if(str == null) {
+    if (str == null) {
       return false;
     }
     return double.tryParse(str) != null;
@@ -105,60 +129,58 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                 TextFormField(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: _productNameController,
-                    decoration: const InputDecoration(labelText: 'Product Name'),
+                    decoration:
+                        const InputDecoration(labelText: 'Product Name'),
                     validator: (value) {
-                      
                       if (value!.isEmpty || _isNumeric(value)) {
-                        return 'Please enter a product name with letters';}
-                      else{
-                        return null;}
+                        return 'Please enter a product name with letters';
+                      } else {
+                        return null;
+                      }
                     },
-                    onSaved: (value){
+                    onSaved: (value) {
                       setState(() {
                         auct_form[rowNo.toString()]!["name"] = value!;
                       });
                     },
-                     onChanged: (value) => setState(() => productName = value)
-                  ),
-                
+                    onChanged: (value) => setState(() => productName = value)),
                 TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: _quantityController,
                     decoration: const InputDecoration(labelText: 'Quantity'),
                     validator: (value) {
                       if (value!.isEmpty || !(_isNumeric(value))) {
-                        return 'Please enter a quantity with numbers';}
-                      else{
-                        return null;}
-                      
+                        return 'Please enter a quantity with numbers';
+                      } else {
+                        return null;
+                      }
                     },
-                    onSaved: (value){
+                    onSaved: (value) {
                       setState(() {
-                        auct_form[rowNo.toString()]!["quantity"] = int.parse(value!);
+                        auct_form[rowNo.toString()]!["quantity"] =
+                            int.parse(value!);
                       });
                     },
-                    onChanged: (value) => setState(() => quantity = value)
-                      
-                    ),            
-                
-                
+                    onChanged: (value) => setState(() => quantity = value)),
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: _basePriceController,
-                    decoration: const InputDecoration(labelText: 'Base Price'),
-                    validator: (value) {
-                      if (value!.isEmpty || !(_isNumeric(value))) {
-                        return 'Please enter a base price with numbers';}
-                      else{
-                        return null;}
-                    },
-                    onSaved: (value){
-                      setState(() {
-                        auct_form[rowNo.toString()]!["basePrice"] = int.parse(value!);
-                      });
-                    },
-                    onChanged: (value) => setState(() => basePrice = value),
-                  ),
+                  controller: _basePriceController,
+                  decoration: const InputDecoration(labelText: 'Base Price'),
+                  validator: (value) {
+                    if (value!.isEmpty || !(_isNumeric(value))) {
+                      return 'Please enter a base price with numbers';
+                    } else {
+                      return null;
+                    }
+                  },
+                  onSaved: (value) {
+                    setState(() {
+                      auct_form[rowNo.toString()]!["basePrice"] =
+                          int.parse(value!);
+                    });
+                  },
+                  onChanged: (value) => setState(() => basePrice = value),
+                ),
               ],
             ),
             actions: <Widget>[
@@ -173,12 +195,11 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                 icon: const Icon(Icons.save),
                 label: const Text("Add item"),
                 onPressed: () {
-                  if (_key.currentState!.validate()){
+                  if (_key.currentState!.validate()) {
                     _key.currentState!.save();
-                    
+
                     for (var key in auct_form.keys) {
                       auct_form[key]!["soldPrice"] = 0;
-                      
                     }
 
                     oneTable.add([
@@ -202,6 +223,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                     for (var key in auct_form.keys) {
                       print(auct_form);
                     }
+
                     Navigator.of(context).pop();
                   }
                 },
@@ -212,10 +234,6 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
       setState(() {});
     });
   }
-
-
-
-
 
   List<DataRow> getRows(List<List<dynamic>> table) =>
       table.map((row) => DataRow(cells: getCells(row))).toList();
@@ -236,15 +254,16 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
     ];
 
     Container container = Container(
-      child: SingleChildScrollView(child: SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      
-        child: DataTable(
-          columns: getColumns(columns),
-          rows: getRows(oneTable),
+      child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: DataTable(
+            columns: getColumns(columns),
+            rows: getRows(oneTable),
+          ),
         ),
       ),
-    ),);
+    );
     return container;
   }
 }
