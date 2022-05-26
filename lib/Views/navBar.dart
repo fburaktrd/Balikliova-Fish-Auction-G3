@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+<<<<<<< Updated upstream
 //import 'package:myapp/Views/auctionTableScreen.dart';
 import 'package:myapp/Views/home_page.dart';
 import 'package:myapp/Views/update_info.dart';
@@ -7,6 +8,9 @@ import 'package:myapp/controllers/authService.dart';
 import 'package:myapp/models/database.dart';
 
 import 'AuctionTablePage.dart';
+=======
+import 'package:myapp/models/CoopHeadController.dart';
+>>>>>>> Stashed changes
 
 class navBar extends StatefulWidget {
   const navBar({Key? key}) : super(key: key);
@@ -276,7 +280,160 @@ class _navBarState extends State<navBar> {
                         ),
                       ),
                     ),
+<<<<<<< Updated upstream
                   )
+=======
+                  ),
+                  Visibility(
+                    visible: _coopCrew | _coopMember,
+                    //if user is coop crew
+                    child: ListTile(
+                      leading: Icon(Icons.arrow_forward_ios_rounded),
+                      horizontalTitleGap: 1,
+                      title: Text('Join Live Auction'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: _coopHead,
+                    child: ListTile(
+                      //if user is coop head
+                      leading: Icon(Icons.flag_rounded),
+                      horizontalTitleGap: 1,
+                      title: Text('Start Live Auction'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: _coopHead,
+                    child: ListTile(
+                      //if user is coop head
+                      leading: Icon(Icons.create_new_folder_rounded),
+                      horizontalTitleGap: 1,
+                      title: Text('Create Auction Table'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: _coopHead,
+                    child: ListTile(
+                      //if user is coop head, views all auction tables
+                      leading: Icon(Icons.view_comfortable_sharp),
+                      horizontalTitleGap: 1,
+                      title: Text('View Auction Tables'),
+                      onTap: () {
+                        setState(){
+                          CoopHeadController.viewAuctionTables(),
+                          Navigator.pop(context);
+                        }
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: _coopMember,
+                    child: ListTile(
+                      //if user is coop member
+                      leading: Icon(Icons.payments_outlined),
+                      horizontalTitleGap: 1,
+                      title: Text('Payrolls'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: _customer,
+                    child: ListTile(
+                      leading: Icon(Icons.double_arrow_outlined),
+                      horizontalTitleGap: 1,
+                      title: Text('Enter Live Auction'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: _coopMember | _coopCrew | _customer,
+                    child: ListTile(
+                      // if user is coop member, coop crew, customer
+                      leading: Icon(Icons.view_day),
+                      horizontalTitleGap: 1,
+                      title: Text('View Auction Table'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    // if user is customer
+                    visible: _customer,
+                    child: ListTile(
+                      leading: Icon(Icons.point_of_sale),
+                      horizontalTitleGap: 1,
+                      title: Text('Order Information'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: _coopCrew,
+                    child: ListTile(
+                      //if user is coop crew
+                      leading: Icon(Icons.delivery_dining),
+                      horizontalTitleGap: 1,
+                      title: Text('Delivery Information'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: true,
+                    child: ListTile(
+                      // for everyone
+                      leading: Icon(Icons.person),
+                      horizontalTitleGap: 1,
+                      title: Text('Profile Settings'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+>>>>>>> Stashed changes
                 ],
               )),
       ),
