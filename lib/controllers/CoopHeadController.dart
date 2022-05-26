@@ -9,6 +9,12 @@ class CoopHeadController extends UserController {
 
     }
 
+    void changeProductFlow(){
+        
+        //Eğer şu anki auciton bitmişse o zaman coophead database e bağlanıp yeni product i çekip auction create auctionTable ı çalıştırır
+
+    }
+
  
 
 }

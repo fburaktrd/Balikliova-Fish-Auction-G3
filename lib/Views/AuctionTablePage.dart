@@ -15,6 +15,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
   List<List<List<dynamic>>> tablesList = [];
   List<List<dynamic>> oneTable = [];
 
+  
   final _productNameController = TextEditingController();
   final _quantityController = TextEditingController();
   final _basePriceController = TextEditingController();
