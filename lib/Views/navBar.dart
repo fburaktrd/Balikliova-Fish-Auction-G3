@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/Views/ViewAuctionTableForCOOPHEAD.dart';
+import 'package:myapp/Views/ViewAuctionTableForOthers.dart';
 //import 'package:myapp/Views/auctionTableScreen.dart';
 import 'package:myapp/Views/home_page.dart';
 import 'package:myapp/Views/update_info.dart';
@@ -155,7 +157,7 @@ class _navBarState extends State<navBar> {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      HomePage())); //AuctionTableScreen()
+                                      ViewAuctionTableforCOOPHEAD())); //AuctionTableScreen()
                             },
                           ),
                         ),
@@ -199,7 +201,7 @@ class _navBarState extends State<navBar> {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      HomePage())); //AuctionTableScreen()
+                                      ViewAuctionTableforOthers())); //AuctionTableScreen()
                             },
                           ),
                         ),
@@ -323,13 +325,10 @@ class _navBarState extends State<navBar> {
 
   String getUserType() {
     // return "COOP_HEAD";
-    return (userInfo != null
-        ? userInfo["role"]
-        : "");
+    return (userInfo != null ? userInfo["role"] : "");
   }
 
   bool checkUserType(String userType) {
-   
     if (getUserType() == userType) {
       return true;
     } else {
