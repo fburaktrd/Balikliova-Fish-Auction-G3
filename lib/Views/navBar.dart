@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-<<<<<<< Updated upstream
 //import 'package:myapp/Views/auctionTableScreen.dart';
 import 'package:myapp/Views/home_page.dart';
 import 'package:myapp/Views/update_info.dart';
@@ -8,9 +7,8 @@ import 'package:myapp/controllers/authService.dart';
 import 'package:myapp/models/database.dart';
 
 import 'AuctionTablePage.dart';
-=======
-import 'package:myapp/models/CoopHeadController.dart';
->>>>>>> Stashed changes
+import 'package:myapp/controllers//CoopHeadController.dart';
+
 
 class navBar extends StatefulWidget {
   const navBar({Key? key}) : super(key: key);
@@ -280,10 +278,10 @@ class _navBarState extends State<navBar> {
                         ),
                       ),
                     ),
-<<<<<<< Updated upstream
-                  )
-=======
+
                   ),
+
+
                   Visibility(
                     visible: _coopCrew | _coopMember,
                     //if user is coop crew
@@ -338,7 +336,7 @@ class _navBarState extends State<navBar> {
                       title: Text('View Auction Tables'),
                       onTap: () {
                         setState(){
-                          CoopHeadController.viewAuctionTables(),
+                          CoopHeadController().viewAuctionTables();
                           Navigator.pop(context);
                         }
                       },
@@ -433,7 +431,7 @@ class _navBarState extends State<navBar> {
                       },
                     ),
                   ),
->>>>>>> Stashed changes
+
                 ],
               )),
       ),
