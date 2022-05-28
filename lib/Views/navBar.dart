@@ -5,7 +5,7 @@ import 'package:myapp/Views/home_page.dart';
 import 'package:myapp/Views/update_info.dart';
 import 'package:myapp/controllers/authService.dart';
 import 'package:myapp/models/database.dart';
-
+import 'package:myapp/Views/AuctionTablePageForCoopHead.dart';
 import 'AuctionTablePage.dart';
 import 'package:myapp/controllers//CoopHeadController.dart';
 
@@ -172,7 +172,7 @@ class _navBarState extends State<navBar> {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      AuctionTableScreen())); //AuctionTableScreen()
+                                      AuctionTablePageForCoophead())); //AuctionTableScreen()
                             },
                           ),
                         ),
