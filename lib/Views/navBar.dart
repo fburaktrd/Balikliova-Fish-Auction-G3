@@ -146,7 +146,8 @@ class _navBarState extends State<navBar> {
                           ),
                         ),
                         Visibility(
-                          visible: _coopHead,
+                          visible:
+                              true, // Herkese açık bir element olduğu için herkes görebilmeli
                           child: ListTile(
                             //if user is coop head, views all auction tables
                             leading: Icon(Icons.view_comfortable_sharp),
@@ -156,7 +157,22 @@ class _navBarState extends State<navBar> {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      HomePage())); //AuctionTableScreen()
+                                      AuctionTableScreen())); // olamlı
+                            },
+                          ),
+                        ),
+                        Visibility(
+                          visible: _coopHead || _crewMember,
+                          child: ListTile(
+                            //if user is coop head, views all auction tables
+                            leading: Icon(Icons.view_comfortable_sharp),
+                            horizontalTitleGap: 1,
+                            title: Text('Update Auction Tables'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      AuctionTableScreen())); //AuctionTableScreen()
                             },
                           ),
                         ),
@@ -359,21 +375,6 @@ class _navBarState extends State<navBar> {
                       leading: Icon(Icons.double_arrow_outlined),
                       horizontalTitleGap: 1,
                       title: Text('Enter Live Auction'),
-                      onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                  Visibility(
-                    visible: _coopMember | _coopCrew | _customer,
-                    child: ListTile(
-                      // if user is coop member, coop crew, customer
-                      leading: Icon(Icons.view_day),
-                      horizontalTitleGap: 1,
-                      title: Text('View Auction Table'),
                       onTap: () {
                         // Update the state of the app
                         // ...
