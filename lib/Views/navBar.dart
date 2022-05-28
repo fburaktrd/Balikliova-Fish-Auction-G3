@@ -9,7 +9,6 @@ import 'package:myapp/models/database.dart';
 import 'AuctionTablePage.dart';
 import 'package:myapp/controllers//CoopHeadController.dart';
 
-
 class navBar extends StatefulWidget {
   const navBar({Key? key}) : super(key: key);
 
@@ -278,10 +277,7 @@ class _navBarState extends State<navBar> {
                         ),
                       ),
                     ),
-
                   ),
-
-
                   Visibility(
                     visible: _coopCrew | _coopMember,
                     //if user is coop crew
@@ -335,7 +331,7 @@ class _navBarState extends State<navBar> {
                       horizontalTitleGap: 1,
                       title: Text('View Auction Tables'),
                       onTap: () {
-                        setState(){
+                        setState() {
                           CoopHeadController().viewAuctionTables();
                           Navigator.pop(context);
                         }
@@ -363,6 +359,21 @@ class _navBarState extends State<navBar> {
                       leading: Icon(Icons.double_arrow_outlined),
                       horizontalTitleGap: 1,
                       title: Text('Enter Live Auction'),
+                      onTap: () {
+                        // Update the state of the app
+                        // ...
+                        // Then close the drawer
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: _coopMember | _coopCrew | _customer,
+                    child: ListTile(
+                      // if user is coop member, coop crew, customer
+                      leading: Icon(Icons.view_day),
+                      horizontalTitleGap: 1,
+                      title: Text('View Auction Table'),
                       onTap: () {
                         // Update the state of the app
                         // ...
@@ -431,7 +442,6 @@ class _navBarState extends State<navBar> {
                       },
                     ),
                   ),
-
                 ],
               )),
       ),
@@ -478,13 +488,10 @@ class _navBarState extends State<navBar> {
 
   String getUserType() {
     // return "COOP_HEAD";
-    return (userInfo != null
-        ? userInfo["role"]
-        : "");
+    return (userInfo != null ? userInfo["role"] : "");
   }
 
   bool checkUserType(String userType) {
-   
     if (getUserType() == userType) {
       return true;
     } else {
