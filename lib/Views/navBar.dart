@@ -1,15 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Views/UpdateAuctionTable.dart';
-import 'package:myapp/Views/ViewAuctionTableForCOOPHEAD.dart';
+
 import 'package:myapp/Views/AuctionTablePageForCoopHead.dart';
-import 'package:myapp/Views/ViewAuctionTableForOthers.dart';
-//import 'package:myapp/Views/auctionTableScreen.dart';
+import 'package:myapp/Views/AuctionTablePage.dart';
 import 'package:myapp/Views/live_auction_coop.dart';
 import 'package:myapp/Views/update_info.dart';
 import 'package:myapp/controllers/authService.dart';
 import 'package:myapp/models/database.dart';
-import 'package:myapp/Views/AuctionTablePageForCoopHead.dart';
+
 import 'package:myapp/Views/AuctionTableForCrew.dart';
 import 'package:myapp/Views/AuctionTableForCustomerMember.dart';
 
