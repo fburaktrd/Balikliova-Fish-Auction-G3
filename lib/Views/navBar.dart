@@ -233,21 +233,6 @@ class _navBarState extends State<navBar> {
                           ),
                         ),
                         Visibility(
-                          visible: _coopHead | _crewMember,
-                          child: ListTile(
-                            //if user is coop head, views all auction tables
-                            leading: const Icon(Icons.view_comfortable_sharp),
-                            horizontalTitleGap: 1,
-                            title: const Text('Update Auction Tables'),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      UpdateAuctionTable())); //AuctionTableScreen()
-                            },
-                          ),
-                        ),
-                        Visibility(
                           visible: _coopMember,
                           child: ListTile(
                             //if user is coop member
