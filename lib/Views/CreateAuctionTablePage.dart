@@ -8,14 +8,14 @@ import 'package:myapp/controllers/authService.dart';
 import 'package:myapp/models/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class AuctionTableScreen extends StatefulWidget {
-  const AuctionTableScreen({Key? key}) : super(key: key);
+class CreateAuctionTableScreen extends StatefulWidget {
+  const CreateAuctionTableScreen({Key? key}) : super(key: key);
 
   @override
-  State<AuctionTableScreen> createState() => _AuctionTableScreenState();
+  State<CreateAuctionTableScreen> createState() => _CreateAuctionTableScreenState();
 }
 
-class _AuctionTableScreenState extends State<AuctionTableScreen> {
+class _CreateAuctionTableScreenState extends State<CreateAuctionTableScreen> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   late AuctionTableController controller;

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Views/UpdateAuctionTable.dart';
 
 import 'package:myapp/Views/AuctionTablePageForCoopHead.dart';
-import 'package:myapp/Views/AuctionTablePage.dart';
+import 'package:myapp/Views/CreateAuctionTablePage.dart';
 import 'package:myapp/Views/live_auction_coop.dart';
 import 'package:myapp/Views/update_info.dart';
 import 'package:myapp/controllers/authService.dart';
@@ -14,7 +14,7 @@ import 'package:myapp/Views/AuctionTableForCustomerMember.dart';
 
 //import 'package:another_flushbar/flushbar.dart';
 
-import 'AuctionTablePage.dart';
+import 'CreateAuctionTablePage.dart';
 
 class navBar extends StatefulWidget {
   const navBar({Key? key}) : super(key: key);
@@ -213,7 +213,7 @@ class _navBarState extends State<navBar> {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      const AuctionTableScreen())); // olamlı
+                                      const CreateAuctionTableScreen())); // olamlı
                             },
                           ),
                         ),
