@@ -26,8 +26,7 @@ class _ViewAuctionTableCrewState extends State<ViewAuctionTableCrew> {
                                         ["3","Uskumru",45,3,24]
                                         ],
                                       ];
-  List<bool> isAuctioned = [true,true,false];
-  List<bool> isPublished = [false,true,true];
+
 
   List<List<dynamic>> table = []; 
 
@@ -43,9 +42,9 @@ class _ViewAuctionTableCrewState extends State<ViewAuctionTableCrew> {
                   children: [
                     Expanded(child: ListView.builder(
                            
-                        itemCount: getPublishedTables(tables, isPublished).length,
+                        itemCount:  tables.length,
                         itemBuilder: (context,index){
-                          return showTables(getPublishedTables(tables, isPublished),isAuctioned)[index];
+                          return showTables(tables)[index];
                         },
                         ),),           
 
@@ -58,7 +57,7 @@ class _ViewAuctionTableCrewState extends State<ViewAuctionTableCrew> {
   }
 
 
-  List<Column> showTables(List<List<List<dynamic>>> tables, List<bool> isAuctioned){
+  List<Column> showTables(List<List<List<dynamic>>> tables){
     final columns = [
       "No",
       "Product Name",
@@ -71,10 +70,7 @@ class _ViewAuctionTableCrewState extends State<ViewAuctionTableCrew> {
       Column(
       children: [
       Padding(padding: const EdgeInsets.all(8)),
-        Container(child: Align(alignment: Alignment.center,child: tableAuctioned(isAuctioned),),
-                width: double.infinity,
-                color: Colors.blue,
-                height: 22,),
+
       SingleChildScrollView(child: SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       
@@ -113,15 +109,4 @@ class _ViewAuctionTableCrewState extends State<ViewAuctionTableCrew> {
     }
     return publishedTables;
   }
-
-   Text tableAuctioned(List<bool> isAuctioned) {
-    if (isAuctioned[0]){
-      isAuctioned.add(isAuctioned.removeAt(0));
-      return Text("Auctioned");
-    }
-    else{
-      isAuctioned.add(isAuctioned.removeAt(0));
-      return Text("Not Auctioned");
-    }
-}
 }

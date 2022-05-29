@@ -1,12 +1,18 @@
 import 'package:myapp/Views/navBar.dart';
 import 'package:flutter/material.dart';
-class ViewAuctionTables extends StatefulWidget{
+import 'package:myapp/controllers/CoopHeadController.dart';
+import 'package:myapp/models/coopHead.dart';
+class ViewAuctionTableCoopHead extends StatefulWidget{
 
   @override
-  State<ViewAuctionTables> createState() => _ViewAuctionTablesState();
+  State<ViewAuctionTableCoopHead> createState() => _ViewAuctionTableCoopHeadState();
 }
 
-class _ViewAuctionTablesState extends State<ViewAuctionTables> {
+class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
+  
+
+
+
   List<List<List<dynamic>>> tables =  [
                                         [
                                         ["1","Levrek",20,10,10],
@@ -26,11 +32,9 @@ class _ViewAuctionTablesState extends State<ViewAuctionTables> {
                                         ["3","Uskumru",45,3,24]
                                         ],
                                       ];
-  List<bool> isAuctioned = [true,true,false];
-  List<bool> isPublished = [false,true,true];
+ 
 
   List<List<dynamic>> table = []; 
-
   
   @override
   Widget build(BuildContext context) {
@@ -43,22 +47,19 @@ class _ViewAuctionTablesState extends State<ViewAuctionTables> {
                   children: [
                     Expanded(child: ListView.builder(
                            
-                        itemCount: getPublishedTables(tables, isPublished).length,
+                        itemCount: tables.length,
                         itemBuilder: (context,index){
-                          return showTables(getPublishedTables(tables, isPublished),isAuctioned)[index];
+                          return showTables(tables)[index];
                         },
-                        ),),           
-
+                        ),),
+          
                     ],
-                      ),)
-                    
-                   ,);          
-             
-           
+                      ),)                 
+                   ,);                      
   }
 
 
-  List<Column> showTables(List<List<List<dynamic>>> tables, List<bool> isAuctioned){
+  List<Column> showTables(List<List<List<dynamic>>> tables){
     final columns = [
       "No",
       "Product Name",
@@ -66,32 +67,51 @@ class _ViewAuctionTablesState extends State<ViewAuctionTables> {
       "Base Price",
       "Sold Price"
     ];
+    int tableNum = 0;
   
-    var containers = tables.map((table) =>
-      Column(
+    List<Column> cols = [];
+    
+    for (var i = 0; i < tables.length; i++) {
+      table = tables[i];
+      Column col = Column(
       children: [
-      Padding(padding: const EdgeInsets.all(8)),
-        Container(child: Align(alignment: Alignment.center,child: tableAuctioned(isAuctioned),),
-                width: double.infinity,
-                color: Colors.blue,
-                height: 22,),
-      SingleChildScrollView(child: SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      
-        child: DataTable(
-          columns: getColumns(columns),
-          rows: getRows(table),
+        Padding(padding: const EdgeInsets.all(8)),
+        
+        SingleChildScrollView(child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        
+          child: DataTable(
+            columns: getColumns(columns),
+            rows: getRows(table),
+          ),
         ),
       ),
-    ),
-    Row(children: [
+   
+      Row(children: [
+          ElevatedButton(child: Text("Publish"),
+          onPressed: () {
+            setState(() {
+              publishAuctionTable(table);
+              }
+            );
+          }
+        ),
 
-        ElevatedButton(onPressed: () {}, child: Text("Update"))
-    ],)
+        ElevatedButton(child: Text("Update"),
+        onPressed: () {
+            setState(() {
+              updateAuctionTableRowView(context,table);
+            });
+          
+        }, )
       ],)
-    ).toList();        
+      ],
+      );
+     
+      cols.add(col);
+    }       
 
-    return containers;                
+    return cols;                
   }
   
 
@@ -104,24 +124,178 @@ class _ViewAuctionTablesState extends State<ViewAuctionTables> {
   List<DataColumn> getColumns(List<String> columns) =>
       columns.map((column) => DataColumn(label: Text(column))).toList();
 
-  List<List<List>> getPublishedTables(List<List<List>> tables, List<bool> isPublished) {
-    List<List<List<dynamic>>> publishedTables = [];
-    for (var i = 0; i < isPublished.length; i++) {
-      if (isPublished[i]){
-        publishedTables.add(tables[i]);
-      }
-    }
-    return publishedTables;
+    
+
+  void publishAuctionTable(List<List<dynamic>> table) { // table i published table a gönder
+    
+    
   }
 
-   Text tableAuctioned(List<bool> isAuctioned) {
-    if (isAuctioned[0]){
-      isAuctioned.add(isAuctioned.removeAt(0));
-      return Text("Auctioned");
+  void updateAuctionTableRowView(BuildContext context,List<List<dynamic>> table) {
+    
+      List<ListTile> tiles = [];
+
+      for (var i = 0; i < table.length; i++) {
+        ListTile tile = ListTile(title: Text("Update row ${i+1}"),
+                                  onTap: (){
+                                    //updateAuctionTableAlert(context, table,i);
+                                  },);
+                                tiles.add(tile);
+        
+      }
+      
+      showDialog(context: context, builder: (BuildContext context){
+      return AlertDialog(title: Text("Choose row"),
+                        content: Container(width: double.minPositive,
+                                  child: ListView.builder(itemCount: tiles.length,
+                                  shrinkWrap: true,
+                                      itemBuilder: (context,index){
+                                        return tiles[index];
+                                      }
+                                      ),)                        
+                                );
+      }
+      ).then((_) {
+      setState(() {});
+    });
+ 
+  }
+
+   bool _isNumeric(String str) {
+    if(str == null) {
+      return false;
     }
-    else{
-      isAuctioned.add(isAuctioned.removeAt(0));
-      return Text("Not Auctioned");
-    }
-}
+    return double.tryParse(str) != null;
+  }
+/*
+  void updateAuctionTableAlert(BuildContext context, List<List<dynamic>> table,int index){
+    final GlobalKey<FormState> _key = GlobalKey<FormState>();
+    final _productNameController = TextEditingController();
+    final _quantityController = TextEditingController();
+    final _basePriceController = TextEditingController();
+    String productName = '';
+    String quantity = '';
+    String basePrice = '';
+
+
+  
+    showDialog(context: context, builder: (BuildContext context){
+      return AlertDialog(title: Text("Update Table"),
+                          content: Form(child: Column(
+                            children: [
+                                TextFormField(
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  controller: _productNameController,
+                                  decoration: const InputDecoration(labelText: 'Product Name'),
+                                  validator: (value) { 
+                                    if (value!.isEmpty || _isNumeric(value)) {
+                                      return 'Please enter a product name with letters';}
+                                    else{
+                                      return null;}
+                                  },
+                                  onSaved: (value){
+                                    setState(() {
+                                      table[index][1] = value!;
+                                    });
+                                  },
+                                  onChanged: (value) => setState(() => productName = value)
+                                ),
+
+                                TextFormField(
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  controller: _quantityController,
+                                  decoration: const InputDecoration(labelText: 'Quantity'),
+                                  validator: (value) {
+                                    
+                                    if (value!.isEmpty || !(_isNumeric(value))) {
+                                      return 'Please enter a quantity with numbers';}
+                                    else{
+                                      return null;}
+                                    
+                                  },
+                                  onSaved: (value){
+                                    setState(() {
+                                      table[index][2] = int.parse(value!);
+                                    });
+                                  },
+                                  onChanged: (value) => setState(() => quantity = value)
+                                    
+                                  ),
+
+                                TextFormField(
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  controller: _basePriceController,
+                                  decoration: const InputDecoration(labelText: 'Base Price'),
+                                  validator: (value) {
+                                    
+                                    if (value!.isEmpty || !(_isNumeric(value))) {
+                                      return 'Please enter a base price with numbers';}
+                                    else{
+                                      return null;}
+                                  },
+                                  onSaved: (value){
+                                    setState(() {
+                                      table[index][3] = int.parse(value!);
+                                    });
+                                  },
+                                  onChanged: (value) => setState(() => basePrice = value),
+                                ),            
+                            ],
+                          
+                        ),
+                          ),
+                        actions: <Widget>[
+                          ElevatedButton.icon(
+                          icon: const Icon(Icons.cancel),
+                          label: const Text("Cancel"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            },
+                          ),
+
+                          ElevatedButton.icon(
+                            icon: const Icon(Icons.save),
+                            label: const Text("Save"),
+                            onPressed: () {
+                              if (_key.currentState!.validate()){
+                                _key.currentState!.save();
+
+                          setState(() {
+                            _productNameController.clear();
+                            _basePriceController.clear();
+                            _quantityController.clear();
+                          });
+
+                          Navigator.of(context).pop();
+                  }
+                },
+              ),
+                        ]
+                      );
+
+
+    }).then((_) {
+      setState(() {});
+    });
+  }
+  */
+
+  bool checkTablePublished(List<bool> isPublished, int i) {
+    return isPublished[i];
+  }
+
+  void showPopUpDialog(BuildContext context) {
+    showDialog(context: context, builder: (BuildContext context) {
+      Widget okButton = TextButton(
+        child: Text("OK"),
+        onPressed: () {
+          Navigator.of(context).pop();
+         },);
+      return AlertDialog(title: Text("Oops..."),
+                  content: Text("This table is already published"),
+                  actions: [okButton]
+            );
+    });
+    
+  }
 }

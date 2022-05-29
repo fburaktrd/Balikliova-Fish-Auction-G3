@@ -26,8 +26,7 @@ class _ViewAuctionTablesState extends State<ViewAuctionTableCustomerMember> {
                                         ["3","Uskumru",45,3,24]
                                         ],
                                       ];
-  List<bool> isAuctioned = [true,true,false];
-  List<bool> isPublished = [false,true,true];
+
 
   List<List<dynamic>> table = []; 
 
@@ -43,33 +42,21 @@ class _ViewAuctionTablesState extends State<ViewAuctionTableCustomerMember> {
                   children: [
                     Expanded(child: ListView.builder(
                            
-                        itemCount: getPublishedTables(tables, isPublished).length,
+                        itemCount: tables.length,
                         itemBuilder: (context,index){
-                          return showTables(getPublishedTables(tables, isPublished),isAuctioned)[index];
+                          return showTables(tables)[index];
                         },
                         ),),
-                         
-
-                        
-
-                       
-                        
-                            
 
                     ],
                       ),)
                     
                    ,);
-                  
-               
-
-              
-             
-           
+        
   }
 
 
-  List<Column> showTables(List<List<List<dynamic>>> tables,List<bool> isAuctioned){
+  List<Column> showTables(List<List<List<dynamic>>> tables){
     final columns = [
       "No",
       "Product Name",
@@ -82,10 +69,6 @@ class _ViewAuctionTablesState extends State<ViewAuctionTableCustomerMember> {
       Column(
       children: [
       Padding(padding: const EdgeInsets.all(8)),
-        Container(child: Align(alignment: Alignment.center,child: tableAuctioned(isAuctioned),),
-                width: double.infinity,
-                color: Colors.blue,
-                height: 22,),
       SingleChildScrollView(child: SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       
@@ -111,24 +94,5 @@ class _ViewAuctionTablesState extends State<ViewAuctionTableCustomerMember> {
   List<DataColumn> getColumns(List<String> columns) =>
       columns.map((column) => DataColumn(label: Text(column))).toList();
 
-  List<List<List>> getPublishedTables(List<List<List>> tables, List<bool> isPublished) {
-    List<List<List<dynamic>>> publishedTables = [];
-    for (var i = 0; i < isPublished.length; i++) {
-      if (isPublished[i]){
-        publishedTables.add(tables[i]);
-      }
-    }
-    return publishedTables;
-  }
-
-  Text tableAuctioned(List<bool> isAuctioned) {
-    if (isAuctioned[0]){
-      isAuctioned.add(isAuctioned.removeAt(0));
-      return Text("Auctioned");
-    }
-    else{
-      isAuctioned.add(isAuctioned.removeAt(0));
-      return Text("Not Auctioned");
-    }
-  }
+  
 }
