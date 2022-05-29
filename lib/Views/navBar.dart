@@ -131,7 +131,8 @@ class _navBarState extends State<navBar> {
                         Visibility(
                           visible: _coopHead,
                           child: ListTile(
-//if user is coop head//                           leading: const Icon(Icons.flag_rounded),
+                            //if user is coop head
+                            leading: const Icon(Icons.flag_rounded),
                             horizontalTitleGap: 1,
                             title: const Text('Start Live Auction'),
                             onTap: () {
@@ -169,7 +170,6 @@ class _navBarState extends State<navBar> {
                                               }
                                           }
                                       })
-                                    
                                   .catchError((onError) {
                                 //TODO pop-up snackbar//
                                 /*
@@ -228,7 +228,7 @@ class _navBarState extends State<navBar> {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                       ViewAuctionTableCoopHead())); //AuctionTableScreen()
+                                      ViewAuctionTableCoopHead())); //AuctionTableScreen()
                             },
                           ),
                         ),
