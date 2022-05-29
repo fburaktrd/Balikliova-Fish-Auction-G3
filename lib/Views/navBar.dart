@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/Views/UpdateAuctionTable.dart';
 import 'package:myapp/Views/ViewAuctionTableForCOOPHEAD.dart';
 import 'package:myapp/Views/AuctionTablePageForCooPHead.dart';
 import 'package:myapp/Views/ViewAuctionTableForOthers.dart';
@@ -228,7 +229,7 @@ class _navBarState extends State<navBar> {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      const ViewAuctionTableforCOOPHEAD())); //AuctionTableScreen()
+                                       ViewAuctionTableCoopHead())); //AuctionTableScreen()
                             },
                           ),
                         ),
@@ -243,7 +244,7 @@ class _navBarState extends State<navBar> {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      ViewAuctionTableCoopHead())); //AuctionTableScreen()
+                                      UpdateAuctionTable())); //AuctionTableScreen()
                             },
                           ),
                         ),
