@@ -119,10 +119,10 @@ class _SignUpState extends State<SignUp> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: TextFormField(
         validator: (value) {
-          return value!.isNotEmpty &
-                  value.contains(RegExp(r'^[a-zA-Z0-9._ :/]*$'))
+          return value!.isNotEmpty &&
+                checkAddress(value)
               ? null
-              : "Invalid Adress.";
+              : "Your address is not in the range.(Addresses that are in the range: Urla,Balıklıova,Mordoğan,Ildır).";
         },
         controller: address,
         keyboardType: TextInputType.streetAddress,
@@ -190,11 +190,10 @@ class _SignUpState extends State<SignUp> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: TextFormField(
         validator: (value) {
-          return value!.isNotEmpty &
-                  value.contains(RegExp(
-                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'))
-              ? null
-              : "Password must contain minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character (?=.*?[#?!@\$%^&*-])";
+          return (value!.isNotEmpty &&
+                  value.length < 6)
+              ? "Password must contain minimum six characters."
+              : null;
         },
         obscureText: true,
         controller: password,
