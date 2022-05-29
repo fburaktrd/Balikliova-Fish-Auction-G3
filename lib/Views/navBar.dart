@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-//import 'package:myapp/Views/auctionTableScreen.dart';
+
 import 'package:myapp/Views/home_page.dart';
 import 'package:myapp/Views/update_info.dart';
 import 'package:myapp/controllers/authService.dart';
 import 'package:myapp/models/database.dart';
 import 'package:myapp/Views/AuctionTablePageForCoopHead.dart';
-import 'AuctionTablePage.dart';
+import 'createAuctionTable.dart';
 import 'package:myapp/controllers//CoopHeadController.dart';
 
 class navBar extends StatefulWidget {
@@ -157,25 +157,11 @@ class _navBarState extends State<navBar> {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      AuctionTableScreen())); // olamlı
+                                      ViewAuctionTables())); // olamlı
                             },
                           ),
                         ),
-                        Visibility(
-                          visible: _coopHead || _crewMember,
-                          child: ListTile(
-                            //if user is coop head, views all auction tables
-                            leading: Icon(Icons.view_comfortable_sharp),
-                            horizontalTitleGap: 1,
-                            title: Text('Update Auction Tables'),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      AuctionTablePageForCoophead())); //AuctionTableScreen()
-                            },
-                          ),
-                        ),
+                       
                         Visibility(
                           visible: _coopMember,
                           child: ListTile(
@@ -309,51 +295,9 @@ class _navBarState extends State<navBar> {
                       },
                     ),
                   ),
-                  Visibility(
-                    visible: _coopHead,
-                    child: ListTile(
-                      //if user is coop head
-                      leading: Icon(Icons.flag_rounded),
-                      horizontalTitleGap: 1,
-                      title: Text('Start Live Auction'),
-                      onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                  Visibility(
-                    visible: _coopHead,
-                    child: ListTile(
-                      //if user is coop head
-                      leading: Icon(Icons.create_new_folder_rounded),
-                      horizontalTitleGap: 1,
-                      title: Text('Create Auction Table'),
-                      onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                  Visibility(
-                    visible: _coopHead,
-                    child: ListTile(
-                      //if user is coop head, views all auction tables
-                      leading: Icon(Icons.view_comfortable_sharp),
-                      horizontalTitleGap: 1,
-                      title: Text('View Auction Tables'),
-                      onTap: () {
-                        setState() {
-                          CoopHeadController().viewAuctionTables();
-                          Navigator.pop(context);
-                        }
-                      },
-                    ),
-                  ),
+                  
+                 
+                  
                   Visibility(
                     visible: _coopMember,
                     child: ListTile(
@@ -428,21 +372,7 @@ class _navBarState extends State<navBar> {
                       },
                     ),
                   ),
-                  Visibility(
-                    visible: true,
-                    child: ListTile(
-                      // for everyone
-                      leading: Icon(Icons.person),
-                      horizontalTitleGap: 1,
-                      title: Text('Profile Settings'),
-                      onTap: () {
-                        // Update the state of the app
-                        // ...
-                        // Then close the drawer
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
+                  
                 ],
               )),
       ),
