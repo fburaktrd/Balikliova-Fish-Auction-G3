@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Views/ViewAuctionTableForCOOPHEAD.dart';
+import 'package:myapp/Views/AuctionTablePageForCooPHead.dart';
 import 'package:myapp/Views/ViewAuctionTableForOthers.dart';
 //import 'package:myapp/Views/auctionTableScreen.dart';
 import 'package:myapp/Views/live_auction_coop.dart';
@@ -220,6 +221,21 @@ class _navBarState extends State<navBar> {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       const ViewAuctionTableforCOOPHEAD())); //AuctionTableScreen()
+                            },
+                          ),
+                        ),
+                        Visibility(
+                          visible: _coopHead || _crewMember,
+                          child: ListTile(
+                            //if user is coop head, views all auction tables
+                            leading: const Icon(Icons.view_comfortable_sharp),
+                            horizontalTitleGap: 1,
+                            title: const Text('Update Auction Tables'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      const AuctionTablePageForCoophead())); //AuctionTableScreen()
                             },
                           ),
                         ),

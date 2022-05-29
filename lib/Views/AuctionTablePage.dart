@@ -1,9 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:myapp/Views/navBar.dart';
 import 'package:myapp/controllers/AuctionTableGetItController.dart';
 import "package:myapp/controllers/auctionTableController.dart";
 import 'package:myapp/locator.dart';
+import 'package:myapp/Views/update_info.dart';
+import 'package:myapp/controllers/authService.dart';
+import 'package:myapp/models/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AuctionTableScreen extends StatefulWidget {
   const AuctionTableScreen({Key? key}) : super(key: key);
@@ -13,6 +16,14 @@ class AuctionTableScreen extends StatefulWidget {
 }
 
 class _AuctionTableScreenState extends State<AuctionTableScreen> {
+  bool _customer = false;
+  bool _coopMember = false;
+  bool _coopHead = false;
+  bool _coopCrew = false;
+  bool _crewMember = false;
+  bool loading = true;
+  var userInfo;
+
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   late AuctionTableController controller;
@@ -46,6 +57,29 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
 
   @override
   void initState() {
+    Database()
+        .ref
+        .child("Roles")
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((res) {
+      Database()
+          .ref
+          .child(res.value == "CUSTOMER" ? "Customer" : "Cooperative_Head")
+          .child(FirebaseAuth.instance.currentUser!.uid)
+          .get()
+          .then((userRes) {
+        userInfo = userRes.value;
+        print(FirebaseAuth.instance.currentUser!.uid);
+        checkUserTypes();
+        print(_coopHead);
+        setState(() {
+          loading = false;
+          print(userInfo);
+        });
+      });
+    });
+
     show_auct_table = oneTable.isEmpty ? false : true;
     setState(() {});
     super.initState();
@@ -53,6 +87,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
 
   @override
   Widget build(BuildContext context) {
+    checkUserTypes();
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -263,5 +298,76 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
       ),
     );
     return container;
+  }
+
+  void checkUserTypes() {
+    if (checkUserTypeCustomer()) {
+      _customer = true;
+      _coopMember = false;
+      _coopHead = false;
+      _coopCrew = false;
+      _crewMember = false;
+    } else if (checkUserTypeCoopCrew()) {
+      _coopCrew = true;
+      _customer = false;
+      _coopMember = false;
+      _coopHead = false;
+      _crewMember = false;
+    } else if (checkUserTypeCoopHead()) {
+      _coopHead = true;
+      _customer = false;
+      _coopMember = false;
+      _coopCrew = false;
+      _crewMember = false;
+    } else if (checkUserTypeCoopMember()) {
+      _coopMember = true;
+      _customer = false;
+      _coopHead = false;
+      _coopCrew = false;
+      _crewMember = false;
+    } else if (checkUserTypeCrewMember()) {
+      _crewMember = true;
+      _customer = false;
+      _coopMember = false;
+      _coopHead = false;
+      _coopCrew = false;
+    }
+  }
+
+  String getName() {
+    return (userInfo != null ? userInfo["name"] : "");
+  }
+
+  String getUserType() {
+    // return "COOP_HEAD";
+    return (userInfo != null ? userInfo["role"] : "");
+  }
+
+  bool checkUserType(String userType) {
+    if (getUserType() == userType) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool checkUserTypeCustomer() {
+    return checkUserType("CUSTOMER");
+  }
+
+  bool checkUserTypeCoopHead() {
+    return checkUserType("COOP_HEAD");
+  }
+
+  bool checkUserTypeCoopCrew() {
+    return checkUserType("Cooperative Crew");
+  }
+
+  bool checkUserTypeCoopMember() {
+    return checkUserType("Cooperative Member");
+  }
+
+  bool checkUserTypeCrewMember() {
+    return checkUserType("Crew Member");
   }
 }
