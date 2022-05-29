@@ -1,7 +1,5 @@
-import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:myapp/Views/navBar.dart';
 import 'package:myapp/controllers/AuctionTableGetItController.dart';
 import "package:myapp/controllers/auctionTableController.dart";
@@ -48,7 +46,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
 
   @override
   void initState() {
-    show_auct_table = oneTable.length == 0 ? false : true;
+    show_auct_table = oneTable.isEmpty ? false : true;
     setState(() {});
     super.initState();
   }
@@ -59,7 +57,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
       home: Scaffold(
         appBar: AppBar(
             title: const Text("Create Auction Table"), centerTitle: true),
-        drawer: navBar(),
+        drawer: const navBar(),
         body: Form(
           key: _key,
           child: Center(
@@ -67,7 +65,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
               children: [
                 show_auct_table == true
                     ? showAuctionTable(oneTable)
-                    : Text("You have no auction table..."),
+                    : const Text("You have no auction table..."),
                 FloatingActionButton(
                   child: const Icon(Icons.add),
                   onPressed: () {
@@ -90,7 +88,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                         show_auct_table = false;
                         setState(() {});
                       },
-                      child: Text('Delete Table'),
+                      child: const Text('Delete Table'),
                     ),
                     publishButton = TextButton(
                       style: ButtonStyle(
@@ -98,7 +96,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
                             MaterialStateProperty.all<Color>(Colors.blue),
                       ),
                       onPressed: () {},
-                      child: Text('Add Table to the library'),
+                      child: const Text('Add Table to the library'),
                     )
                   ],
                 ) //if (oneTable.isNotEmpty) buttonRow
@@ -239,7 +237,7 @@ class _AuctionTableScreenState extends State<AuctionTableScreen> {
       table.map((row) => DataRow(cells: getCells(row))).toList();
 
   List<DataCell> getCells(List<dynamic> row) =>
-      row.map((cell) => DataCell(Text('${cell}'))).toList();
+      row.map((cell) => DataCell(Text('$cell'))).toList();
 
   List<DataColumn> getColumns(List<String> columns) =>
       columns.map((column) => DataColumn(label: Text(column))).toList();

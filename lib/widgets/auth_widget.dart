@@ -1,15 +1,12 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Views/home_page.dart';
 import 'package:myapp/Views/login_register_page.dart';
-import 'package:myapp/Views/update_info.dart';
 import 'package:myapp/locator.dart';
 import 'package:myapp/models/coopHead.dart';
 import 'package:myapp/models/customer.dart';
 import 'package:myapp/controllers/UserController.dart';
 import 'package:myapp/models/database.dart';
 import 'package:myapp/models/user.dart';
-import 'package:myapp/widgets/error_page.dart';
 
 class AuthWidget extends StatefulWidget {
   const AuthWidget({Key? key, required this.snapshot}) : super(key: key);
@@ -27,7 +24,7 @@ class _AuthWidgetState extends State<AuthWidget> {
     // TODO: implement initState
     super.initState();
 
-    Future.delayed(Duration(milliseconds: 1000))
+    Future.delayed(const Duration(milliseconds: 1000))
         .then((value) => setState(() {}));
   }
 

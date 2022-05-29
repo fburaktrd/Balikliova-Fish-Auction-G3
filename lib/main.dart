@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:myapp/Views/login_register_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:myapp/controllers/authService.dart';
 import 'package:myapp/locator.dart';

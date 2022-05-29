@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:myapp/controllers/auctionTableController.dart';
 
 class AuctionTableGetItController extends ChangeNotifier {
   List<List<dynamic>> _table = [];

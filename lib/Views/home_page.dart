@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Views/navBar.dart';
 import 'package:myapp/controllers/UserController.dart';
@@ -28,7 +27,7 @@ class _HomePageState extends State<HomePage> {
     //getIt<LandingPageCustomerController>().getCustomer; user'ı alıyoruz.
     return Scaffold(
         appBar: AppBar(title: const Text("Home Page")),
-        drawer: navBar(),
+        drawer: const navBar(),
         body: Center(
             child: MaterialButton(
                 onPressed: () {
@@ -36,7 +35,7 @@ class _HomePageState extends State<HomePage> {
                   print("Logged out");
                 },
                 color: Colors.blue[300],
-                child: Text("Log out ${name}",
+                child: Text("Log out $name",
                     style: Theme.of(context).textTheme.bodyLarge))));
   }
 }

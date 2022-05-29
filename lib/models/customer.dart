@@ -1,7 +1,7 @@
 import 'package:myapp/models/user.dart';
 
 class Customer extends GeneralUser {
-  String _address;
+  final String _address;
   Customer(
       {required String uid,
       required String name,

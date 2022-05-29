@@ -7,13 +7,13 @@ class UpdateAuctionTable extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
+        title: const Center(
             child: Text(
           "Update Auction Table",
         )),
       ),
       body: Column(
-        children: [Center(child: Text("Overview")), Placeholder()],
+        children: const [Center(child: Text("Overview")), Placeholder()],
       ),
     );
   }

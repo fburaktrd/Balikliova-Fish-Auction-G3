@@ -24,9 +24,9 @@ class _InformationScreenState extends State<InformationScreen> {
   final _phone = TextEditingController();
   final _password = TextEditingController();
   final _address = TextEditingController();
-  bool _valid_username = false;
-  bool _valid_phone = false;
-  bool _valid_password = false;
+  final bool _valid_username = false;
+  final bool _valid_phone = false;
+  final bool _valid_password = false;
   bool _isLoading = true;
   int id = 0;
 
@@ -97,10 +97,10 @@ class _InformationScreenState extends State<InformationScreen> {
       home: Scaffold(
         appBar: AppBar(title: const Text("Change Information")),
         resizeToAvoidBottomInset: false,
-        drawer: navBar(),
+        drawer: const navBar(),
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: (_isLoading == true
                 ? const CircularProgressIndicator(color: Colors.blue)
                 : Form(
@@ -116,7 +116,7 @@ class _InformationScreenState extends State<InformationScreen> {
                             Text(
                               "Name: ${getName()}",
                               textAlign: TextAlign.left,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 23.0,
                               ),
                             ),
@@ -126,8 +126,8 @@ class _InformationScreenState extends State<InformationScreen> {
                                   updateNameAlertDialog(context);
                                 });
                               },
-                              icon: Icon(Icons.edit),
-                              label: Text("Edit"),
+                              icon: const Icon(Icons.edit),
+                              label: const Text("Edit"),
                             ),
                           ],
                         ),
@@ -138,7 +138,7 @@ class _InformationScreenState extends State<InformationScreen> {
                             Text(
                               "Username: ${getUsername()}",
                               textAlign: TextAlign.left,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 23.0,
                               ),
                             ),
@@ -148,8 +148,8 @@ class _InformationScreenState extends State<InformationScreen> {
                                   updateUsernameAlertDialog(context);
                                 });
                               },
-                              icon: Icon(Icons.edit),
-                              label: Text("Edit"),
+                              icon: const Icon(Icons.edit),
+                              label: const Text("Edit"),
                             ),
                           ],
                         ),
@@ -160,7 +160,7 @@ class _InformationScreenState extends State<InformationScreen> {
                             Text(
                               "Phone: ${getPhoneNumber()}",
                               textAlign: TextAlign.left,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 23.0,
                               ),
                             ),
@@ -170,8 +170,8 @@ class _InformationScreenState extends State<InformationScreen> {
                                   updatePhoneAlertDialog(context);
                                 });
                               },
-                              icon: Icon(Icons.edit),
-                              label: Text("Edit"),
+                              icon: const Icon(Icons.edit),
+                              label: const Text("Edit"),
                             ),
                           ],
                         ),
@@ -185,19 +185,19 @@ class _InformationScreenState extends State<InformationScreen> {
                                   updatePasswordAlertDialog(context);
                                 });
                               },
-                              icon: Icon(Icons.lock_rounded),
-                              label: Text("Update Password"),
+                              icon: const Icon(Icons.lock_rounded),
+                              label: const Text("Update Password"),
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
+                            const Text(
                               "Delivery Options",
                               textAlign: TextAlign.left,
                               style: TextStyle(
@@ -215,8 +215,8 @@ class _InformationScreenState extends State<InformationScreen> {
                                     addNewAddressAlertDialog(context);
                                   });
                                 },
-                                icon: Icon(Icons.add_location_alt),
-                                label: Text("Add new address"),
+                                icon: const Icon(Icons.add_location_alt),
+                                label: const Text("Add new address"),
                               ),
                             ),
                           ],
@@ -226,7 +226,7 @@ class _InformationScreenState extends State<InformationScreen> {
                             children: getDeliveryOptions()
                                 .map(
                                   (data) => RadioListTile(
-                                    title: Text("${data.deliveryAddress}"),
+                                    title: Text(data.deliveryAddress),
                                     groupValue: id,
                                     value: data.index,
                                     onChanged: (val) {
@@ -249,8 +249,8 @@ class _InformationScreenState extends State<InformationScreen> {
                                 deleteChosenOption(id);
                               });
                             },
-                            icon: Icon(Icons.delete_rounded),
-                            label: Text("Delete chosen option"),
+                            icon: const Icon(Icons.delete_rounded),
+                            label: const Text("Delete chosen option"),
                           ),
                         ),
                         Visibility(
@@ -262,8 +262,8 @@ class _InformationScreenState extends State<InformationScreen> {
                                 id = 0;
                               });
                             },
-                            icon: Icon(Icons.save),
-                            label: Text("Save chosen as delivery option"),
+                            icon: const Icon(Icons.save),
+                            label: const Text("Save chosen as delivery option"),
                           ),
                         ),
                       ],
@@ -276,31 +276,31 @@ class _InformationScreenState extends State<InformationScreen> {
   }
 
   String getName() {
-    return this.name;
+    return name;
   }
 
   void setName(String text) {
-    this.name = text;
+    name = text;
   }
 
   String getUsername() {
-    return this.username;
+    return username;
   }
 
   void setUsername(String text) {
-    this.username = text;
+    username = text;
   }
 
   String getPhoneNumber() {
-    return this.phone;
+    return phone;
   }
 
   void setPhoneNumber(String text) {
-    this.phone = text;
+    phone = text;
   }
 
   void setPassword(String newPassword) {
-    this.password = newPassword;
+    password = newPassword;
   }
 
   bool checkUsernameExists(String newUsername) {
@@ -321,19 +321,19 @@ class _InformationScreenState extends State<InformationScreen> {
     List<String> addresses = getAddresses();
     List<DeliveryOption> deliveryOptions = [];
     for (int i = 0; i < addresses.length; i++) {
-      DeliveryOption del_opt =
-          new DeliveryOption(deliveryAddress: addresses[i], index: i);
-      deliveryOptions.add(del_opt);
+      DeliveryOption delOpt =
+          DeliveryOption(deliveryAddress: addresses[i], index: i);
+      deliveryOptions.add(delOpt);
     }
     return deliveryOptions;
   }
 
-  void setInfoDb(String role_node, String info_label, String value) {
+  void setInfoDb(String roleNode, String infoLabel, String value) {
     Database()
         .ref
-        .child(role_node)
+        .child(roleNode)
         .child(user_info["uid"])
-        .child(info_label)
+        .child(infoLabel)
         .set(value);
   }
 
@@ -355,22 +355,22 @@ class _InformationScreenState extends State<InformationScreen> {
             initialValue: TRphoneCode,
             formatInput: true,
             keyboardType:
-                TextInputType.numberWithOptions(signed: true, decimal: true),
-            inputBorder: OutlineInputBorder(),
+                const TextInputType.numberWithOptions(signed: true, decimal: true),
+            inputBorder: const OutlineInputBorder(),
             onSaved: (PhoneNumber number) {},
             textFieldController: _phone,
           ),
           actions: <Widget>[
             ElevatedButton.icon(
-              icon: Icon(Icons.cancel),
-              label: Text("Cancel"),
+              icon: const Icon(Icons.cancel),
+              label: const Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton.icon(
-              icon: Icon(Icons.save),
-              label: Text("Save"),
+              icon: const Icon(Icons.save),
+              label: const Text("Save"),
               onPressed: () {
                 if (checkPhone(context, _phone.text)) {
                   phone = _phone.text;
@@ -410,15 +410,15 @@ class _InformationScreenState extends State<InformationScreen> {
           ),
           actions: <Widget>[
             ElevatedButton.icon(
-              icon: Icon(Icons.cancel),
-              label: Text("Cancel"),
+              icon: const Icon(Icons.cancel),
+              label: const Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton.icon(
-              icon: Icon(Icons.save),
-              label: Text("Save"),
+              icon: const Icon(Icons.save),
+              label: const Text("Save"),
               onPressed: () {
                 if (checkPassword(context, _password.text)) {
                   setPassword(_password.text);
@@ -455,15 +455,15 @@ class _InformationScreenState extends State<InformationScreen> {
           ),
           actions: <Widget>[
             ElevatedButton.icon(
-              icon: Icon(Icons.cancel),
-              label: Text("Cancel"),
+              icon: const Icon(Icons.cancel),
+              label: const Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton.icon(
-              icon: Icon(Icons.save),
-              label: Text("Save"),
+              icon: const Icon(Icons.save),
+              label: const Text("Save"),
               onPressed: () {
                 if (checkUsername(context, _username.text)) {
                   username = _username.text;
@@ -502,15 +502,15 @@ class _InformationScreenState extends State<InformationScreen> {
           ),
           actions: <Widget>[
             ElevatedButton.icon(
-              icon: Icon(Icons.cancel),
-              label: Text("Cancel"),
+              icon: const Icon(Icons.cancel),
+              label: const Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton.icon(
-              icon: Icon(Icons.save),
-              label: Text("Save"),
+              icon: const Icon(Icons.save),
+              label: const Text("Save"),
               onPressed: () {
                 if (checkName(context, _name.text)) {
                   name = _name.text;
@@ -599,7 +599,7 @@ class _InformationScreenState extends State<InformationScreen> {
   }
 
   void addNewAddress(String newAddress) {
-    this.addresses.add(newAddress);
+    addresses.add(newAddress);
   }
 
   void displayFailMessage(BuildContext context, String message) {
@@ -607,14 +607,14 @@ class _InformationScreenState extends State<InformationScreen> {
   }
 
   void deleteChosenOption(int index) {
-    this.addresses.removeAt(index);
+    addresses.removeAt(index);
   }
 
   void setChosenAddress(int index) {
     //replace 2 adresses. index 0 daki adres chosen (aktif) seçilmiş delivery option olarak kabul edilir.
-    String tempAddress = this.addresses[0];
-    this.addresses[0] = this.addresses[index];
-    this.addresses[index] = tempAddress;
+    String tempAddress = addresses[0];
+    addresses[0] = addresses[index];
+    addresses[index] = tempAddress;
   }
 
   void displaySuccessMessage(BuildContext context, String message) {
@@ -626,11 +626,11 @@ class _InformationScreenState extends State<InformationScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("${title}"),
-          content: Text("${message}."),
+          title: Text(title),
+          content: Text("$message."),
           actions: <Widget>[
             ElevatedButton(
-              child: new Text("OK"),
+              child: const Text("OK"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -661,15 +661,15 @@ class _InformationScreenState extends State<InformationScreen> {
           ),
           actions: <Widget>[
             ElevatedButton.icon(
-              icon: Icon(Icons.cancel),
-              label: Text("Cancel"),
+              icon: const Icon(Icons.cancel),
+              label: const Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             ElevatedButton.icon(
-              icon: Icon(Icons.save),
-              label: Text("Save"),
+              icon: const Icon(Icons.save),
+              label: const Text("Save"),
               onPressed: () {
                 if (checkAddress(context, _address.text)) {
                   //Think about it... Burak

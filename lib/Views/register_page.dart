@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/controllers/authService.dart';
-import 'package:myapp/models/customer.dart';
 
 bool checkAddress(String address) {
   List<String> acceptedAdresses = <String>[

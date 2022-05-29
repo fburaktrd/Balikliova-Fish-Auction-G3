@@ -1,5 +1,3 @@
-import 'package:myapp/models/coopHead.dart';
-import '../views/AuctionTablePageForCoopHead.dart';
 import 'UserController.dart';
 
 class CoopHeadController extends UserController {

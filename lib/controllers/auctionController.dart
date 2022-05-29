@@ -1,6 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:myapp/models/auction.dart';
 import 'package:myapp/models/database.dart';
 
 class AuctionController{

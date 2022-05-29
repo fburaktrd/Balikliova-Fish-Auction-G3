@@ -1,8 +1,5 @@
-import "package:myapp/Views/AuctionTablePage.dart";
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/colors.dart';
 import 'package:myapp/controllers/CoopHeadController.dart';
-import 'navBar.dart';
 
 class AuctionTablePageForCoophead extends StatefulWidget {
   const AuctionTablePageForCoophead({Key? key}) : super(key: key);
@@ -153,7 +150,7 @@ class _AuctionTablePageForCoopheadState extends State<AuctionTablePageForCoophea
 
   List<DataCell> getCells(List<dynamic> row) =>
       row.map((cell) =>
-          DataCell(Text('${cell}'))).toList();
+          DataCell(Text('$cell'))).toList();
 
   List<DataColumn> getColumns(List<String> columns) =>
       columns.map((column) =>

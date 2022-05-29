@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Views/ViewAuctionTableForCOOPHEAD.dart';
 import 'package:myapp/Views/ViewAuctionTableForOthers.dart';
 //import 'package:myapp/Views/auctionTableScreen.dart';
-import 'package:myapp/Views/home_page.dart';
+import 'package:myapp/Views/live_auction_coop.dart';
 import 'package:myapp/Views/update_info.dart';
 import 'package:myapp/controllers/authService.dart';
 import 'package:myapp/models/database.dart';
@@ -54,10 +54,15 @@ class _navBarState extends State<navBar> {
     super.initState();
   }
 
+  //double toDouble(TimeOfDay givenTime) =>
+  //    givenTime.hour + givenTime.minute / 60.0;
+//
+  //String timeToString(TimeOfDay givenTime) =>
+  //    givenTime.hour.toString() + ":" + givenTime.minute.toString();
   @override
   Widget build(BuildContext context) {
     checkUserTypes();
-    return Container(
+    return SizedBox(
       width: 250,
       child: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
@@ -77,24 +82,24 @@ class _navBarState extends State<navBar> {
                           height: 135,
                           width: 250,
                           child: DrawerHeader(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.blue,
                             ),
                             child: Container(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 10,
                                     height: 12,
                                   ),
                                   Text(
                                     getName(),
-                                    style: TextStyle(fontSize: 26),
+                                    style: const TextStyle(fontSize: 26),
                                   ),
                                   Text(
                                     getUserType(),
-                                    style: TextStyle(fontSize: 18),
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                 ],
                               ),
@@ -105,9 +110,10 @@ class _navBarState extends State<navBar> {
                           visible: _coopCrew | _coopMember,
                           //if user is coop crew
                           child: ListTile(
-                            leading: Icon(Icons.arrow_forward_ios_rounded),
+                            leading:
+                                const Icon(Icons.arrow_forward_ios_rounded),
                             horizontalTitleGap: 1,
-                            title: Text('Join Live Auction'),
+                            title: const Text('Join Live Auction'),
                             onTap: () {
                               // Update the state of the app
                               // ...
@@ -116,6 +122,56 @@ class _navBarState extends State<navBar> {
                             },
                           ),
                         ),
+                        //Visibility(
+                        //  visible: _coopHead,
+                        //  child: ListTile(
+//if user is coop head//
+                        //    leading: const Icon(Icons.flag_rounded),
+                        //    horizontalTitleGap: 1,
+                        //    title: const Text('Start Live Auction'),
+                        //    onTap: () {
+                        //      showTimePicker(
+                        //              context: context,
+                        //              helpText: "Current Time: " +
+                        //                  timeToString(TimeOfDay.now()),
+                        //              initialTime: TimeOfDay.now())
+                        //          .then((value) => {
+                        //                if (value != null)
+                        //                  {
+                        //                    if (toDouble(TimeOfDay.now()) <
+                        //                        toDouble(value))
+                        //                      {
+                        //                        Navigator.pop(context),
+                        //                        Navigator.of(context).push(
+                        //                            MaterialPageRoute(
+                        //                                builder: (BuildContext
+                        //                                        context) =>
+                        //                                    const LiveAuctionCoop()))
+                        //                      }
+                        //                    else
+                        //                      {
+                        //                        Flushbar(
+                        //                                title:
+                        //                                    "Past Time Error",
+                        //                                message:
+                        //                                    "Please choose a future time",
+                        //                                duration: const Duration(
+                        //                                    seconds: 3))
+                        //                            .show(context)
+                        //                      }
+                        //                  }
+                        //              })
+                        //          .catchError((onError) {
+//TODO pop-up snackbar//
+                        //        Flushbar(
+                        //                title: "Error while setting time",
+                        //                message: "Please try again.",
+                        //                duration: const Duration(seconds: 3))
+                        //            .show(context);
+                        //      });
+                        //    },
+                        //  ),
+                        //),
                         Visibility(
                           visible: _coopHead,
                           child: ListTile(
@@ -124,10 +180,13 @@ class _navBarState extends State<navBar> {
                             horizontalTitleGap: 1,
                             title: Text('Start Live Auction'),
                             onTap: () {
-                              // Update the state of the app
+                              Navigator.pop(context);
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      LiveAuctionCoop()));
+//                             // Update the state of the app
                               // ...
                               // Then close the drawer
-                              Navigator.pop(context);
                             },
                           ),
                         ),
@@ -135,14 +194,15 @@ class _navBarState extends State<navBar> {
                           visible: _coopHead,
                           child: ListTile(
                             //if user is coop head
-                            leading: Icon(Icons.create_new_folder_rounded),
+                            leading:
+                                const Icon(Icons.create_new_folder_rounded),
                             horizontalTitleGap: 1,
-                            title: Text('Create Auction Table'),
+                            title: const Text('Create Auction Table'),
                             onTap: () {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      AuctionTableScreen())); // olamlı
+                                      const AuctionTableScreen())); // olamlı
                             },
                           ),
                         ),
@@ -150,14 +210,14 @@ class _navBarState extends State<navBar> {
                           visible: _coopHead,
                           child: ListTile(
                             //if user is coop head, views all auction tables
-                            leading: Icon(Icons.view_comfortable_sharp),
+                            leading: const Icon(Icons.view_comfortable_sharp),
                             horizontalTitleGap: 1,
-                            title: Text('View Auction Tables'),
+                            title: const Text('View Auction Tables'),
                             onTap: () {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      ViewAuctionTableforCOOPHEAD())); //AuctionTableScreen()
+                                      const ViewAuctionTableforCOOPHEAD())); //AuctionTableScreen()
                             },
                           ),
                         ),
@@ -165,9 +225,9 @@ class _navBarState extends State<navBar> {
                           visible: _coopMember,
                           child: ListTile(
                             //if user is coop member
-                            leading: Icon(Icons.payments_outlined),
+                            leading: const Icon(Icons.payments_outlined),
                             horizontalTitleGap: 1,
-                            title: Text('Payrolls'),
+                            title: const Text('Payrolls'),
                             onTap: () {
                               // Update the state of the app
                               // ...
@@ -179,9 +239,9 @@ class _navBarState extends State<navBar> {
                         Visibility(
                           visible: _customer,
                           child: ListTile(
-                            leading: Icon(Icons.double_arrow_outlined),
+                            leading: const Icon(Icons.double_arrow_outlined),
                             horizontalTitleGap: 1,
-                            title: Text('Enter Live Auction'),
+                            title: const Text('Enter Live Auction'),
                             onTap: () {
                               // Update the state of the app
                               // ...
@@ -194,14 +254,14 @@ class _navBarState extends State<navBar> {
                           visible: _coopMember | _coopCrew | _customer,
                           child: ListTile(
                             // if user is coop member, coop crew, customer
-                            leading: Icon(Icons.view_day),
+                            leading: const Icon(Icons.view_day),
                             horizontalTitleGap: 1,
-                            title: Text('View Auction Table'),
+                            title: const Text('View Auction Table'),
                             onTap: () {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      ViewAuctionTableforOthers())); //AuctionTableScreen()
+                                      const ViewAuctionTableforOthers())); //AuctionTableScreen()
                             },
                           ),
                         ),
@@ -209,9 +269,9 @@ class _navBarState extends State<navBar> {
                           // if user is customer
                           visible: _customer,
                           child: ListTile(
-                            leading: Icon(Icons.point_of_sale),
+                            leading: const Icon(Icons.point_of_sale),
                             horizontalTitleGap: 1,
-                            title: Text('Order Information'),
+                            title: const Text('Order Information'),
                             onTap: () {
                               // Update the state of the app
                               // ...
@@ -224,9 +284,9 @@ class _navBarState extends State<navBar> {
                           visible: _coopCrew,
                           child: ListTile(
                             //if user is coop crew
-                            leading: Icon(Icons.delivery_dining),
+                            leading: const Icon(Icons.delivery_dining),
                             horizontalTitleGap: 1,
-                            title: Text('Delivery Information'),
+                            title: const Text('Delivery Information'),
                             onTap: () {
                               // Update the state of the app
                               // ...
@@ -239,14 +299,14 @@ class _navBarState extends State<navBar> {
                           visible: true,
                           child: ListTile(
                             // for everyone
-                            leading: Icon(Icons.person),
+                            leading: const Icon(Icons.person),
                             horizontalTitleGap: 1,
-                            title: Text('Profile Settings'),
+                            title: const Text('Profile Settings'),
                             onTap: () {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      InformationScreen()));
+                                      const InformationScreen()));
                             },
                           ),
                         ),
@@ -259,12 +319,12 @@ class _navBarState extends State<navBar> {
                       child: Container(
                         child: Column(
                           children: [
-                            Divider(),
+                            const Divider(),
                             Visibility(
                               visible: true,
                               child: ListTile(
-                                leading: Icon(Icons.logout),
-                                title: Text('Log Out'),
+                                leading: const Icon(Icons.logout),
+                                title: const Text('Log Out'),
                                 onTap: () {
                                   // Update the state of the app
                                   // ...

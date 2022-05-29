@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:intl/intl.dart';
 
 
 class Database{
@@ -12,11 +10,11 @@ class Database{
     return snap;
   }
 
-  void setUser(String uid, String username, String name, String surname, String address, String phone_number) {
+  void setUser(String uid, String username, String name, String surname, String address, String phoneNumber) {
     ref
         .child("Users")
         .child(username)
-        .set({"username": username, "name": name, "uid": uid, "phone_number": phone_number, "address": address, "surname": surname});
+        .set({"username": username, "name": name, "uid": uid, "phone_number": phoneNumber, "address": address, "surname": surname});
     ref.child("Usernames").child(uid).set(username);
   }
 
