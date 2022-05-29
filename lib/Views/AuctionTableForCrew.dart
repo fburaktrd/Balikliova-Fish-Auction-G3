@@ -1,12 +1,12 @@
 import 'package:myapp/Views/navBar.dart';
 import 'package:flutter/material.dart';
-class ViewAuctionTables extends StatefulWidget{
+class ViewAuctionTableCrew extends StatefulWidget{
 
   @override
-  State<ViewAuctionTables> createState() => _ViewAuctionTablesState();
+  State<ViewAuctionTableCrew> createState() => _ViewAuctionTableCrewState();
 }
 
-class _ViewAuctionTablesState extends State<ViewAuctionTables> {
+class _ViewAuctionTableCrewState extends State<ViewAuctionTableCrew> {
   List<List<List<dynamic>>> tables =  [
                                         [
                                         ["1","Levrek",20,10,10],

@@ -1,12 +1,12 @@
 import 'package:myapp/Views/navBar.dart';
 import 'package:flutter/material.dart';
-class ViewAuctionTables extends StatefulWidget{
+class ViewAuctionTableCustomerMember extends StatefulWidget{
 
   @override
-  State<ViewAuctionTables> createState() => _ViewAuctionTablesState();
+  State<ViewAuctionTableCustomerMember> createState() => _ViewAuctionTablesState();
 }
 
-class _ViewAuctionTablesState extends State<ViewAuctionTables> {
+class _ViewAuctionTablesState extends State<ViewAuctionTableCustomerMember> {
   List<List<List<dynamic>>> tables =  [
                                         [
                                         ["1","Levrek",20,10,10],
@@ -47,18 +47,29 @@ class _ViewAuctionTablesState extends State<ViewAuctionTables> {
                         itemBuilder: (context,index){
                           return showTables(getPublishedTables(tables, isPublished),isAuctioned)[index];
                         },
-                        ),),           
+                        ),),
+                         
+
+                        
+
+                       
+                        
+                            
 
                     ],
                       ),)
                     
-                   ,);          
+                   ,);
+                  
+               
+
+              
              
            
   }
 
 
-  List<Column> showTables(List<List<List<dynamic>>> tables, List<bool> isAuctioned){
+  List<Column> showTables(List<List<List<dynamic>>> tables,List<bool> isAuctioned){
     final columns = [
       "No",
       "Product Name",
@@ -84,10 +95,6 @@ class _ViewAuctionTablesState extends State<ViewAuctionTables> {
         ),
       ),
     ),
-    Row(children: [
-
-        ElevatedButton(onPressed: () {}, child: Text("Update"))
-    ],)
       ],)
     ).toList();        
 
@@ -114,7 +121,7 @@ class _ViewAuctionTablesState extends State<ViewAuctionTables> {
     return publishedTables;
   }
 
-   Text tableAuctioned(List<bool> isAuctioned) {
+  Text tableAuctioned(List<bool> isAuctioned) {
     if (isAuctioned[0]){
       isAuctioned.add(isAuctioned.removeAt(0));
       return Text("Auctioned");
@@ -123,5 +130,5 @@ class _ViewAuctionTablesState extends State<ViewAuctionTables> {
       isAuctioned.add(isAuctioned.removeAt(0));
       return Text("Not Auctioned");
     }
-}
+  }
 }

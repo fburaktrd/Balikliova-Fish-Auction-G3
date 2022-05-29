@@ -8,8 +8,11 @@ import 'package:myapp/Views/live_auction_coop.dart';
 import 'package:myapp/Views/update_info.dart';
 import 'package:myapp/controllers/authService.dart';
 import 'package:myapp/models/database.dart';
+import 'package:myapp/Views/AuctionTablePageForCoopHead.dart';
+import 'package:myapp/Views/AuctionTableForCrew.dart';
+import 'package:myapp/Views/AuctionTableForCustomerMember.dart';
 
-import 'package:another_flushbar/flushbar.dart';
+//import 'package:another_flushbar/flushbar.dart';
 
 import 'AuctionTablePage.dart';
 
@@ -152,6 +155,7 @@ class _navBarState extends State<navBar> {
                                               }
                                             else
                                               {
+                                                /*
                                                 Flushbar(
                                                         title:
                                                             "Past Time Error",
@@ -161,16 +165,20 @@ class _navBarState extends State<navBar> {
                                                             const Duration(
                                                                 seconds: 3))
                                                     .show(context)
+                                                    */
                                               }
                                           }
                                       })
+                                    
                                   .catchError((onError) {
                                 //TODO pop-up snackbar//
+                                /*
                                 Flushbar(
                                         title: "Error while setting time",
                                         message: "Please try again.",
                                         duration: const Duration(seconds: 3))
                                     .show(context);
+                                    */
                               });
                             },
                           ),
@@ -225,7 +233,7 @@ class _navBarState extends State<navBar> {
                           ),
                         ),
                         Visibility(
-                          visible: _coopHead || _crewMember,
+                          visible: _coopHead | _crewMember,
                           child: ListTile(
                             //if user is coop head, views all auction tables
                             leading: const Icon(Icons.view_comfortable_sharp),
@@ -235,7 +243,7 @@ class _navBarState extends State<navBar> {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      const AuctionTablePageForCoophead())); //AuctionTableScreen()
+                                      ViewAuctionTableCoopHead())); //AuctionTableScreen()
                             },
                           ),
                         ),
@@ -269,7 +277,7 @@ class _navBarState extends State<navBar> {
                           ),
                         ),
                         Visibility(
-                          visible: _coopMember | _coopCrew | _customer,
+                          visible: _coopMember | _customer,
                           child: ListTile(
                             // if user is coop member, coop crew, customer
                             leading: const Icon(Icons.view_day),
@@ -279,7 +287,22 @@ class _navBarState extends State<navBar> {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      const ViewAuctionTableforOthers())); //AuctionTableScreen()
+                                      ViewAuctionTableCustomerMember())); //AuctionTableScreen()
+                            },
+                          ),
+                        ),
+                        Visibility(
+                          visible: _crewMember,
+                          child: ListTile(
+                            // if user is coop member, coop crew, customer
+                            leading: const Icon(Icons.view_day),
+                            horizontalTitleGap: 1,
+                            title: const Text('View Auction Table'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ViewAuctionTableCrew())); //AuctionTableScreen()
                             },
                           ),
                         ),
