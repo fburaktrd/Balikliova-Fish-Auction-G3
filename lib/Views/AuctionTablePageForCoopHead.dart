@@ -1,65 +1,77 @@
 import 'package:myapp/Views/navBar.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/controllers/CoopHeadController.dart';
+import 'package:myapp/controllers/auctionTableController.dart';
+import 'package:myapp/models/auctionTable.dart';
 import 'package:myapp/models/coopHead.dart';
-class ViewAuctionTableCoopHead extends StatefulWidget{
 
+class ViewAuctionTableCoopHead extends StatefulWidget {
   @override
-  State<ViewAuctionTableCoopHead> createState() => _ViewAuctionTableCoopHeadState();
+  State<ViewAuctionTableCoopHead> createState() =>
+      _ViewAuctionTableCoopHeadState();
 }
 
 class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
-  
+  List<AuctionTable> auctionTables = [];
+  List<List<List<dynamic>>> tables = [
+    [
+      ["1", "Levrek", 20, 10, 10],
+      ["2", "Hamsi", 12, 23, 43],
+      ["3", "Sardalya", 45, 3, 24]
+    ],
+    [
+      ["1", "Çipura", 20, 10, 10],
+      ["2", "Sazan", 12, 23, 43],
+      ["3", "Kalkan", 45, 3, 24]
+    ],
+    [
+      ["1", "Lüfer", 20, 10, 10],
+      ["2", "Palamut", 12, 23, 43],
+      ["3", "Uskumru", 45, 3, 24]
+    ],
+  ];
 
+  List<List<dynamic>> table = [];
 
-
-  List<List<List<dynamic>>> tables =  [
-                                        [
-                                        ["1","Levrek",20,10,10],
-                                        ["2","Hamsi",12,23,43],
-                                        ["3","Sardalya",45,3,24]
-                                        ],
-
-                                        [
-                                        ["1","Çipura",20,10,10],
-                                        ["2","Sazan",12,23,43],
-                                        ["3","Kalkan",45,3,24]
-                                        ],
-                                        
-                                        [
-                                        ["1","Lüfer",20,10,10],
-                                        ["2","Palamut",12,23,43],
-                                        ["3","Uskumru",45,3,24]
-                                        ],
-                                      ];
- 
-
-  List<List<dynamic>> table = []; 
-  
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    AuctionTableController()
+        .getTables()
+        .then((resAuctionTables) => {
+          for (var table in resAuctionTables){
+            print(table.seafoodProducts)
+          }
+        });
    
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: const Text("AuctionTableList"),),
-        drawer: const navBar(),
-        body: Column(
-                  children: [
-                    Expanded(child: ListView.builder(
-                           
-                        itemCount: tables.length,
-                        itemBuilder: (context,index){
-                          return showTables(tables)[index];
-                        },
-                        ),),
-          
-                    ],
-                      ),)                 
-                   ,);                      
+
+    super.initState();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text("AuctionTableList"),
+        ),
+        drawer: const navBar(),
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: tables.length,
+                itemBuilder: (context, index) {
+                  return showTables(tables)[index];
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-  List<Column> showTables(List<List<List<dynamic>>> tables){
+  List<Column> showTables(List<List<List<dynamic>>> tables) {
     final columns = [
       "No",
       "Product Name",
@@ -68,52 +80,50 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
       "Sold Price"
     ];
     int tableNum = 0;
-  
+
     List<Column> cols = [];
-    
+
     for (var i = 0; i < tables.length; i++) {
       table = tables[i];
       Column col = Column(
-      children: [
-        Padding(padding: const EdgeInsets.all(8)),
-        
-        SingleChildScrollView(child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        
-          child: DataTable(
-            columns: getColumns(columns),
-            rows: getRows(table),
+        children: [
+          Padding(padding: const EdgeInsets.all(8)),
+          SingleChildScrollView(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                columns: getColumns(columns),
+                rows: getRows(table),
+              ),
+            ),
           ),
-        ),
-      ),
-   
-      Row(children: [
-          ElevatedButton(child: Text("Publish"),
-          onPressed: () {
-            setState(() {
-              publishAuctionTable(table);
-              }
-            );
-          }
-        ),
-
-        ElevatedButton(child: Text("Update"),
-        onPressed: () {
-            setState(() {
-              updateAuctionTableRowView(context,table);
-            });
-          
-        }, )
-      ],)
-      ],
+          Row(
+            children: [
+              ElevatedButton(
+                  child: Text("Publish"),
+                  onPressed: () {
+                    setState(() {
+                      publishAuctionTable(table);
+                    });
+                  }),
+              ElevatedButton(
+                child: Text("Update"),
+                onPressed: () {
+                  setState(() {
+                    updateAuctionTableRowView(context, table);
+                  });
+                },
+              )
+            ],
+          )
+        ],
       );
-     
-      cols.add(col);
-    }       
 
-    return cols;                
+      cols.add(col);
+    }
+
+    return cols;
   }
-  
 
   List<DataRow> getRows(List<List<dynamic>> table) =>
       table.map((row) => DataRow(cells: getCells(row))).toList();
@@ -124,45 +134,45 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   List<DataColumn> getColumns(List<String> columns) =>
       columns.map((column) => DataColumn(label: Text(column))).toList();
 
-    
-
-  void publishAuctionTable(List<List<dynamic>> table) { // table i published table a gönder
-    
-    
+  void publishAuctionTable(List<List<dynamic>> table) {
+    // table i published table a gönder
   }
 
-  void updateAuctionTableRowView(BuildContext context,List<List<dynamic>> table) {
-    
-      List<ListTile> tiles = [];
+  void updateAuctionTableRowView(
+      BuildContext context, List<List<dynamic>> table) {
+    List<ListTile> tiles = [];
 
-      for (var i = 0; i < table.length; i++) {
-        ListTile tile = ListTile(title: Text("Update row ${i+1}"),
-                                  onTap: (){
-                                    //updateAuctionTableAlert(context, table,i);
-                                  },);
-                                tiles.add(tile);
-        
-      }
-      
-      showDialog(context: context, builder: (BuildContext context){
-      return AlertDialog(title: Text("Choose row"),
-                        content: Container(width: double.minPositive,
-                                  child: ListView.builder(itemCount: tiles.length,
-                                  shrinkWrap: true,
-                                      itemBuilder: (context,index){
-                                        return tiles[index];
-                                      }
-                                      ),)                        
-                                );
-      }
-      ).then((_) {
+    for (var i = 0; i < table.length; i++) {
+      ListTile tile = ListTile(
+        title: Text("Update row ${i + 1}"),
+        onTap: () {
+          //updateAuctionTableAlert(context, table,i);
+        },
+      );
+      tiles.add(tile);
+    }
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text("Choose row"),
+              content: Container(
+                width: double.minPositive,
+                child: ListView.builder(
+                    itemCount: tiles.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return tiles[index];
+                    }),
+              ));
+        }).then((_) {
       setState(() {});
     });
- 
   }
 
-   bool _isNumeric(String str) {
-    if(str == null) {
+  bool _isNumeric(String str) {
+    if (str == null) {
       return false;
     }
     return double.tryParse(str) != null;
@@ -285,17 +295,19 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   }
 
   void showPopUpDialog(BuildContext context) {
-    showDialog(context: context, builder: (BuildContext context) {
-      Widget okButton = TextButton(
-        child: Text("OK"),
-        onPressed: () {
-          Navigator.of(context).pop();
-         },);
-      return AlertDialog(title: Text("Oops..."),
-                  content: Text("This table is already published"),
-                  actions: [okButton]
-            );
-    });
-    
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          Widget okButton = TextButton(
+            child: Text("OK"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          );
+          return AlertDialog(
+              title: Text("Oops..."),
+              content: Text("This table is already published"),
+              actions: [okButton]);
+        });
   }
 }
