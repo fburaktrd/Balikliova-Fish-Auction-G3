@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Views/navBar.dart';
 import 'package:myapp/controllers/AuctionTableGetItController.dart';
+import 'package:myapp/controllers/UserController.dart';
 import "package:myapp/controllers/auctionTableController.dart";
 import 'package:myapp/locator.dart';
-import 'package:myapp/Views/update_info.dart';
-import 'package:myapp/controllers/authService.dart';
-import 'package:myapp/models/database.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class CreateAuctionTableScreen extends StatefulWidget {
   const CreateAuctionTableScreen({Key? key}) : super(key: key);
 
   @override
-  State<CreateAuctionTableScreen> createState() => _CreateAuctionTableScreenState();
+  State<CreateAuctionTableScreen> createState() =>
+      _CreateAuctionTableScreenState();
 }
 
 class _CreateAuctionTableScreenState extends State<CreateAuctionTableScreen> {
@@ -21,6 +19,7 @@ class _CreateAuctionTableScreenState extends State<CreateAuctionTableScreen> {
   late AuctionTableController controller;
   Map<String, Map<String, dynamic>> auct_form = {};
   List<List<List<dynamic>>> tablesList = [];
+  var user = getIt<UserController>().getUser;
   List<List<dynamic>> oneTable = getIt<AuctionTableGetItController>().getTable;
 
   final _productNameController = TextEditingController();
@@ -98,7 +97,18 @@ class _CreateAuctionTableScreenState extends State<CreateAuctionTableScreen> {
                         foregroundColor:
                             MaterialStateProperty.all<Color>(Colors.blue),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        AuctionTableController.addAuctionTable(
+                            oneTable, user.uid);
+                        List<List<dynamic>> resetTable = [];
+                        getIt<AuctionTableGetItController>()
+                            .fetchTable(resetTable);
+                        showMessage(context,
+                            "You have created an auction table successfully. You can see your auction table in View Auction Table page.");
+                        setState(() {
+                          oneTable = [];
+                        });
+                      },
                       child: const Text('Add Table to the library'),
                     )
                   ],
@@ -267,4 +277,14 @@ class _CreateAuctionTableScreenState extends State<CreateAuctionTableScreen> {
     );
     return container;
   }
+}
+
+void showMessage(contex, String message) {
+  showDialog(
+      context: contex,
+      builder: (contex) {
+        return AlertDialog(
+          content: Text(message),
+        );
+      });
 }

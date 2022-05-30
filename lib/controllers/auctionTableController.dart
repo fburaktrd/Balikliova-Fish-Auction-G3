@@ -2,14 +2,14 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:myapp/models/database.dart';
 
 class AuctionTableController {
-  var db = Database();
+  final ref = FirebaseDatabase.instance.ref();
 
   void addProductToTable(String auctionTableID, String productID) {
-    db.ref.child("AuctionTables").child(auctionTableID).child("Products");
+    ref.child("AuctionTables").child(auctionTableID).child("Products");
   }
 
   void deleteProductFromTable(String auctionTableID, String productID) {
-    db.ref
+    ref
         .child("AuctionTables")
         .child(auctionTableID)
         .child("Products")
@@ -18,43 +18,41 @@ class AuctionTableController {
   }
 
   DatabaseReference getTables() {
-    return db.ref.child("AuctionTables");
+    return ref.child("AuctionTables");
   }
 
   DatabaseReference getTable(String tableID) {
-    return db.ref.child("AuctionTables").child(tableID);
+    return ref.child("AuctionTables").child(tableID);
   }
 
-  //sonradan yorumdan çıakrıtlmalı
-  // AuctionTable addAuctionTable(Map<String,Map<String,dynamic>> auct_table) {
-  //   int rowNo = 0;
-  //   List<String> rowIds = [];
-  //   List<String> products = [];
-  //   List<int> basePrices = [];
-  //   List<int> quantities = [];
-  //   List<int> soldPrices = [];
-
-  //   for (int i = 0; i < auct_table.length; i++) {
-  //     rowIds.add(rowNo.toString());
-  //     products.add(auct_table[rowNo.toString()]!["name"]);
-  //     basePrices.add(auct_table[rowNo.toString()]!["basePrice"]);
-  //     quantities.add(auct_table[rowNo.toString()]!["quantity"]);
-  //     products.add(auct_table[rowNo.toString()]!["name"]);
-  //     soldPrices.add(0);
-  //     rowNo++;
-  //   }
-
-  //   AuctionTable table = AuctionTable(uid, //rastgele bir id mi gelecek?
-  //                                     products: products,
-  //                                     basePrices: basePrices,
-  //                                     quantities: quantities,
-  //                                     soldPrices: soldPrices,
-  //                                     rowID: rowIds);
-  //   return table;
-
-  // }
+  static void addAuctionTable(List<List<dynamic>> products, String uid) {
+    final List<String> keys = [
+      "id",
+      "productName",
+      "quantity",
+      "basePrice",
+      "soldPrice"
+    ];
+    final now = DateTime.now();
+    final id = now.microsecondsSinceEpoch.toString(); //Generating unique table id.
+    
+    Map<String, Map<String, dynamic>> seafoodProductIds = {};
+    for (var i = 0; i < products.length; i++) {
+      seafoodProductIds[(i+1).toString()] = {};
+      for (var j = 0; j < products[i].length; j++) {  
+        seafoodProductIds[(i+1).toString()]![keys[j]] = products[i][j];
+      }
+    }
+    Map<String, dynamic> auctionTable = {"id":id,
+    "isPublished":false,
+    "seafoodProductIds":seafoodProductIds,
+    "createdTime": id,
+    "CoopHeadId":uid};
+    FirebaseDatabase.instance.ref().child("Auction_Table").child(id).set(auctionTable);
+  }
+  
 
   void deleteAuctionTable(String auctionTableID) {
-    db.ref.child("AuctionTables").child(auctionTableID).remove();
+    ref.child("AuctionTables").child(auctionTableID).remove();
   }
 }
