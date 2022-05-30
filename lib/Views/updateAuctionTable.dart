@@ -82,6 +82,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
    List<Column> cols = [];
     
     for (var i = 0; i < tables.length; i++) {
+      table = tables[i];
       Column col = Column(
       children: [
         Padding(padding: const EdgeInsets.all(8)),
@@ -91,7 +92,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
         
           child: DataTable(
             columns: getColumns(columns),
-            rows: getRows(tables[i]),
+            rows: getRows(table),
           ),
         ),
       ),
@@ -100,7 +101,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
    ElevatedButton(child: Text("Update"),
         onPressed: () {
             setState(() {
-              chooseUpdateOption(context,tables[i]);
+              chooseUpdateOption(context,tables[i],i);
             });
           
         }, )
@@ -132,7 +133,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   }
 
   
-  void chooseUpdateOption(BuildContext context, List<List<dynamic>>table) {
+  void chooseUpdateOption(BuildContext context, List<List<dynamic>> table, int tableNum) {
     showDialog(context: context, builder: (BuildContext context){
       return AlertDialog(
         title: Text("Choose update option"),
@@ -143,7 +144,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
               child: ElevatedButton(
                 child: Text("Add Product"),
                 onPressed: () {
-                  addProductAlert(context,table);
+                  addProductAlert(context,tables[tableNum],tableNum);
                 }, ),
             ),
 
@@ -171,8 +172,10 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
     });
   }
 
-  void addProductAlert(BuildContext context, List<List<dynamic>> table) {
-    int newRow = table.length++;
+  void addProductAlert(BuildContext context, List<List<dynamic>> table, int tableNum) {
+    int newRow = tables[tableNum].length;
+    newRow++;
+    
     showDialog(context: context, builder: (BuildContext context){
       return AlertDialog(
         title: Text("Add product"),
@@ -242,7 +245,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
               if (_key.currentState!.validate()){
                 _key.currentState!.save();
 
-                table.add([newRow.toString(),
+                tables[tableNum].add([(newRow).toString(),
                           productName,
                           int.parse(quantity),
                           int.parse(basePrice),
@@ -278,7 +281,5 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
 
  
   }
-
- 
 
  
