@@ -98,7 +98,11 @@ class _CreateAuctionTableScreenState extends State<CreateAuctionTableScreen> {
                             MaterialStateProperty.all<Color>(Colors.blue),
                       ),
                       onPressed: () {
-                        AuctionTableController.addAuctionTable(
+                        if(oneTable.length == 0){
+                          showMessage(context,
+                            "You must add at least one product to the table.");
+                        }else{
+                          AuctionTableController.addAuctionTable(
                             oneTable, user.uid);
                         List<List<dynamic>> resetTable = [];
                         getIt<AuctionTableGetItController>()
@@ -108,6 +112,8 @@ class _CreateAuctionTableScreenState extends State<CreateAuctionTableScreen> {
                         setState(() {
                           oneTable = [];
                         });
+                        }
+                        
                       },
                       child: const Text('Add Table to the library'),
                     )
