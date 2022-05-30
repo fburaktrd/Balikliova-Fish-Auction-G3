@@ -85,10 +85,15 @@ class _CreateAuctionTableScreenState extends State<CreateAuctionTableScreen> {
                             MaterialStateProperty.all<Color>(Colors.blue),
                       ),
                       onPressed: () {
-                        oneTable.clear();
-                        rowNo = 1;
-                        show_auct_table = false;
-                        setState(() {});
+
+                        List<List<dynamic>> resetTable = [];
+                          getIt<AuctionTableGetItController>()
+                              .fetchTable(resetTable);
+                          showMessage(context,
+                              "You delete the table.");
+                          setState(() {
+                            oneTable = [];
+                          });
                       },
                       child: const Text('Delete Table'),
                     ),
@@ -98,22 +103,21 @@ class _CreateAuctionTableScreenState extends State<CreateAuctionTableScreen> {
                             MaterialStateProperty.all<Color>(Colors.blue),
                       ),
                       onPressed: () {
-                        if(oneTable.length == 0){
+                        if (oneTable.length == 0) {
                           showMessage(context,
-                            "You must add at least one product to the table.");
-                        }else{
+                              "You must add at least one product to the table.");
+                        } else {
                           AuctionTableController.addAuctionTable(
-                            oneTable, user.uid);
-                        List<List<dynamic>> resetTable = [];
-                        getIt<AuctionTableGetItController>()
-                            .fetchTable(resetTable);
-                        showMessage(context,
-                            "You have created an auction table successfully. You can see your auction table in View Auction Table page.");
-                        setState(() {
-                          oneTable = [];
-                        });
+                              oneTable, user.uid);
+                          List<List<dynamic>> resetTable = [];
+                          getIt<AuctionTableGetItController>()
+                              .fetchTable(resetTable);
+                          showMessage(context,
+                              "You have created an auction table successfully. You can see your auction table in View Auction Table page.");
+                          setState(() {
+                            oneTable = [];
+                          });
                         }
-                        
                       },
                       child: const Text('Add Table to the library'),
                     )
