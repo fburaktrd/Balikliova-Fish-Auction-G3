@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/Views/UpdateAuctionTable.dart';
-
-import 'package:myapp/Views/AuctionTablePageForCoopHead.dart';
+import 'package:myapp/Views/updateAuctionTable.dart';
 import 'package:myapp/Views/CreateAuctionTablePage.dart';
 import 'package:myapp/Views/live_auction_coop.dart';
 import 'package:myapp/Views/update_info.dart';
