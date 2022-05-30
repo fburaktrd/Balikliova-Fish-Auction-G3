@@ -33,20 +33,27 @@ class AuctionTableController {
     for (var key in resMap.keys) {
       List<List<dynamic>> seafoodsAsList = [];
       var seafoods = resMap[key]["seafoodProducts"];
-      List<dynamic> seafoodAsList = [0, 0, 0, 0, 0];
+      
       for (var seafood in seafoods.getRange(1, seafoods.length)) {
+        List<dynamic> seafoodAsList = [0, 0, 0, 0, 0];
         for (var seaKey in seafood.keys) {
+         //print("${seaKey} --> ${mapKeysAsIndex[seaKey]}");
           seafoodAsList[(mapKeysAsIndex[seaKey]!)] = seafood[seaKey];
         }
-        // print(seafoodAsList);
+        
         seafoodsAsList.add(seafoodAsList);
+        //print(seafoodsAsList);
       }
-      auctionTables.add(AuctionTable(
+      
+      var auctionTable = AuctionTable(
           coopHeadId: resMap[key]["CoopHeadId"],
           seafoodProducts: seafoodsAsList,
-          id: resMap[key]["id"]));
+          id: resMap[key]["id"]);
+      auctionTables.add(auctionTable);
     }
-    
+    // for (var table in auctionTables) {
+    //   print(table.seafoodProducts);
+    // }
     return auctionTables;
   }
 

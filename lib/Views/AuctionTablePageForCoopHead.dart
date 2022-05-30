@@ -13,36 +13,37 @@ class ViewAuctionTableCoopHead extends StatefulWidget {
 
 class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   List<AuctionTable> auctionTables = [];
-  List<List<List<dynamic>>> tables = [
-    [
-      ["1", "Levrek", 20, 10, 10],
-      ["2", "Hamsi", 12, 23, 43],
-      ["3", "Sardalya", 45, 3, 24]
-    ],
-    [
-      ["1", "Çipura", 20, 10, 10],
-      ["2", "Sazan", 12, 23, 43],
-      ["3", "Kalkan", 45, 3, 24]
-    ],
-    [
-      ["1", "Lüfer", 20, 10, 10],
-      ["2", "Palamut", 12, 23, 43],
-      ["3", "Uskumru", 45, 3, 24]
-    ],
-  ];
+  List<List<List<dynamic>>> tables = [];
+
+  // [
+  //   [
+  //     ["1", "Levrek", 20, 10, 10],
+  //     ["2", "Hamsi", 12, 23, 43],
+  //     ["3", "Sardalya", 45, 3, 24]
+  //   ],
+  //   [
+  //     ["1", "Çipura", 20, 10, 10],
+  //     ["2", "Sazan", 12, 23, 43],
+  //     ["3", "Kalkan", 45, 3, 24]
+  //   ],
+  //   [
+  //     ["1", "Lüfer", 20, 10, 10],
+  //     ["2", "Palamut", 12, 23, 43],
+  //     ["3", "Uskumru", 45, 3, 24]
+  //   ],
+  // ];
 
   List<List<dynamic>> table = [];
 
   @override
   void initState() {
-    AuctionTableController()
-        .getTables()
-        .then((resAuctionTables) => {
-          for (var table in resAuctionTables){
-            print(table.seafoodProducts)
-          }
-        });
-   
+    AuctionTableController().getTables().then((resAuctionTables) {
+      for (var table in resAuctionTables) {
+        //print(table.seafoodProducts);
+        tables.add(table.seafoodProducts);
+      }
+      setState(() {});
+    });
 
     super.initState();
   }
