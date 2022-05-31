@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:myapp/Views/navBar.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/controllers/CoopHeadController.dart';
@@ -22,8 +24,6 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   String productName = '';
   String quantity = '';
   String basePrice = '';
-
-
 
   // [
   //   [
@@ -109,21 +109,32 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
             ),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Container(
+                padding: EdgeInsets.all(50),
+                child: ElevatedButton(
+                    child: Text("Publish"),
+                    style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(fontSize: 17),
+                        fixedSize: Size(100, 40)),
+                    onPressed: () {
+                      setState(() {
+                        publishAuctionTable(table);
+                      });
+                    }),
+              ),
               ElevatedButton(
-                  child: Text("Publish"),
-                  onPressed: () {
-                    setState(() {
-                      publishAuctionTable(table);
-                    });
-                  }),
-              ElevatedButton(child: Text("Update"),
+                child: Text("Update"),
+                style: ElevatedButton.styleFrom(
+                    textStyle: const TextStyle(fontSize: 17),
+                    fixedSize: Size(100, 40)),
                 onPressed: () {
-                setState(() {
-                  chooseUpdateOption(context,tables[i],i);
-                });
-          
-        }, )
+                  setState(() {
+                    chooseUpdateOption(context, tables[i], i);
+                  });
+                },
+              ),
             ],
           )
         ],
@@ -188,276 +199,285 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
     return double.tryParse(str) != null;
   }
 
-   void chooseUpdateOption(BuildContext context, List<List<dynamic>> table, int tableNum) {
-    showDialog(context: context, builder: (BuildContext context){
-      return AlertDialog(
-        title: Text("Choose update option"),
-        content: Column(
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                child: Text("Add Product"),
-                onPressed: () {
-                  addProductAlert(context,tables[tableNum],tableNum);
-                }, ),
+  void chooseUpdateOption(
+      BuildContext context, List<List<dynamic>> table, int tableNum) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Choose Update Option", textAlign: TextAlign.center),
+            content: Column(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(16),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(fontSize: 25),
+                        fixedSize: Size(200, 75)),
+                    child: Text("Add Product"),
+                    onPressed: () {
+                      addProductAlert(context, tables[tableNum], tableNum);
+                    },
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(16),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(fontSize: 23),
+                        fixedSize: Size(200, 75)),
+                    child: Text("Update product"),
+                    onPressed: () {
+                      updateRowAlert(context, tables[tableNum], tableNum);
+                    },
+                  ),
+                ),
+                Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(16),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 25),
+                          fixedSize: Size(200, 75)),
+                      child: Text("Cancel"),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ))
+              ],
             ),
-
-            Align(
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                child: Text("Update product"),
-                onPressed: () {
-                  updateRowAlert(context,tables[tableNum],tableNum);
-                },),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: ElevatedButton(
-                child: Text("Cancel"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },)
-            )
-          ],
-        ),
-      );
-    }).then((_) {
+          );
+        }).then((_) {
       setState(() {});
     });
   }
 
-  void addProductAlert(BuildContext context, List<List<dynamic>> table, int tableNum) {
+  void addProductAlert(
+      BuildContext context, List<List<dynamic>> table, int tableNum) {
     int newRow = tables[tableNum].length;
     newRow++;
-    
-    showDialog(context: context, builder: (BuildContext context){
-      return AlertDialog(
-        title: Text("Add product"),
-        content: Form(
-          key: _key,
-          child: Column(
-            children: [
-              TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: _productNameController,
-                decoration: const InputDecoration(labelText: 'Product Name'),
-                validator: (value) { 
-                  if (value!.isEmpty || _isNumeric(value)) {
-                    return 'Please enter a product name with letters';}
-                  else{
-                    return null;}
-                },
-                  onChanged: (value) => setState(() => productName = value)
-              ),
 
-              TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: _quantityController,
-                decoration: const InputDecoration(labelText: 'Quantity'),
-                validator: (value) {
-                  
-                  if (value!.isEmpty || !(_isNumeric(value))) {
-                    return 'Please enter a quantity with numbers';}
-                  else{
-                    return null;}
-                  
-                },
-                onChanged: (value) => setState(() => quantity = value)
-                  
-                ),
-
-              TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: _basePriceController,
-                decoration: const InputDecoration(labelText: 'Base Price'),
-                validator: (value) {
-                  
-                  if (value!.isEmpty || !(_isNumeric(value))) {
-                    return 'Please enter a base price with numbers';}
-                  else{
-                    return null;}
-                },       
-                onChanged: (value) => setState(() => basePrice = value),
-              ),            
-            ],
-          ),
-          ),
-      
-       actions: <Widget>[
-         ElevatedButton.icon(
-          icon: const Icon(Icons.cancel),
-          label: const Text("Cancel"),
-          onPressed: () {
-            Navigator.of(context).pop();
-            },
-          ),
-
-          ElevatedButton.icon(
-            icon: const Icon(Icons.save),
-            label: const Text("Save"),
-            onPressed: () {
-              if (_key.currentState!.validate()){
-                _key.currentState!.save();
-
-                tables[tableNum].add([(newRow).toString(),
-                          productName,
-                          int.parse(quantity),
-                          int.parse(basePrice),
-                          0
-                          ]);
-          
-                setState(() {
-                  _productNameController.clear();
-                  _basePriceController.clear();
-                  _quantityController.clear();
-                });
-
-                Navigator.of(context).pop();
-              }
-            }
-          ),
-
-       ],
-      );
-    }).then((_) {
-      setState(() {});
-    });
-  } 
-
-  void updateRowAlert(BuildContext context, List<List<dynamic>> table, int tableNum) {
-    List<ElevatedButton> buttons = [];
-    for (var rowNum = 0; rowNum < table.length; rowNum++) {
-        ElevatedButton button = ElevatedButton(
-          child: Text("Update row ${rowNum+1}"),
-          onPressed: (){
-            updateAuctionTableAlert(context,tables[tableNum],tableNum,rowNum);
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Add product"),
+            content: Form(
+              key: _key,
+              child: Column(
+                children: [
+                  TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _productNameController,
+                      decoration:
+                          const InputDecoration(labelText: 'Product Name'),
+                      validator: (value) {
+                        if (value!.isEmpty || _isNumeric(value)) {
+                          return 'Please enter a product name with letters';
+                        } else {
+                          return null;
+                        }
                       },
-        );
-      buttons.add(button);
-    }
-    showDialog(context: context, builder: (BuildContext context){
-      AlertDialog dialogName=  AlertDialog(
-        title: Text("Choose row"),
-        content: Container(
-          width: double.minPositive,
-          child: ListView.builder(itemCount: buttons.length,
-          shrinkWrap: true,
-              itemBuilder: (context,index){
-                return buttons[index];
-              }
+                      onChanged: (value) =>
+                          setState(() => productName = value)),
+                  TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _quantityController,
+                      decoration: const InputDecoration(labelText: 'Quantity'),
+                      validator: (value) {
+                        if (value!.isEmpty || !(_isNumeric(value))) {
+                          return 'Please enter a quantity with numbers';
+                        } else {
+                          return null;
+                        }
+                      },
+                      onChanged: (value) => setState(() => quantity = value)),
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    controller: _basePriceController,
+                    decoration: const InputDecoration(labelText: 'Base Price'),
+                    validator: (value) {
+                      if (value!.isEmpty || !(_isNumeric(value))) {
+                        return 'Please enter a base price with numbers';
+                      } else {
+                        return null;
+                      }
+                    },
+                    onChanged: (value) => setState(() => basePrice = value),
+                  ),
+                ],
+              ),
             ),
-          ), 
-        actions: <Widget>[
-          ElevatedButton.icon(
-          icon: const Icon(Icons.cancel),
-          label: const Text("Cancel"),
-          onPressed: () {
-            Navigator.of(context).pop();
-            },
-          ),
-        ],                       
-        );
-      return dialogName;                    
-    }).then((_) {
+            actions: <Widget>[
+              ElevatedButton.icon(
+                icon: const Icon(Icons.cancel),
+                label: const Text("Cancel"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              ElevatedButton.icon(
+                  icon: const Icon(Icons.save),
+                  label: const Text("Save"),
+                  onPressed: () {
+                    if (_key.currentState!.validate()) {
+                      _key.currentState!.save();
+
+                      tables[tableNum].add([
+                        (newRow).toString(),
+                        productName,
+                        int.parse(quantity),
+                        int.parse(basePrice),
+                        0
+                      ]);
+
+                      setState(() {
+                        _productNameController.clear();
+                        _basePriceController.clear();
+                        _quantityController.clear();
+                      });
+
+                      Navigator.of(context).pop();
+                    }
+                  }),
+            ],
+          );
+        }).then((_) {
       setState(() {});
     });
-    
   }
 
-  void updateAuctionTableAlert(BuildContext context, List<List<dynamic>> table,int tableNum ,int rowNum) {
-        showDialog(context: context, builder: (BuildContext context){
-      return AlertDialog(
-        title: Text("Update product"),
-        content: Form(
-          key: _key,
-          child: Column(
-            children: [
-              TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: _productNameController,
-                decoration: const InputDecoration(labelText: 'Product Name'),
-                validator: (value) { 
-                  if (value!.isEmpty || _isNumeric(value)) {
-                    return 'Please enter a product name with letters';}
-                  else{
-                    return null;}
-                },
-                  onChanged: (value) => setState(() => productName = value)
-              ),
-
-              TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: _quantityController,
-                decoration: const InputDecoration(labelText: 'Quantity'),
-                validator: (value) {
-                  
-                  if (value!.isEmpty || !(_isNumeric(value))) {
-                    return 'Please enter a quantity with numbers';}
-                  else{
-                    return null;}
-                  
-                },
-                onChanged: (value) => setState(() => quantity = value)
-                  
-                ),
-
-              TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: _basePriceController,
-                decoration: const InputDecoration(labelText: 'Base Price'),
-                validator: (value) {
-                  
-                  if (value!.isEmpty || !(_isNumeric(value))) {
-                    return 'Please enter a base price with numbers';}
-                  else{
-                    return null;}
-                },       
-                onChanged: (value) => setState(() => basePrice = value),
-              ),            
-            ],
-          ),
-          ),
-      
-       actions: <Widget>[
-         ElevatedButton.icon(
-          icon: const Icon(Icons.cancel),
-          label: const Text("Cancel"),
-          onPressed: () {
-            Navigator.of(context).pop();
-
-          }
-         ),
-          
-
-          ElevatedButton.icon(
-            icon: const Icon(Icons.save),
-            label: const Text("Save"),
-            onPressed: () {
-              if (_key.currentState!.validate()){
-                _key.currentState!.save();
-
-                tables[tableNum][rowNum] = [(rowNum+1).toString(),
-                          productName,
-                          int.parse(quantity),
-                          int.parse(basePrice),
-                          0
-                ];
-          
-                setState(() {
-                  _productNameController.clear();
-                  _basePriceController.clear();
-                  _quantityController.clear();
-                });
-
-                Navigator.of(context).pop();
-
-              }
-            }
-          ),
-       ],
+  void updateRowAlert(
+      BuildContext context, List<List<dynamic>> table, int tableNum) {
+    List<ElevatedButton> buttons = [];
+    for (var rowNum = 0; rowNum < table.length; rowNum++) {
+      ElevatedButton button = ElevatedButton(
+        child: Text("Update row ${rowNum + 1}"),
+        onPressed: () {
+          updateAuctionTableAlert(context, tables[tableNum], tableNum, rowNum);
+        },
       );
-    }).then((_) {
+      buttons.add(button);
+    }
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          AlertDialog dialogName = AlertDialog(
+            title: Text("Choose row"),
+            content: Container(
+              width: double.minPositive,
+              child: ListView.builder(
+                  itemCount: buttons.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return buttons[index];
+                  }),
+            ),
+            actions: <Widget>[
+              ElevatedButton.icon(
+                icon: const Icon(Icons.cancel),
+                label: const Text("Cancel"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+          return dialogName;
+        }).then((_) {
+      setState(() {});
+    });
+  }
+
+  void updateAuctionTableAlert(BuildContext context, List<List<dynamic>> table,
+      int tableNum, int rowNum) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Update product"),
+            content: Form(
+              key: _key,
+              child: Column(
+                children: [
+                  TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _productNameController,
+                      decoration:
+                          const InputDecoration(labelText: 'Product Name'),
+                      validator: (value) {
+                        if (value!.isEmpty || _isNumeric(value)) {
+                          return 'Please enter a product name with letters';
+                        } else {
+                          return null;
+                        }
+                      },
+                      onChanged: (value) =>
+                          setState(() => productName = value)),
+                  TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _quantityController,
+                      decoration: const InputDecoration(labelText: 'Quantity'),
+                      validator: (value) {
+                        if (value!.isEmpty || !(_isNumeric(value))) {
+                          return 'Please enter a quantity with numbers';
+                        } else {
+                          return null;
+                        }
+                      },
+                      onChanged: (value) => setState(() => quantity = value)),
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    controller: _basePriceController,
+                    decoration: const InputDecoration(labelText: 'Base Price'),
+                    validator: (value) {
+                      if (value!.isEmpty || !(_isNumeric(value))) {
+                        return 'Please enter a base price with numbers';
+                      } else {
+                        return null;
+                      }
+                    },
+                    onChanged: (value) => setState(() => basePrice = value),
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              ElevatedButton.icon(
+                  icon: const Icon(Icons.cancel),
+                  label: const Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+              ElevatedButton.icon(
+                  icon: const Icon(Icons.save),
+                  label: const Text("Save"),
+                  onPressed: () {
+                    if (_key.currentState!.validate()) {
+                      _key.currentState!.save();
+
+                      tables[tableNum][rowNum] = [
+                        (rowNum + 1).toString(),
+                        productName,
+                        int.parse(quantity),
+                        int.parse(basePrice),
+                        0
+                      ];
+
+                      setState(() {
+                        _productNameController.clear();
+                        _basePriceController.clear();
+                        _quantityController.clear();
+                      });
+
+                      Navigator.of(context).pop();
+                    }
+                  }),
+            ],
+          );
+        }).then((_) {
       setState(() {});
     });
   }

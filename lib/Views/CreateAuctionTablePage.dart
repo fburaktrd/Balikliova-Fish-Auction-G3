@@ -79,29 +79,30 @@ class _CreateAuctionTableScreenState extends State<CreateAuctionTableScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    deleteButton = TextButton(
-                      style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.blue),
-                      ),
+                    ElevatedButton(
+                      child: const Text('Delete Table',
+                          style: TextStyle(color: Colors.white)),
+                      style: ElevatedButton.styleFrom(
+                          fixedSize: Size(200, 50),
+                          surfaceTintColor: Colors.blue),
                       onPressed: () {
-
-                        List<List<dynamic>> resetTable = [];
+                        if (oneTable.length == 0) {
+                          showMessage(context, "There is no table to delete!");
+                        } else {
+                          List<List<dynamic>> resetTable = [];
                           getIt<AuctionTableGetItController>()
                               .fetchTable(resetTable);
-                          showMessage(context,
-                              "You delete the table.");
+                          showMessage(context, "You delete the table.");
                           setState(() {
                             oneTable = [];
                           });
+                        }
                       },
-                      child: const Text('Delete Table'),
                     ),
-                    publishButton = TextButton(
-                      style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.blue),
-                      ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          fixedSize: Size(200, 50),
+                          surfaceTintColor: Colors.blue),
                       onPressed: () {
                         if (oneTable.length == 0) {
                           showMessage(context,
@@ -119,7 +120,8 @@ class _CreateAuctionTableScreenState extends State<CreateAuctionTableScreen> {
                           });
                         }
                       },
-                      child: const Text('Add Table to the library'),
+                      child: const Text('Add Table to the library',
+                          style: TextStyle(color: Colors.white)),
                     )
                   ],
                 ) //if (oneTable.isNotEmpty) buttonRow
