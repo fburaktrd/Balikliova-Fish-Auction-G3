@@ -1,20 +1,19 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/Views/AuctionTableForCrew.dart';
+import 'package:myapp/Views/AuctionTableForCustomerMember.dart';
 import 'package:myapp/Views/AuctionTablePageForCoopHead.dart';
-import 'package:myapp/Views/updateAuctionTable.dart';
 import 'package:myapp/Views/CreateAuctionTablePage.dart';
 import 'package:myapp/Views/live_auction_coop.dart';
 import 'package:myapp/Views/update_info.dart';
 import 'package:myapp/controllers/authService.dart';
 import 'package:myapp/models/database.dart';
 
-import 'package:myapp/Views/AuctionTableForCrew.dart';
-import 'package:myapp/Views/AuctionTableForCustomerMember.dart';
-
 //import 'package:another_flushbar/flushbar.dart';
 
 import 'CreateAuctionTablePage.dart';
+import 'live_auction_customer.dart';
 
 class navBar extends StatefulWidget {
   const navBar({Key? key}) : super(key: key);
@@ -252,10 +251,10 @@ class _navBarState extends State<navBar> {
                             horizontalTitleGap: 1,
                             title: const Text('Enter Live Auction'),
                             onTap: () {
-                              // Update the state of the app
-                              // ...
-                              // Then close the drawer
                               Navigator.pop(context);
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      const LiveAuctionCustomer()));
                             },
                           ),
                         ),
