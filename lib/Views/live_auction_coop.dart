@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import 'navBar.dart';
 
 class LiveAuctionCoop extends StatefulWidget {
@@ -10,6 +10,16 @@ class LiveAuctionCoop extends StatefulWidget {
 }
 
 class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
+  
+  YoutubePlayerController _controller = YoutubePlayerController(
+    initialVideoId: 'vq3IvvNe7VY',
+    params: YoutubePlayerParams (
+      startAt: Duration(seconds: 0),
+      showControls: true,
+      showFullscreenButton: true,
+    ),
+  );
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,6 +40,10 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                       alignment: Alignment.topRight,
                       height: (MediaQuery.of(context).size.height) / 2,
                       width: MediaQuery.of(context).size.width - 45,
+                      child: YoutubePlayerIFrame(
+                        controller: _controller,
+                        aspectRatio: 3/2,
+                      ),
                     )
                   ],
                 ),
