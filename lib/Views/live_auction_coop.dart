@@ -120,7 +120,9 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             ),
                             color: Colors.blueAccent,
                             textColor: Colors.white,
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
                             minWidth: MediaQuery.of(context).size.width - 45,
                             height: 50))
                   ],

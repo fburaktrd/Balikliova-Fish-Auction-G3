@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/Views/AuctionTablePageForCoopHead.dart';
@@ -155,7 +156,6 @@ class _navBarState extends State<navBar> {
                                               }
                                             else
                                               {
-                                                /*
                                                 Flushbar(
                                                         title:
                                                             "Past Time Error",
@@ -165,7 +165,6 @@ class _navBarState extends State<navBar> {
                                                             const Duration(
                                                                 seconds: 3))
                                                     .show(context)
-                                                    */
                                               }
                                           }
                                       })
