@@ -15,16 +15,6 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   List<AuctionTable> auctionTables = [];
   List<List<List<dynamic>>> tables = [];
 
-  final GlobalKey<FormState> _key = GlobalKey<FormState>();
-  final _productNameController = TextEditingController();
-  final _quantityController = TextEditingController();
-  final _basePriceController = TextEditingController();
-  String productName = '';
-  String quantity = '';
-  String basePrice = '';
-
-
-
   // [
   //   [
   //     ["1", "Levrek", 20, 10, 10],
@@ -57,6 +47,14 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
 
     super.initState();
   }
+
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final _productNameController = TextEditingController();
+  final _quantityController = TextEditingController();
+  final _basePriceController = TextEditingController();
+  String productName = '';
+  String quantity = '';
+  String basePrice = '';
 
   @override
   Widget build(BuildContext context) {
@@ -366,16 +364,21 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   }
 
   void updateAuctionTableAlert(BuildContext context, List<List<dynamic>> table,int tableNum ,int rowNum) {
-        showDialog(context: context, builder: (BuildContext context){
+  final GlobalKey<FormState> _updateKey = GlobalKey<FormState>();
+  final _updateProductNameController = TextEditingController(text: tables[tableNum][rowNum][1]);
+  final _updateQuantityController = TextEditingController(text: tables[tableNum][rowNum][2].toString());
+  final _updateBasePriceController = TextEditingController(text: tables[tableNum][rowNum][3].toString());
+  
+      showDialog(context: context, builder: (BuildContext context){
       return AlertDialog(
         title: Text("Update product"),
         content: Form(
-          key: _key,
+          key: _updateKey,
           child: Column(
             children: [
               TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: _productNameController,
+                controller: _updateProductNameController,
                 decoration: const InputDecoration(labelText: 'Product Name'),
                 validator: (value) { 
                   if (value!.isEmpty || _isNumeric(value)) {
@@ -388,7 +391,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
 
               TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: _quantityController,
+                controller: _updateQuantityController,
                 decoration: const InputDecoration(labelText: 'Quantity'),
                 validator: (value) {
                   
@@ -404,7 +407,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
 
               TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: _basePriceController,
+                controller: _updateBasePriceController,
                 decoration: const InputDecoration(labelText: 'Base Price'),
                 validator: (value) {
                   
@@ -434,8 +437,8 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
             icon: const Icon(Icons.save),
             label: const Text("Save"),
             onPressed: () {
-              if (_key.currentState!.validate()){
-                _key.currentState!.save();
+              if (_updateKey.currentState!.validate()){
+                _updateKey.currentState!.save();
 
                 tables[tableNum][rowNum] = [(rowNum+1).toString(),
                           productName,
@@ -445,9 +448,9 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                 ];
           
                 setState(() {
-                  _productNameController.clear();
-                  _basePriceController.clear();
-                  _quantityController.clear();
+                  _updateProductNameController.clear();
+                  _updateBasePriceController.clear();
+                  _updateQuantityController.clear();
                 });
 
                 Navigator.of(context).pop();
