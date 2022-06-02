@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
-import 'navBar.dart';
 import 'package:myapp/controllers/CoopHeadController.dart';
+import 'package:timer_count_down/timer_controller.dart';
+import 'package:timer_count_down/timer_count_down.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
+import 'navBar.dart';
 
 class LiveAuctionCoop extends StatefulWidget {
   const LiveAuctionCoop({Key? key}) : super(key: key);
@@ -12,9 +14,9 @@ class LiveAuctionCoop extends StatefulWidget {
 }
 
 class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
-
   CoopHeadController cp = new CoopHeadController();
-
+  final CountdownController countdownController =
+      new CountdownController(autoStart: true);
   YoutubePlayerController _controller = YoutubePlayerController(
     initialVideoId: 'vq3IvvNe7VY',
     params: YoutubePlayerParams(
@@ -26,6 +28,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
 
   @override
   Widget build(BuildContext context) {
+    int userCount = getLiveUserCount();
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
@@ -37,10 +40,53 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Live Auction Video Stream",
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            height: 2,
+                            fontSize: 25),
+                      ),
+                    ),
+                    SizedBox(width: 10, height: 3),
+                    Container(
+                      alignment: Alignment.center,
+                      child: ElevatedButton.icon(
+                        icon: Icon(Icons.person),
+                        label: Text("$userCount"),
+                        onPressed: () {
+                          onEnd();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.red,
+                          shadowColor: Colors.white,
+                          alignment: Alignment.center,
+                        ),
+                      ),
+                    ),
+                    Countdown(
+                      controller: countdownController,
+                      seconds: 9, //update time
+                      build: (_, double time) => SizedBox.shrink(),
+                      interval: Duration(seconds: 1),
+                      onFinished: () {
+                        onEnd();
+                      },
+                    ),
+                  ],
+                ),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      alignment: Alignment.topRight,
+                      alignment: Alignment.center,
                       height: (MediaQuery.of(context).size.height) / 2,
                       width: MediaQuery.of(context).size.width - 2,
                       child: YoutubePlayerIFrame(
@@ -61,7 +107,9 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             ),
                             color: Colors.blueAccent,
                             textColor: Colors.white,
-                            onPressed: () {cp.changeProductFlow();},
+                            onPressed: () {
+                              cp.changeProductFlow();
+                            },
                             minWidth: MediaQuery.of(context).size.width - 45,
                             height: 50)),
                   ],
@@ -77,7 +125,9 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             ),
                             color: Colors.blueAccent,
                             textColor: Colors.white,
-                            onPressed: () {cp.changeBasePrice();},
+                            onPressed: () {
+                              cp.changeBasePrice();
+                            },
                             minWidth: MediaQuery.of(context).size.width - 45,
                             height: 50))
                   ],
@@ -93,7 +143,9 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             ),
                             color: Colors.blueAccent,
                             textColor: Colors.white,
-                            onPressed: () {cp.activateDeactivateButtons();},
+                            onPressed: () {
+                              cp.activateDeactivateButtons();
+                            },
                             minWidth: MediaQuery.of(context).size.width - 45,
                             height: 50))
                   ],
@@ -109,7 +161,9 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             ),
                             color: Colors.blueAccent,
                             textColor: Colors.white,
-                            onPressed: () {cp.finaliseSoldPrice();},
+                            onPressed: () {
+                              cp.finaliseSoldPrice();
+                            },
                             minWidth: MediaQuery.of(context).size.width - 45,
                             height: 50))
                   ],
@@ -136,5 +190,15 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
               ])),
     );
   }
-}
 
+  onEnd() {
+    //10 saniyede bir databaseden yeni bid var mı diye çekmesi gerek
+    countdownController.restart();
+
+    setState(() {});
+  }
+
+  int getLiveUserCount() {
+    return 10;
+  }
+}

@@ -135,6 +135,10 @@ class _InformationScreenState extends State<InformationScreen> {
                             ),
                           ],
                         ),
+                        SizedBox(
+                          width: 8,
+                          height: 5,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -160,6 +164,10 @@ class _InformationScreenState extends State<InformationScreen> {
                               label: const Text("Edit"),
                             ),
                           ],
+                        ),
+                        SizedBox(
+                          width: 8,
+                          height: 5,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -187,6 +195,10 @@ class _InformationScreenState extends State<InformationScreen> {
                             ),
                           ],
                         ),
+                        SizedBox(
+                          width: 8,
+                          height: 5,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -202,8 +214,9 @@ class _InformationScreenState extends State<InformationScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 8,
+                        SizedBox(
+                          width: 8,
+                          height: 5,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,

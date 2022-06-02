@@ -73,9 +73,10 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
     String fishName = fish.getFishType();
     double quantity = fish.getFishAmount();
     double basePrice = fish.getBasePrice();
+    int userCount = getLiveUserCount();
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: const Text("Change Information")),
+        appBar: AppBar(title: const Text("Live Auction")),
         resizeToAvoidBottomInset: false,
         drawer: const navBar(),
         body: SafeArea(
@@ -87,18 +88,34 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Live Auction Video Strem",
-                            style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                height: 2,
-                                fontSize: 25),
+                      Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Live Auction Video Stream",
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              height: 2,
+                              fontSize: 25),
+                        ),
+                      ),
+                      SizedBox(width: 10, height: 3),
+                      Container(
+                        alignment: Alignment.center,
+                        child: ElevatedButton.icon(
+                          icon: Icon(Icons.person),
+                          label: Text("$userCount"),
+                          onPressed: () {
+                            onEnd();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                            shadowColor: Colors.white,
+                            alignment: Alignment.center,
                           ),
                         ),
                       ),
@@ -239,77 +256,91 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [],
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        FloatingActionButton(
-                          child: Icon(
-                            Icons.remove,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          onPressed: () => setState(() => decreaseCounter()),
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      FloatingActionButton(
+                        child: Icon(
+                          Icons.remove,
+                          color: Colors.white,
+                          size: 16,
                         ),
-                        SizedBox(
-                          width: 60,
-                          height: 50,
-                          child: TextField(
-                            autofocus: false,
-                            controller: _controller,
-                            keyboardType: TextInputType.number,
-                            textAlign: TextAlign.center,
-                            onChanged: (value) {
-                              setState(
-                                () {
-                                  setCounter(_controller.value.text);
-                                },
-                              );
-                            },
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'^\d+\.?\d*')),
-                            ],
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(8.0),
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: Colors.blue, width: 6.0),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: Colors.blue, width: 6.0),
-                              ),
+                        onPressed: () => setState(() => decreaseCounter()),
+                      ),
+                      SizedBox(
+                        width: 10,
+                        height: 10,
+                      ),
+                      SizedBox(
+                        width: 60,
+                        height: 50,
+                        child: TextField(
+                          autofocus: false,
+                          controller: _controller,
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
+                          onChanged: (value) {
+                            setState(
+                              () {
+                                setCounter(_controller.value.text);
+                              },
+                            );
+                          },
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^\d+\.?\d*')),
+                          ],
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(8.0),
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.blue, width: 6.0),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.blue, width: 6.0),
                             ),
                           ),
                         ),
-                        FloatingActionButton(
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          onPressed: () => setState(() => increaseCounter()),
+                      ),
+                      SizedBox(
+                        width: 10,
+                        height: 10,
+                      ),
+                      FloatingActionButton(
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: 16,
                         ),
-                        new ElevatedButton.icon(
-                          icon: Icon(Icons.local_offer_sharp),
-                          label: Text("Make Bid"),
-                          onPressed: () {
-                            if (checkBid()) {
-                              makeBid(counter);
-                            } else {
-                              displayMessage("Invalid Bid", context,
-                                  "You can not make bid lower than or equal to latest bid.");
-                              setState(() {});
-                            }
-                          },
-                        ),
-                      ],
-                    ),
+                        onPressed: () => setState(() => increaseCounter()),
+                      ),
+                      SizedBox(
+                        width: 10,
+                        height: 10,
+                      ),
+                      new ElevatedButton.icon(
+                        icon: Icon(Icons.local_offer_sharp),
+                        label: Text("Make Bid"),
+                        onPressed: () {
+                          if (checkBid()) {
+                            makeBid(counter);
+                            setState(() {});
+                          } else {
+                            displayMessage("Invalid Bid", context,
+                                "You can not make bid lower than or equal to current bid.");
+                            setState(() {});
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                        height: 10,
+                      )
+                    ],
                   ),
                 ],
               ),
@@ -381,6 +412,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
   onEnd() {
     //10 saniyede bir databaseden yeni bid var mı diye çekmesi gerek
     countdownController.restart();
+
     setState(() {});
   }
 
@@ -399,6 +431,10 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
   void makeBid(double bid) {
     fish.setLatestBid(bid);
     onEnd();
+  }
+
+  int getLiveUserCount() {
+    return 10;
   }
 
   void displayMessage(String title, BuildContext context, String message) {
