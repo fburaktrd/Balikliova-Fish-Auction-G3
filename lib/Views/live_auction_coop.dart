@@ -34,7 +34,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
     ["2", "Hamsi", 12, 23, 43],
     ["3", "Sardalya", 45, 3, 24]
   ];
-
+  List<dynamic> unsold_index = [];
   String newPrice = "";
   int i = 0;
   int highestBid = 0;
@@ -145,11 +145,13 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) => AlertDialog(
+                                  alignment: Alignment.bottomCenter,
                                   title: const Text('Change Product Flow'),
                                   content: SingleChildScrollView(
                                     child: ListBody(
-                                      children: const <Widget>[
+                                      children: <Widget>[
                                         Text('Next Item info:\n'),
+                                        Text("${getItemInfos(i + 1)}"),
                                       ],
                                     ),
                                   ),
@@ -160,15 +162,32 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                         },
                                         child: const Text("Cancel")),
                                     TextButton(
-                                      child: const Text('Approve'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
+                                        child: const Text('Next Item'),
+                                        onPressed: () {
+                                          for (var j = 0;
+                                              j < table.length;
+                                              j++) {
+                                            unsold_index.add(j);
+                                          }
+                                          int j = 0;
+                                          while (true) {
+                                            if (unsold_index.length == 0) {
+                                              //alertbox bitti
+                                              break;
+                                            }
+
+                                            if (table[unsold_index[j]][4] !=
+                                                0) {
+                                              unsold_index.remove(j);
+                                            } else {
+                                              i++;
+                                            }
+                                          }
+                                          Navigator.of(context).pop();
+                                        }),
                                   ],
                                 ),
                               );
-
                               //cp.changeProductFlow();
                             },
                             minWidth: MediaQuery.of(context).size.width - 45,
@@ -193,6 +212,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                   context: context,
                                   builder: (BuildContext context) =>
                                       AlertDialog(
+                                          alignment: Alignment.bottomCenter,
                                           title: const Text(
                                               "Enter your new price"),
                                           titleTextStyle:
