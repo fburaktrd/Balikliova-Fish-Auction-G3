@@ -143,97 +143,97 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                       )
                     ],
                   ),
-                  Container(
-                    child: Column(
-                      children: [
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
                                 "Seafood: $fishName",
                                 style: TextStyle(
                                     color: Colors.black,
                                     height: 2,
                                     fontSize: 20),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
                                 "Quantity: $quantity kg",
                                 style: TextStyle(
                                     color: Colors.black,
                                     height: 2,
                                     fontSize: 20),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
                                 "Base Price: $basePrice ₺",
                                 style: TextStyle(
                                     color: Colors.black,
                                     height: 2,
                                     fontSize: 20),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.all(12.0),
-                              padding: const EdgeInsets.all(5.0),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.blueAccent, width: 5)),
-                              child: SizedBox(
-                                child: Expanded(
-                                  child: Text(
-                                    "Latest Bid: $latestBid ₺",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        height: 1.5,
-                                        fontSize: 20),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.all(12.0),
+                                padding: const EdgeInsets.all(5.0),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.blueAccent, width: 5)),
+                                child: SizedBox(
+                                  child: Expanded(
+                                    child: Text(
+                                      "Latest Bid: $latestBid ₺",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          height: 1.5,
+                                          fontSize: 20),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            ElevatedButton(
-                              onPressed: onEnd,
-                              child: Wrap(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.refresh,
-                                    size: 24.0,
-                                  ),
-                                  Countdown(
-                                    controller: countdownController,
-                                    seconds: 9, //update time
-                                    build: (_, double time) => Text(
-                                      time.toStringAsPrecision(1),
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                      ),
+                              ElevatedButton(
+                                onPressed: onEnd,
+                                child: Wrap(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.refresh,
+                                      size: 24.0,
                                     ),
-                                    interval: Duration(seconds: 1),
-                                    onFinished: () {
-                                      onEnd();
-                                    },
-                                  ),
-                                ],
+                                    Countdown(
+                                      controller: countdownController,
+                                      seconds: 9, //update time
+                                      build: (_, double time) => Text(
+                                        time.toStringAsPrecision(1),
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      interval: Duration(seconds: 1),
+                                      onFinished: () {
+                                        onEnd();
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Row(
@@ -301,7 +301,6 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                         onPressed: () {
                           if (checkBid()) {
                             makeBid(counter);
-                            setState(() {});
                           } else {
                             displayMessage("Invalid Bid", context,
                                 "You can not make bid lower than or equal to latest bid.");
@@ -387,6 +386,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
   }
 
   onEnd() {
+    //10 saniyede bir databaseden yeni bid var mı diye çekmesi gerek
     countdownController.restart();
     setState(() {});
   }
@@ -405,6 +405,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
 
   void makeBid(double bid) {
     fish.setLatestBid(bid);
+    onEnd();
   }
 
   void displayMessage(String title, BuildContext context, String message) {

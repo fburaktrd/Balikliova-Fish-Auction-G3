@@ -110,7 +110,7 @@ class _InformationScreenState extends State<InformationScreen> {
                           height: 6,
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
@@ -119,6 +119,10 @@ class _InformationScreenState extends State<InformationScreen> {
                               style: const TextStyle(
                                 fontSize: 23.0,
                               ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                              height: 1,
                             ),
                             ElevatedButton.icon(
                               onPressed: () {
@@ -132,7 +136,7 @@ class _InformationScreenState extends State<InformationScreen> {
                           ],
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
@@ -141,6 +145,10 @@ class _InformationScreenState extends State<InformationScreen> {
                               style: const TextStyle(
                                 fontSize: 23.0,
                               ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                              height: 1,
                             ),
                             ElevatedButton.icon(
                               onPressed: () {
@@ -154,7 +162,7 @@ class _InformationScreenState extends State<InformationScreen> {
                           ],
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
@@ -163,6 +171,10 @@ class _InformationScreenState extends State<InformationScreen> {
                               style: const TextStyle(
                                 fontSize: 23.0,
                               ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                              height: 1,
                             ),
                             ElevatedButton.icon(
                               onPressed: () {
@@ -194,7 +206,7 @@ class _InformationScreenState extends State<InformationScreen> {
                           height: 8,
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const Text(
@@ -206,6 +218,10 @@ class _InformationScreenState extends State<InformationScreen> {
                                 decorationThickness: 1.8,
                                 fontSize: 20.0,
                               ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                              height: 1,
                             ),
                             Visibility(
                               visible: visibleAddAddress,
@@ -222,7 +238,10 @@ class _InformationScreenState extends State<InformationScreen> {
                           ],
                         ),
                         Container(
+                          width: 200,
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: getDeliveryOptions()
                                 .map(
                                   (data) => RadioListTile(
@@ -252,6 +271,10 @@ class _InformationScreenState extends State<InformationScreen> {
                             icon: const Icon(Icons.delete_rounded),
                             label: const Text("Delete chosen option"),
                           ),
+                        ),
+                        SizedBox(
+                          width: 8,
+                          height: 5,
                         ),
                         Visibility(
                           visible: visibleDeleteAddress,
@@ -354,8 +377,8 @@ class _InformationScreenState extends State<InformationScreen> {
             autoValidateMode: AutovalidateMode.disabled,
             initialValue: TRphoneCode,
             formatInput: true,
-            keyboardType:
-                const TextInputType.numberWithOptions(signed: true, decimal: true),
+            keyboardType: const TextInputType.numberWithOptions(
+                signed: true, decimal: true),
             inputBorder: const OutlineInputBorder(),
             onSaved: (PhoneNumber number) {},
             textFieldController: _phone,
