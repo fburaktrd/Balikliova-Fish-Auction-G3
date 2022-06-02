@@ -53,11 +53,11 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
         " Name: " +
         table[i][1] +
         " Quantity: " +
-        table[i][2] +
+        table[i][2].toString() +
         " Base Price: " +
-        table[i][3] +
+        table[i][3].toString() +
         " Sold Price: " +
-        table[i][4]);
+        table[i][4].toString());
   }
 
   @override
