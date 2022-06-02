@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import 'navBar.dart';
+import 'package:myapp/controllers/CoopHeadController.dart';
+
 
 class LiveAuctionCoop extends StatefulWidget {
   const LiveAuctionCoop({Key? key}) : super(key: key);
@@ -10,6 +12,9 @@ class LiveAuctionCoop extends StatefulWidget {
 }
 
 class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
+
+  CoopHeadController cp = new CoopHeadController();
+
   YoutubePlayerController _controller = YoutubePlayerController(
     initialVideoId: 'vq3IvvNe7VY',
     params: YoutubePlayerParams(
@@ -56,9 +61,9 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             ),
                             color: Colors.blueAccent,
                             textColor: Colors.white,
-                            onPressed: () {},
+                            onPressed: () {cp.changeProductFlow();},
                             minWidth: MediaQuery.of(context).size.width - 45,
-                            height: 50))
+                            height: 50)),
                   ],
                 ),
                 Row(
@@ -72,7 +77,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             ),
                             color: Colors.blueAccent,
                             textColor: Colors.white,
-                            onPressed: () {},
+                            onPressed: () {cp.changeBasePrice();},
                             minWidth: MediaQuery.of(context).size.width - 45,
                             height: 50))
                   ],
@@ -88,7 +93,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             ),
                             color: Colors.blueAccent,
                             textColor: Colors.white,
-                            onPressed: () {},
+                            onPressed: () {cp.activateDeactivateButtons();},
                             minWidth: MediaQuery.of(context).size.width - 45,
                             height: 50))
                   ],
@@ -104,7 +109,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             ),
                             color: Colors.blueAccent,
                             textColor: Colors.white,
-                            onPressed: () {},
+                            onPressed: () {cp.finaliseSoldPrice();},
                             minWidth: MediaQuery.of(context).size.width - 45,
                             height: 50))
                   ],
@@ -121,6 +126,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             color: Colors.blueAccent,
                             textColor: Colors.white,
                             onPressed: () {
+                              cp.finishLiveAuction();
                               Navigator.of(context).pop();
                             },
                             minWidth: MediaQuery.of(context).size.width - 45,
@@ -131,3 +137,4 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
     );
   }
 }
+
