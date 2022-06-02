@@ -39,18 +39,26 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
   int i = 0;
   int highestBid = 0;
 
-  int getItemPrice(int itemIndex){
+  int getItemPrice(int itemIndex) {
     return table[i][3];
   }
 
-  void setItemPrice(int itemIndex, String newValue){
+  void setItemPrice(int itemIndex, String newValue) {
     table[i][3] = int.parse(newValue);
   }
 
-  String getItemInfos(int itemIndex){
-    return ("Item no: " + table[i][0] + " Name: " + table[i][1] + " Quantity: " + table[i][2] + " Base Price: " + table[i][3] + " Sold Price: " + table[i][4]);
+  String getItemInfos(int itemIndex) {
+    return ("Item no: " +
+        table[i][0] +
+        " Name: " +
+        table[i][1] +
+        " Quantity: " +
+        table[i][2] +
+        " Base Price: " +
+        table[i][3] +
+        " Sold Price: " +
+        table[i][4]);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +142,34 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             color: Colors.blueAccent,
                             textColor: Colors.white,
                             onPressed: () {
-                              cp.changeProductFlow();
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Change Product Flow'),
+                                  content: SingleChildScrollView(
+                                    child: ListBody(
+                                      children: const <Widget>[
+                                        Text('Next Item info:\n'),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text("Cancel")),
+                                    TextButton(
+                                      child: const Text('Approve'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+
+                              //cp.changeProductFlow();
                             },
                             minWidth: MediaQuery.of(context).size.width - 45,
                             height: 50)),
@@ -154,84 +189,86 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             onPressed: () {
                               //cp.changeBasePrice();
 
-
                               showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                              AlertDialog(
-                              title: const Text(
-                              "Enter your new price"),
-                              titleTextStyle:
-                              const TextStyle(fontSize: 24),
-                              elevation: 10,
-                              content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                              Text("Previous price: ${getItemPrice(i)}"),
-                              TextField(
-                              keyboardType:
-                              TextInputType.number,
-                              onChanged: (String? str) =>
-                              setState(() {
-                              newPrice = str!;
-                              }),
-    )
-    ],
-    ),
-    actions: <Widget>[
-    TextButton(
-    onPressed: () {
-    if (newPrice == "") {
-    Flushbar(
-    title:
-    "No value entered",
-    message:
-    "Please specify the next price.",
-    duration:
-    const Duration(
-    seconds: 3))
-        .show(context);
-    }
-    //value entered is higher
-    else if (getItemPrice(i) > int.parse(newPrice)) {
-    setItemPrice(i, newPrice);
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                          title: const Text(
+                                              "Enter your new price"),
+                                          titleTextStyle:
+                                              const TextStyle(fontSize: 24),
+                                          elevation: 10,
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Text(
+                                                  "Previous price: ${getItemPrice(i)}"),
+                                              TextField(
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                onChanged: (String? str) =>
+                                                    setState(() {
+                                                  newPrice = str!;
+                                                }),
+                                              )
+                                            ],
+                                          ),
+                                          actions: <Widget>[
+                                            TextButton(
+                                                onPressed: () {
+                                                  if (newPrice == "") {
+                                                    Flushbar(
+                                                            title:
+                                                                "No value entered",
+                                                            message:
+                                                                "Please specify the next price.",
+                                                            duration:
+                                                                const Duration(
+                                                                    seconds: 3))
+                                                        .show(context);
+                                                  }
+                                                  //value entered is higher
+                                                  else if (getItemPrice(i) >
+                                                      int.parse(newPrice)) {
+                                                    setItemPrice(i, newPrice);
 
-    Flushbar(
-    title: "Done!",
-    message:
-    "Product value has been changed! " +
-    getItemInfos(i),
-    duration:
-    const Duration(
-    seconds: 3))
-        .show(context);
-    } else {
-    Flushbar(
-    title:
-    "Value Beyond Limit",
-    message:
-    "Please enter a lower value than previous.",
-    duration:
-    const Duration(
-    seconds: 3))
-        .show(context);
-    }
-    },
-    //style: ButtonStyle(minimumSize: 16, maximumSize: 25),
-    child: const Text("Change")),
-    TextButton(
-    onPressed: () => {
-    Navigator.pop(
-    context, 'Cancel'),
-    },
-    child: const Text("Cancel")),
-    //TODO dummy bu silinecek
-    TextButton(
-    onPressed: () =>
-    {highestBid = 600},
-    child: const Text(
-    "600 diye yeni bid gelmiş olsun")),
-    ]));
+                                                    Flushbar(
+                                                            title: "Done!",
+                                                            message:
+                                                                "Product value has been changed! " +
+                                                                    getItemInfos(
+                                                                        i),
+                                                            duration:
+                                                                const Duration(
+                                                                    seconds: 3))
+                                                        .show(context);
+                                                  } else {
+                                                    Flushbar(
+                                                            title:
+                                                                "Value Beyond Limit",
+                                                            message:
+                                                                "Please enter a lower value than previous.",
+                                                            duration:
+                                                                const Duration(
+                                                                    seconds: 3))
+                                                        .show(context);
+                                                  }
+                                                },
+                                                //style: ButtonStyle(minimumSize: 16, maximumSize: 25),
+                                                child: const Text("Change")),
+                                            TextButton(
+                                                onPressed: () => {
+                                                      Navigator.pop(
+                                                          context, 'Cancel'),
+                                                    },
+                                                child: const Text("Cancel")),
+                                            //TODO dummy bu silinecek
+                                            TextButton(
+                                                onPressed: () =>
+                                                    {highestBid = 600},
+                                                child: const Text(
+                                                    "600 diye yeni bid gelmiş olsun")),
+                                          ]));
                             },
                             minWidth: MediaQuery.of(context).size.width - 45,
                             height: 50))
@@ -269,6 +306,12 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             onPressed: () {
                               //TODO cp.finaliseSoldPrice();
                               table[i][4] = highestBid;
+                              Flushbar(
+                                      title: "Sold Price Set!",
+                                      message: "Sold price set for row: " +
+                                          getItemInfos(i),
+                                      duration: const Duration(seconds: 3))
+                                  .show(context);
                               i++;
                               highestBid = 0;
                             },
