@@ -3,6 +3,9 @@ import 'package:myapp/controllers/CoopHeadController.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'package:another_flushbar/flushbar.dart';
+import '../models/auctionTable.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'navBar.dart';
 
@@ -25,6 +28,29 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
       showFullscreenButton: true,
     ),
   );
+
+  List<dynamic> table = [
+    ["1", "Levrek", 20, 10, 10],
+    ["2", "Hamsi", 12, 23, 43],
+    ["3", "Sardalya", 45, 3, 24]
+  ];
+
+  String newPrice = "";
+  int i = 0;
+  int highestBid = 0;
+
+  int getItemPrice(int itemIndex){
+    return table[i][3];
+  }
+
+  void setItemPrice(int itemIndex, String newValue){
+    table[i][3] = int.parse(newValue);
+  }
+
+  String getItemInfos(int itemIndex){
+    return ("Item no: " + table[i][0] + " Name: " + table[i][1] + " Quantity: " + table[i][2] + " Base Price: " + table[i][3] + " Sold Price: " + table[i][4]);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +152,86 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             color: Colors.blueAccent,
                             textColor: Colors.white,
                             onPressed: () {
-                              cp.changeBasePrice();
+                              //cp.changeBasePrice();
+
+
+                              showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                              AlertDialog(
+                              title: const Text(
+                              "Enter your new price"),
+                              titleTextStyle:
+                              const TextStyle(fontSize: 24),
+                              elevation: 10,
+                              content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                              Text("Previous price: ${getItemPrice(i)}"),
+                              TextField(
+                              keyboardType:
+                              TextInputType.number,
+                              onChanged: (String? str) =>
+                              setState(() {
+                              newPrice = str!;
+                              }),
+    )
+    ],
+    ),
+    actions: <Widget>[
+    TextButton(
+    onPressed: () {
+    if (newPrice == "") {
+    Flushbar(
+    title:
+    "No value entered",
+    message:
+    "Please specify the next price.",
+    duration:
+    const Duration(
+    seconds: 3))
+        .show(context);
+    }
+    //value entered is higher
+    else if (getItemPrice(i) > int.parse(newPrice)) {
+    setItemPrice(i, newPrice);
+
+    Flushbar(
+    title: "Done!",
+    message:
+    "Product value has been changed! " +
+    getItemInfos(i),
+    duration:
+    const Duration(
+    seconds: 3))
+        .show(context);
+    } else {
+    Flushbar(
+    title:
+    "Value Beyond Limit",
+    message:
+    "Please enter a lower value than previous.",
+    duration:
+    const Duration(
+    seconds: 3))
+        .show(context);
+    }
+    },
+    //style: ButtonStyle(minimumSize: 16, maximumSize: 25),
+    child: const Text("Change")),
+    TextButton(
+    onPressed: () => {
+    Navigator.pop(
+    context, 'Cancel'),
+    },
+    child: const Text("Cancel")),
+    //TODO dummy bu silinecek
+    TextButton(
+    onPressed: () =>
+    {highestBid = 600},
+    child: const Text(
+    "600 diye yeni bid gelmiş olsun")),
+    ]));
                             },
                             minWidth: MediaQuery.of(context).size.width - 45,
                             height: 50))
@@ -162,7 +267,10 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             color: Colors.blueAccent,
                             textColor: Colors.white,
                             onPressed: () {
-                              cp.finaliseSoldPrice();
+                              //TODO cp.finaliseSoldPrice();
+                              table[i][4] = highestBid;
+                              i++;
+                              highestBid = 0;
                             },
                             minWidth: MediaQuery.of(context).size.width - 45,
                             height: 50))
