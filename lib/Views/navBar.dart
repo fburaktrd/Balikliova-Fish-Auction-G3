@@ -225,7 +225,7 @@ class _navBarState extends State<navBar> {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      ViewAuctionTableCoopHead())); //AuctionTableScreen()
+                                      ViewAuctionTableCoopHead(userInfo["role"]))); //AuctionTableScreen()
                             },
                           ),
                         ),
@@ -269,7 +269,7 @@ class _navBarState extends State<navBar> {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      ViewAuctionTableCustomerMember())); //AuctionTableScreen()
+                                      ViewAuctionTableCustomerMember(userInfo["role"]))); //AuctionTableScreen()
                             },
                           ),
                         ),

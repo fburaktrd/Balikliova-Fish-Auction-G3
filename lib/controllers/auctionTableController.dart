@@ -5,20 +5,63 @@ import 'package:myapp/models/database.dart';
 class AuctionTableController {
   final ref = FirebaseDatabase.instance.ref();
 
-  void addProductToTable(String auctionTableID, String productID) {
-    ref.child("AuctionTables").child(auctionTableID).child("Products");
+  void publishTable(String auctionTableId) async {
+    var res = await getTable(auctionTableId);
+    var updatedSeafoods = {};
+    ((res["seafoodProducts"] as List)
+            .getRange(1, res["seafoodProducts"].length))
+        .forEach((element) {
+      updatedSeafoods[element["id"].toString()] = element;
+    });
+    res["seafoodProducts"] = updatedSeafoods;
+    res["isPublished"] = true;
+    ref.child("Published_Auction_Table").child(auctionTableId).set(res);
   }
 
-  void deleteProductFromTable(String auctionTableID, String productID) {
+  void addProductToTableDb(String auctionTableID, List<dynamic> productInfo) {
     ref
-        .child("AuctionTables")
+        .child("Auction_Table")
         .child(auctionTableID)
-        .child("Products")
-        .child(productID)
+        .child("seafoodProducts")
+        .child(productInfo[0].toString())
+        .set({
+      "id": productInfo[0],
+      "productName": productInfo[1],
+      "quantity": productInfo[2],
+      "basePrice": productInfo[3],
+      "soldPrice": 0
+    });
+  }
+
+  void updateProductToTableDb(
+      String auctionTableId, String rowNo, List<dynamic> productInfo) {
+    ref
+        .child("Auction_Table")
+        .child(auctionTableId)
+        .child("seafoodProducts")
+        .child(rowNo)
+        .set({
+      "id": productInfo[0],
+      "productName": productInfo[1],
+      "quantity": productInfo[2],
+      "basePrice": productInfo[3],
+      "soldPrice": 0
+    });
+  }
+
+  void deleteProductFromTable(String auctionTableID, String productRowNo) {
+    ref
+        .child("Auction_Table")
+        .child(auctionTableID)
+        .child("seafoodProducts")
+        .child(productRowNo)
         .remove();
   }
 
-  Future<List<AuctionTable>> getTables() async {
+  Future<List<AuctionTable>> getTables(String userRole) async {
+    String path =
+        userRole == "CUSTOMER" ? "Published_Auction_Table" : "Auction_Table";
+    print(userRole);
     List<AuctionTable> auctionTables = [];
     Map<String, int> mapKeysAsIndex = {
       "id": 0,
@@ -28,23 +71,24 @@ class AuctionTableController {
       "soldPrice": 4
     };
 
-    var res = await ref.child("Auction_Table").get();
+    var res = await ref.child(path).get();
+    
     var resMap = (res.value as Map<String, dynamic>);
     for (var key in resMap.keys) {
       List<List<dynamic>> seafoodsAsList = [];
       var seafoods = resMap[key]["seafoodProducts"];
-      
+
       for (var seafood in seafoods.getRange(1, seafoods.length)) {
         List<dynamic> seafoodAsList = [0, 0, 0, 0, 0];
         for (var seaKey in seafood.keys) {
-         //print("${seaKey} --> ${mapKeysAsIndex[seaKey]}");
+          //print("${seaKey} --> ${mapKeysAsIndex[seaKey]}");
           seafoodAsList[(mapKeysAsIndex[seaKey]!)] = seafood[seaKey];
         }
-        
+
         seafoodsAsList.add(seafoodAsList);
         //print(seafoodsAsList);
       }
-      
+
       var auctionTable = AuctionTable(
           coopHeadId: resMap[key]["CoopHeadId"],
           seafoodProducts: seafoodsAsList,
@@ -57,8 +101,9 @@ class AuctionTableController {
     return auctionTables;
   }
 
-  DatabaseReference getTable(String tableID) {
-    return ref.child("AuctionTables").child(tableID);
+  Future<dynamic> getTable(String tableID) async {
+    return ((await ref.child("Auction_Table").child(tableID).get()).value
+        as Map<String, dynamic>);
   }
 
   static void addAuctionTable(List<List<dynamic>> products, String uid) {
