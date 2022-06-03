@@ -107,7 +107,7 @@ class _CreateAuctionTableScreenState extends State<CreateAuctionTableScreen> {
                           showMessage(context,
                               "You must add at least one product to the table.");
                         } else {
-                          AuctionTableController.addAuctionTable(
+                          AuctionTableController().addAuctionTable(
                               oneTable, user.uid);
                           List<List<dynamic>> resetTable = [];
                           getIt<AuctionTableGetItController>()

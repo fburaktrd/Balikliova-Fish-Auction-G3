@@ -1,39 +1,51 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:myapp/models/database.dart';
 
-class AuctionController{
-    var db = Database();
+class AuctionController {
+  final ref = FirebaseDatabase.instance.ref();
 
-    DatabaseReference getAuctions(){
-        return db.ref.child("Auctions");
+  String getTimeStampId() {
+    final now = DateTime.now();
+    final id =
+        now.microsecondsSinceEpoch.toString(); //Generating unique table id.
+    return id;
+  }
+
+  DatabaseReference getAuctions() {
+    return ref.child("Auctions");
+  }
+
+  DatabaseReference getAuction(auctionID) {
+    return ref.child("Auctions").child(auctionID);
+  }
+
+  Future<bool> startAuction(String coopHeadId) async {
+    var res = await ref.child("Published_Auction_Table").get();
+
+    if (res.value != null) {
+      var publishedAuctionTables = (res.value as Map);
+      String id = getTimeStampId();
+      ref.child("Live_Auction").set({
+        "id": id,
+        "isButtonsActive": false,
+        "auctionTableid": publishedAuctionTables["id"],
+        "coopHead": coopHeadId,
+        "createdTime": id
+      });
+      return true;
     }
+    return false;
+  }
 
-    DatabaseReference getAuction(auctionID){
-        return db.ref.child("Auctions").child(auctionID);
-    }
+  void deleteAuction(auctionID) {
+    FirebaseDatabase.instance.ref().child("Auctions").child(auctionID).remove();
+  }
 
-    // Auction startAuction(){
-    //     //devam edecek,tam da anlamadım
-    // }
+  DatabaseReference getUsersInAuction(auctionID) {
+    return ref.child("Auctions").child(auctionID).child("Users");
+  }
 
-    void deleteAuction(auctionID){
-        FirebaseDatabase.instance.ref().child("Auctions").child(auctionID).remove();
-    }
-
-
-    DatabaseReference getUsersInAuction(auctionID){
-        return db.ref.child("Auctions").child(auctionID).child("Users");
-    }
-
-    DatabaseReference getUserInAuction(userID,auctionID){
-        return db.ref.child("Auctions").child(auctionID).child("Users").child(userID);
-    }
-
-
+  DatabaseReference getUserInAuction(userID, auctionID) {
+    return ref.child("Auctions").child(auctionID).child("Users").child(userID);
+  }
 }
-
-
-
-
-
-

@@ -5,7 +5,15 @@ import 'package:myapp/models/database.dart';
 class AuctionTableController {
   final ref = FirebaseDatabase.instance.ref();
 
+  String getTimeStampId() {
+    final now = DateTime.now();
+    final id =
+        now.microsecondsSinceEpoch.toString(); //Generating unique table id.
+    return id;
+  }
+
   void publishTable(String auctionTableId) async {
+    await ref.child("Published_Auction_Table").remove();
     var res = await getTable(auctionTableId);
     var updatedSeafoods = {};
     ((res["seafoodProducts"] as List)
@@ -16,6 +24,11 @@ class AuctionTableController {
     res["seafoodProducts"] = updatedSeafoods;
     res["isPublished"] = true;
     ref.child("Published_Auction_Table").child(auctionTableId).set(res);
+    ref
+        .child("Auction_Table")
+        .child(auctionTableId)
+        .child("isPublished")
+        .set(true);
   }
 
   void addProductToTableDb(String auctionTableID, List<dynamic> productInfo) {
@@ -72,7 +85,7 @@ class AuctionTableController {
     };
 
     var res = await ref.child(path).get();
-    
+
     var resMap = (res.value as Map<String, dynamic>);
     for (var key in resMap.keys) {
       List<List<dynamic>> seafoodsAsList = [];
@@ -106,7 +119,7 @@ class AuctionTableController {
         as Map<String, dynamic>);
   }
 
-  static void addAuctionTable(List<List<dynamic>> products, String uid) {
+  void addAuctionTable(List<List<dynamic>> products, String uid) {
     final List<String> keys = [
       "id",
       "productName",
@@ -114,9 +127,7 @@ class AuctionTableController {
       "basePrice",
       "soldPrice"
     ];
-    final now = DateTime.now();
-    final id =
-        now.microsecondsSinceEpoch.toString(); //Generating unique table id.
+    String id = getTimeStampId();
 
     Map<String, Map<String, dynamic>> seafoodProducts = {};
     for (var i = 0; i < products.length; i++) {
@@ -139,7 +150,7 @@ class AuctionTableController {
         .set(auctionTable);
   }
 
-  void deleteAuctionTable(String auctionTableID) {
-    ref.child("AuctionTables").child(auctionTableID).remove();
+  void deletePublishedAuctionTable(String auctionTableID) {
+    ref.child("Published_Auction_Table").child(auctionTableID).set({});
   }
 }

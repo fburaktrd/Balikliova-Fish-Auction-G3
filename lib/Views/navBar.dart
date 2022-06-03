@@ -7,6 +7,7 @@ import 'package:myapp/Views/AuctionTablePageForCoopHead.dart';
 import 'package:myapp/Views/CreateAuctionTablePage.dart';
 import 'package:myapp/Views/live_auction_coop.dart';
 import 'package:myapp/Views/update_info.dart';
+import 'package:myapp/controllers/auctionController.dart';
 import 'package:myapp/controllers/authService.dart';
 import 'package:myapp/models/database.dart';
 
@@ -29,6 +30,7 @@ class _navBarState extends State<navBar> {
   bool _coopCrew = false;
   bool _crewMember = false;
   bool loading = true;
+  var aucController = AuctionController();
   var userInfo;
 
   @override
@@ -49,10 +51,10 @@ class _navBarState extends State<navBar> {
         userInfo = userRes.value;
         print(FirebaseAuth.instance.currentUser!.uid);
         checkUserTypes();
-        print(_coopHead);
+        //print(_coopHead);
         setState(() {
           loading = false;
-          print(userInfo);
+          //print(userInfo);
         });
       });
     });
@@ -134,70 +136,75 @@ class _navBarState extends State<navBar> {
                             leading: const Icon(Icons.flag_rounded),
                             horizontalTitleGap: 1,
                             title: const Text('Start Live Auction'),
-                            onTap: () {
-                              showTimePicker(
-                                      context: context,
-                                      helpText: "Current Time: " +
-                                          timeToString(TimeOfDay.now()),
-                                      initialTime: TimeOfDay.now())
-                                  .then((value) => {
-                                        if (value != null)
-                                          {
-                                            if (toDouble(TimeOfDay.now()) <
-                                                toDouble(value))
-                                              {
-                                                Navigator.pop(context),
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (BuildContext
-                                                                context) =>
-                                                            const LiveAuctionCoop()))
-                                              }
-                                            else
-                                              {
-                                                Flushbar(
-                                                        title:
-                                                            "Past Time Error",
-                                                        message:
-                                                            "Please choose a future time",
-                                                        duration:
-                                                            const Duration(
-                                                                seconds: 3))
-                                                    .show(context)
-                                              }
-                                          }
-                                      })
-                                  .catchError((onError) {
-                                //TODO pop-up snackbar//
-                                /*
-                                Flushbar(
-                                        title: "Error while setting time",
-                                        message: "Please try again.",
-                                        duration: const Duration(seconds: 3))
-                                    .show(context);
-                                    */
+                            onTap: () async {
+                              var response =
+                                  (aucController.startAuction(userInfo["uid"]))
+                                      .then((value) {
+                                if (value) {
+                                  Navigator.pop(context);
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          const LiveAuctionCoop()));
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder: (contex) {
+                                      return const AlertDialog(
+                                        content: Text("You have to publish an auction table first."),
+                                      );
+                                    });
+                                }
                               });
+
+                              //TIMER
+
+                              // showTimePicker(
+                              //         context: context,
+                              //         helpText: "Current Time: " +
+                              //             timeToString(TimeOfDay.now()),
+                              //         initialTime: TimeOfDay.now())
+                              //     .then((value) => {
+                              //           if (value != null)
+                              //             {
+                              //               if (toDouble(TimeOfDay.now()) <
+                              //                   toDouble(value))
+                              //                 {
+                              //                   Navigator.pop(context),
+                              //                   Navigator.of(context).push(
+                              //                       MaterialPageRoute(
+                              //                           builder: (BuildContext
+                              //                                   context) =>
+                              //                               const LiveAuctionCoop()))
+                              //                 }
+                              //               else
+                              //                 {
+                              //                   Flushbar(
+                              //                           title:
+                              //                               "Past Time Error",
+                              //                           message:
+                              //                               "Please choose a future time",
+                              //                           duration:
+                              //                               const Duration(
+                              //                                   seconds: 3))
+                              //                       .show(context)
+                              //                 }
+                              //             }
+                              //         })
+                              //     .catchError((onError) {
+                              //   //TODO pop-up snackbar//
+                              //   /*
+                              //   Flushbar(
+                              //           title: "Error while setting time",
+                              //           message: "Please try again.",
+                              //           duration: const Duration(seconds: 3))
+                              //       .show(context);
+                              //       */
+                              // });
+
+                              //TIMER
                             },
                           ),
                         ),
-                        //Visibility(
-                        //  visible: _coopHead,
-                        //  child: ListTile(
-                        //    //if user is coop head
-                        //    leading: Icon(Icons.flag_rounded),
-                        //    horizontalTitleGap: 1,
-                        //    title: Text('Start Live Auction'),
-                        //    onTap: () {
-                        //      Navigator.pop(context);
-                        //      Navigator.of(context).push(MaterialPageRoute(
-                        //          builder: (BuildContext context) =>
-                        //              LiveAuctionCoop()));
-                        //      // Update the state of the app
-                        //      // ...
-                        //      // Then close the drawer
-                        //    },
-                        //  ),
-                        //),
                         Visibility(
                           visible: _coopHead,
                           child: ListTile(
@@ -225,7 +232,8 @@ class _navBarState extends State<navBar> {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      ViewAuctionTableCoopHead(userInfo["role"]))); //AuctionTableScreen()
+                                      ViewAuctionTableCoopHead(userInfo[
+                                          "role"]))); //AuctionTableScreen()
                             },
                           ),
                         ),
@@ -269,7 +277,8 @@ class _navBarState extends State<navBar> {
                               Navigator.pop(context);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      ViewAuctionTableCustomerMember(userInfo["role"]))); //AuctionTableScreen()
+                                      ViewAuctionTableCustomerMember(userInfo[
+                                          "role"]))); //AuctionTableScreen()
                             },
                           ),
                         ),
