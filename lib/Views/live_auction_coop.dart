@@ -204,11 +204,13 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                           Navigator.of(context).pop();
                                         },
                                         child: const Text("Cancel")),
+
                                     TextButton(
                                         child: const Text('Next Item'),
                                         onPressed: () {
                                           //dont allow
                                           if(highestBid > 0){
+                                            Navigator.of(context).pop;
                                             Flushbar(
                                                 title:
                                                 "Can't skip to next item!",
@@ -225,6 +227,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                                 if(currentItem[4] == 0 && !wasSecondRound){
                                                   unsoldsTable.add(currentItem);
 
+                                                  Navigator.of(context).pop;
                                                   Flushbar(
                                                       title:
                                                       "Item was not sold",
@@ -234,11 +237,12 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                                       const Duration(
                                                           seconds: 3))
                                                       .show(context);
+
                                                 }
                                                 if(table.indexOf(currentItem) == table.length -1){
                                                   currentItem = getNextItem();
                                                   wasSecondRound = true;
-
+                                                  Navigator.of(context).pop;
                                                   Flushbar(
                                                       title:
                                                       "Second round started",
@@ -252,10 +256,24 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                                 else{
                                                   currentItem = getNextItem();
                                                   if(wasSecondRound){
+                                                    highestBid = 0;
                                                     j++;
                                                   } else {i++;}
+
                                                 }
                                               });
+                                            }
+                                            else{
+                                              Navigator.of(context).pop();
+                                              Flushbar(
+                                                  title:
+                                                  "Auction Is Finished",
+                                                  message:
+                                                  "You cannot change the product of finished auction",
+                                                  duration:
+                                                  const Duration(
+                                                      seconds: 3))
+                                                  .show(context);
                                             }
                                           }
 
@@ -314,6 +332,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                             TextButton(
                                                 onPressed: () {
                                                   if (newPrice == "") {
+                                                    Navigator.of(context).pop;
                                                     Flushbar(
                                                         title:
                                                         "No value entered",
@@ -328,7 +347,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                                   else if (getCurrentItemPrice() >
                                                       int.parse(newPrice)) {
                                                     setCurrentItemPrice(newPrice);
-
+                                                    Navigator.of(context).pop;
                                                     Flushbar(
                                                         title: "Done!",
                                                         message:
@@ -340,6 +359,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                                             seconds: 3))
                                                         .show(context);
                                                   } else {
+                                                    Navigator.of(context).pop;
                                                     Flushbar(
                                                         title:
                                                         "Value Beyond Limit",
@@ -406,14 +426,15 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             onPressed: () {
                               //TODO cp.finaliseSoldPrice();
                               currentItem[4] = highestBid;
+                              Navigator.of(context).pop;
                               Flushbar(
                                   title: "Sold Price Set!",
                                   message: "Sold price set for row: " +
                                       getItemInfo(currentItem),
                                   duration: const Duration(seconds: 3))
                                   .show(context);
-                              i++;
-                              highestBid = 0;
+
+
                             },
                             minWidth: MediaQuery.of(context).size.width - 45,
                             height: 50))
@@ -453,3 +474,4 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
     return 10;
   }
 }
+
