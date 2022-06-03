@@ -32,7 +32,12 @@ class AuctionController {
         updatedSeafoods[element["id"].toString()] = element;
       });
       resMap["seafoodProducts"] = updatedSeafoods;
-      resMap["users"] = resMap["users"].length;
+      try {
+        resMap["users"] = resMap["users"].length;
+      } catch (e) {
+        resMap["users"] = 0;
+      }
+      //resMap["users"] = resMap["users"].length;
       return resMap;
     }
     return {};
