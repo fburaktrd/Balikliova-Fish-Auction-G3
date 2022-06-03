@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/controllers/CoopHeadController.dart';
+import 'package:myapp/controllers/auctionController.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
@@ -44,63 +45,24 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
   int j = 0;
   int highestBid = 0;
   bool wasSecondRound = false;
+  AuctionController auctionController = AuctionController();
   dynamic currentItem;
+
+  var auctionInfo = {};
 
   @override
   void initState() {
-    // TODO: implement initState
     currentItem = table[0];
+    auctionController.listenLiveAuction(listenAuction: () {
+      auctionController.getLiveAuction().then((value) {
+        setState(() {
+          
+          auctionInfo = value;
+        });
+      });
+    });
+    super.initState();
   }
-
-  void setCurrentItem(int index, bool fromBaseTable) {
-    if(fromBaseTable){
-      currentItem = table[index];
-    } else {
-      currentItem = table[table.indexOf(unsoldsTable[index])];
-    }
-  }
-
-  int getCurrentItemPrice() {
-    return currentItem[3];
-  }
-
-  bool willAuctionContinue(){
-    if(wasSecondRound && j == unsoldsTable.length -1 ){
-      return false;
-    }
-    else {
-      return true;
-    }
-  }
-
-  dynamic getNextItem(){
-    if(wasSecondRound){
-      return unsoldsTable[j+1];
-    } else {
-      if(i == table.length - 1){
-        return unsoldsTable[0];
-      }
-      return table[i+1];
-    }
-  }
-
-  void setCurrentItemPrice(String newValue) {
-    currentItem[3] = int.parse(newValue);
-  }
-
-  String getItemInfo(dynamic item) {
-    return ("Item no: " +
-        item[0] +
-        " Name: " +
-        item[1] +
-        " Quantity: " +
-        item[2].toString() +
-        " Base Price: " +
-        item[3].toString() +
-        " Sold Price: " +
-        item[4].toString());
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +98,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                       alignment: Alignment.center,
                       child: ElevatedButton.icon(
                         icon: Icon(Icons.person),
-                        label: Text("$userCount"),
+                        label: Text("${auctionInfo["users"]}"),
                         onPressed: () {
                           onEnd();
                         },
@@ -184,7 +146,6 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             color: Colors.blueAccent,
                             textColor: Colors.white,
                             onPressed: () {
-
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) => AlertDialog(
@@ -193,8 +154,11 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                   content: SingleChildScrollView(
                                     child: ListBody(
                                       children: <Widget>[
-                                        Text('BTW i = ${i} j = ${j} Next Item info:\n'),
-                                        Text(willAuctionContinue()? getItemInfo(getNextItem()) : "There are no remaining items."),
+                                        Text(
+                                            'BTW i = ${i} j = ${j} Next Item info:\n'),
+                                        Text(willAuctionContinue()
+                                            ? getItemInfo(getNextItem())
+                                            : "There are no remaining items."),
                                       ],
                                     ),
                                   ),
@@ -204,80 +168,78 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                           Navigator.of(context).pop();
                                         },
                                         child: const Text("Cancel")),
-
                                     TextButton(
                                         child: const Text('Next Item'),
                                         onPressed: () {
                                           //dont allow
-                                          if(highestBid > 0){
-                                            Navigator.of(context).pop;
+                                          Navigator.of(context).pop();
+                                          if (highestBid > 0) {
                                             Flushbar(
-                                                title:
-                                                "Can't skip to next item!",
-                                                message:
-                                                "There was a bid. You should finalise the sold price.",
-                                                duration:
-                                                const Duration(
-                                                    seconds: 3))
+                                                    title:
+                                                        "Can't skip to next item!",
+                                                    message:
+                                                        "There was a bid. You should finalise the sold price.",
+                                                    duration: const Duration(
+                                                        seconds: 3))
                                                 .show(context);
-                                          }
-                                          else {
-                                            if(willAuctionContinue()){
+                                          } else {
+                                            if (willAuctionContinue()) {
                                               setState(() {
-                                                if(currentItem[4] == 0 && !wasSecondRound){
+                                                if (currentItem[4] == 0 &&
+                                                    !wasSecondRound) {
                                                   unsoldsTable.add(currentItem);
 
-                                                  Navigator.of(context).pop;
                                                   Flushbar(
-                                                      title:
-                                                      "Item was not sold",
-                                                      message:
-                                                      "Will try again 2nd round.",
-                                                      duration:
-                                                      const Duration(
-                                                          seconds: 3))
+                                                          title:
+                                                              "Item was not sold",
+                                                          message:
+                                                              "Will try again 2nd round.",
+                                                          duration:
+                                                              const Duration(
+                                                                  seconds: 3))
                                                       .show(context);
+                                                }
+                                                if (table
+                                                        .indexOf(currentItem) ==
+                                                    table.length - 1) {
+                                                  currentItem = getNextItem();
 
-                                                }
-                                                if(table.indexOf(currentItem) == table.length -1){
-                                                  currentItem = getNextItem();
                                                   wasSecondRound = true;
-                                                  Navigator.of(context).pop;
+
                                                   Flushbar(
-                                                      title:
-                                                      "Second round started",
-                                                      message:
-                                                      "Second round started",
-                                                      duration:
-                                                      const Duration(
-                                                          seconds: 3))
+                                                          title:
+                                                              "Second round started",
+                                                          message:
+                                                              "Second round started",
+                                                          duration:
+                                                              const Duration(
+                                                                  seconds: 3))
                                                       .show(context);
-                                                }
-                                                else{
+                                                } else {
                                                   currentItem = getNextItem();
-                                                  if(wasSecondRound){
+
+                                                  if (wasSecondRound) {
                                                     highestBid = 0;
                                                     j++;
-                                                  } else {i++;}
-
+                                                  } else {
+                                                    i++;
+                                                  }
                                                 }
+                                                AuctionController()
+                                                    .setCurrentFood(
+                                                        currentItem);
                                               });
-                                            }
-                                            else{
-                                              Navigator.of(context).pop();
+                                            } else {
                                               Flushbar(
-                                                  title:
-                                                  "Auction Is Finished",
-                                                  message:
-                                                  "You cannot change the product of finished auction",
-                                                  duration:
-                                                  const Duration(
-                                                      seconds: 3))
+                                                      title:
+                                                          "Auction Is Finished",
+                                                      message:
+                                                          "You cannot change the product of finished auction",
+                                                      duration: const Duration(
+                                                          seconds: 3))
                                                   .show(context);
                                             }
                                           }
-
-
                                         }),
                                   ],
                                 ),
@@ -300,7 +262,6 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             color: Colors.blueAccent,
                             textColor: Colors.white,
                             onPressed: () {
-
                               //cp.changeBasePrice();
 
                               showDialog(
@@ -311,7 +272,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                           title: const Text(
                                               "Enter your new price"),
                                           titleTextStyle:
-                                          const TextStyle(fontSize: 24),
+                                              const TextStyle(fontSize: 24),
                                           elevation: 10,
                                           content: Column(
                                             mainAxisSize: MainAxisSize.min,
@@ -320,11 +281,11 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                                   "Previous price: ${getCurrentItemPrice()}"),
                                               TextField(
                                                 keyboardType:
-                                                TextInputType.number,
+                                                    TextInputType.number,
                                                 onChanged: (String? str) =>
                                                     setState(() {
-                                                      newPrice = str!;
-                                                    }),
+                                                  newPrice = str!;
+                                                }),
                                               )
                                             ],
                                           ),
@@ -334,40 +295,41 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                                   if (newPrice == "") {
                                                     Navigator.of(context).pop;
                                                     Flushbar(
-                                                        title:
-                                                        "No value entered",
-                                                        message:
-                                                        "Please specify the next price.",
-                                                        duration:
-                                                        const Duration(
-                                                            seconds: 3))
+                                                            title:
+                                                                "No value entered",
+                                                            message:
+                                                                "Please specify the next price.",
+                                                            duration:
+                                                                const Duration(
+                                                                    seconds: 3))
                                                         .show(context);
                                                   }
                                                   //value entered is higher
                                                   else if (getCurrentItemPrice() >
                                                       int.parse(newPrice)) {
-                                                    setCurrentItemPrice(newPrice);
+                                                    setCurrentItemPrice(
+                                                        newPrice);
                                                     Navigator.of(context).pop;
                                                     Flushbar(
-                                                        title: "Done!",
-                                                        message:
-                                                        "Product value has been changed! " +
-                                                            getItemInfo(
-                                                                currentItem),
-                                                        duration:
-                                                        const Duration(
-                                                            seconds: 3))
+                                                            title: "Done!",
+                                                            message:
+                                                                "Product value has been changed! " +
+                                                                    getItemInfo(
+                                                                        currentItem),
+                                                            duration:
+                                                                const Duration(
+                                                                    seconds: 3))
                                                         .show(context);
                                                   } else {
                                                     Navigator.of(context).pop;
                                                     Flushbar(
-                                                        title:
-                                                        "Value Beyond Limit",
-                                                        message:
-                                                        "Please enter a lower value than previous.",
-                                                        duration:
-                                                        const Duration(
-                                                            seconds: 3))
+                                                            title:
+                                                                "Value Beyond Limit",
+                                                            message:
+                                                                "Please enter a lower value than previous.",
+                                                            duration:
+                                                                const Duration(
+                                                                    seconds: 3))
                                                         .show(context);
                                                   }
                                                 },
@@ -375,17 +337,15 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                                 child: const Text("Change")),
                                             TextButton(
                                                 onPressed: () => {
-                                                  Navigator.pop(
-                                                      context, 'Cancel'),
-                                                },
+                                                      Navigator.pop(
+                                                          context, 'Cancel'),
+                                                    },
                                                 child: const Text("Cancel")),
                                             //TODO dummy bu silinecek
                                             TextButton(
-                                                onPressed: () =>
-                                                    setState(() {
+                                                onPressed: () => setState(() {
                                                       highestBid = 600;
                                                     }),
-
                                                 child: const Text(
                                                     "600 diye yeni bid gelmiş olsun")),
                                           ]));
@@ -428,13 +388,11 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                               currentItem[4] = highestBid;
                               Navigator.of(context).pop;
                               Flushbar(
-                                  title: "Sold Price Set!",
-                                  message: "Sold price set for row: " +
-                                      getItemInfo(currentItem),
-                                  duration: const Duration(seconds: 3))
+                                      title: "Sold Price Set!",
+                                      message: "Sold price set for row: " +
+                                          getItemInfo(currentItem),
+                                      duration: const Duration(seconds: 3))
                                   .show(context);
-
-
                             },
                             minWidth: MediaQuery.of(context).size.width - 45,
                             height: 50))
@@ -463,6 +421,54 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
     );
   }
 
+  void setCurrentItem(int index, bool fromBaseTable) {
+    if (fromBaseTable) {
+      currentItem = table[index];
+    } else {
+      currentItem = table[table.indexOf(unsoldsTable[index])];
+    }
+  }
+
+  int getCurrentItemPrice() {
+    return currentItem[3];
+  }
+
+  bool willAuctionContinue() {
+    if (wasSecondRound && j == unsoldsTable.length - 1) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  dynamic getNextItem() {
+    if (wasSecondRound) {
+      return unsoldsTable[j + 1];
+    } else {
+      if (i == table.length - 1) {
+        return unsoldsTable[0];
+      }
+      return table[i + 1];
+    }
+  }
+
+  void setCurrentItemPrice(String newValue) {
+    currentItem[3] = int.parse(newValue);
+  }
+
+  String getItemInfo(dynamic item) {
+    return ("Item no: " +
+        item[0] +
+        " Name: " +
+        item[1] +
+        " Quantity: " +
+        item[2].toString() +
+        " Base Price: " +
+        item[3].toString() +
+        " Sold Price: " +
+        item[4].toString());
+  }
+
   onEnd() {
     //10 saniyede bir databaseden yeni bid var mı diye çekmesi gerek
     countdownController.restart();
@@ -474,4 +480,3 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
     return 10;
   }
 }
-

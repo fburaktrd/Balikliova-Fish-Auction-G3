@@ -22,6 +22,17 @@ class AuctionController {
     });
   }
 
+  void setCurrentFood(List<dynamic> food) async {
+    var seafoodMap = {
+      "id": food[0],
+      "productName": food[1],
+      "quantity": food[2],
+      "basePrice": food[3],
+      "soldPrice": 0
+    };
+    ref.child("Live_Auction").child("currentSeafood").set(seafoodMap);
+  }
+
   Future<dynamic> getLiveAuction() async {
     var res = (await ref.child("Live_Auction").get());
     if (res.value != null) {
@@ -32,6 +43,14 @@ class AuctionController {
         updatedSeafoods[element["id"].toString()] = element;
       });
       resMap["seafoodProducts"] = updatedSeafoods;
+      var currentSeafood = resMap["currentSeafood"];
+      resMap["currentSeafood"] = [
+        currentSeafood["id"],
+        currentSeafood["productName"],
+        currentSeafood["quantity"],
+        currentSeafood["basePrice"],
+        currentSeafood["soldPrice"]
+      ];
       try {
         resMap["users"] = resMap["users"].length;
       } catch (e) {
@@ -64,7 +83,8 @@ class AuctionController {
         "auctionTableid": publishedAuctionTables["id"],
         "coopHead": coopHeadId,
         "createdTime": id,
-        "seafoodProducts": updatedSeafoods
+        "seafoodProducts": updatedSeafoods,
+        "currentSeafood": listSea[1]
       });
       return true;
     }
