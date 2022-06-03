@@ -20,6 +20,33 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   List<AuctionTable> auctionTables = [];
   List<List<List<dynamic>>> tables = [];
 
+  List<List<List<dynamic>>> dummyTables = [
+                                              [ 
+                                                ["0","unpublished1",1,23,4],
+                                                ["1","unpublished2",23,23,1]
+                                              ],
+
+                                              [
+                                                ["0","Balıkfalan",12,12,0],
+                                                ["1","bitanedahabalık",23,23,23],
+                                              ]
+                                          ];
+
+  List<List<dynamic>> unpublishedTable =[
+                                          ["0","unpublished1",1,23,4],
+                                          ["1","unpublished2",23,23,1]
+                                        ]; //dummy veri
+
+  List<List<dynamic>> publishedTable = 
+                                        [
+                                          ["0","Balıkfalan",12,12,0],
+                                          ["1","bitanedahabalık",23,23,23],
+                                        ]; // dummy veri
+
+  List<List<List<dynamic>>> unpublishedTables = []; // dummy veri
+
+  List<List<List<dynamic>>> publishedTables = []; // dummy veri
+
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final _productNameController = TextEditingController();
   final _quantityController = TextEditingController();
@@ -88,6 +115,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
       Column col = Column(
         children: [
           Padding(padding: const EdgeInsets.all(8)),
+          Container(child: checkIfPublished(publishedTable)),
           SingleChildScrollView(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -99,13 +127,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
           ),
           Row(
             children: [
-              ElevatedButton(
-                  child: Text("Publish"),
-                  onPressed: () {
-                    setState(() {
-                      auctionTables[i].publishTable();
-                    });
-                  }),
+              publishOrUnpublish(),
               ElevatedButton(
                 child: Text("Update"),
                 onPressed: () {
@@ -134,8 +156,31 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   List<DataColumn> getColumns(List<String> columns) =>
       columns.map((column) => DataColumn(label: Text(column))).toList();
 
-  void publishAuctionTable(List<List<dynamic>> table) {
-    // table i published table a gönder
+
+  ElevatedButton publishOrUnpublish(){ //dummy veriyle yazılmış method
+
+    if(!dummyTables.contains(unpublishedTable)){
+      return ElevatedButton(
+          child: Text("Publish"),
+            onPressed: () {
+              setState(() {
+                //auctionTables[i].publishTable();
+                publishedTables.add(unpublishedTable);
+              });
+            });
+    } 
+    else {
+      return ElevatedButton(
+          child: Text("Unpublish"),
+            onPressed: () {
+              setState(() {
+                //auctionTables[i].publishTable();
+                unpublishedTables.add(publishedTable);
+              });
+            });
+    }
+    
+
   }
 
   void updateAuctionTableRowView(
@@ -361,18 +406,24 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
 
   void updateAuctionTableAlert(BuildContext context, List<List<dynamic>> table,
       int tableNum, int rowNum) {
+
+      final GlobalKey<FormState> _updateKey = GlobalKey<FormState>();
+      final _updateProductNameController = TextEditingController(text: tables[tableNum][rowNum][1]);
+      final _updateQuantityController = TextEditingController(text: tables[tableNum][rowNum][2].toString());
+      final _updateBasePriceController = TextEditingController(text: tables[tableNum][rowNum][3].toString());
+  
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text("Update product"),
             content: Form(
-              key: _key,
+              key: _updateKey,
               child: Column(
                 children: [
                   TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      controller: _productNameController,
+                      controller: _updateProductNameController,
                       decoration:
                           const InputDecoration(labelText: 'Product Name'),
                       validator: (value) {
@@ -386,7 +437,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                           setState(() => productName = value)),
                   TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
-                      controller: _quantityController,
+                      controller: _updateQuantityController,
                       decoration: const InputDecoration(labelText: 'Quantity'),
                       validator: (value) {
                         if (value!.isEmpty || !(_isNumeric(value))) {
@@ -398,7 +449,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                       onChanged: (value) => setState(() => quantity = value)),
                   TextFormField(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: _basePriceController,
+                    controller: _updateBasePriceController,
                     decoration: const InputDecoration(labelText: 'Base Price'),
                     validator: (value) {
                       if (value!.isEmpty || !(_isNumeric(value))) {
@@ -437,9 +488,9 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                       tables[tableNum][rowNum] = updatedInfo;
 
                       setState(() {
-                        _productNameController.clear();
-                        _basePriceController.clear();
-                        _quantityController.clear();
+                        _updateProductNameController.clear();
+                        _updateBasePriceController.clear();
+                        _updateQuantityController.clear();
                       });
 
                       Navigator.of(context).pop();
@@ -452,10 +503,6 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
         }).then((_) {
       setState(() {});
     });
-  }
-
-  bool checkTablePublished(List<bool> isPublished, int i) {
-    return isPublished[i];
   }
 
   void showPopUpDialog(BuildContext context) {
@@ -473,5 +520,12 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
               content: Text("This table is already published"),
               actions: [okButton]);
         });
+  }
+
+  checkIfPublished(List<List<dynamic>> table) { //dummy veriyle yazılmış method
+    if(publishedTables.contains(table)){
+      return Text("Published");
+    }
+    return Text("Unpublished");
   }
 }

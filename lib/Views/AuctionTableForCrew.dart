@@ -80,10 +80,6 @@ class _ViewAuctionTableCrewState extends State<ViewAuctionTableCrew> {
         ),
       ),
     ),
-    Row(children: [
-
-        ElevatedButton(onPressed: () {}, child: Text("Update"))
-    ],)
       ],)
     ).toList();        
 
