@@ -43,6 +43,8 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                                           ["1","bitanedahabalık",23,23,23],
                                         ]; // dummy veri
 
+  bool published = false;
+
   List<List<List<dynamic>>> unpublishedTables = []; // dummy veri
 
   List<List<List<dynamic>>> publishedTables = []; // dummy veri
@@ -115,7 +117,8 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
       Column col = Column(
         children: [
           Padding(padding: const EdgeInsets.all(8)),
-          Container(child: checkIfPublished(publishedTable)),
+          Padding(padding: const EdgeInsets.all(8)
+            ,child: checkIfPublished(auctionTables[i]),),
           SingleChildScrollView(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -147,6 +150,16 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
     return cols;
   }
 
+    Text checkIfPublished(AuctionTable table) { 
+    
+    if(table.isPublished){
+      return Text("Published");
+    }
+    else{
+      return Text("Unpublished");
+    }
+  }
+
   List<DataRow> getRows(List<List<dynamic>> table) =>
       table.map((row) => DataRow(cells: getCells(row))).toList();
 
@@ -157,7 +170,30 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
       columns.map((column) => DataColumn(label: Text(column))).toList();
 
 
-  ElevatedButton publishOrUnpublish(int index){ //dummy veriyle yazılmış method
+  ElevatedButton publishOrUnpublish(int index){
+    if(published){
+      showDialog(context: context, builder: (BuildContext build){
+        return AlertDialog(
+          title: Text("Warning!"),
+          content: SizedBox(
+            child: Column(
+              children: [
+                Container(
+                  child: Text("A table is published already..."), 
+                ),
+                ElevatedButton(onPressed: () {
+                  Navigator.of(context).pop();
+                }, 
+                child: Icon(Icons.arrow_back))
+
+              ]),
+          ),
+        );
+      }).then((_){
+        setState(() {
+        });
+      } );
+    }
 
     if(!dummyTables.contains(unpublishedTable)){
       return ElevatedButton(
@@ -474,8 +510,8 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                   icon: const Icon(Icons.save),
                   label: const Text("Save"),
                   onPressed: () {
-                    if (_key.currentState!.validate()) {
-                      _key.currentState!.save();
+                    if (_updateKey.currentState!.validate()) {
+                      _updateKey.currentState!.save();
                       List<dynamic> updatedInfo = [
                         (rowNum + 1).toString(),
                         productName,
@@ -522,10 +558,5 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
         });
   }
 
-  checkIfPublished(List<List<dynamic>> table) { //dummy veriyle yazılmış method
-    if(publishedTables.contains(table)){
-      return Text("Published");
-    }
-    return Text("Unpublished");
-  }
+
 }
