@@ -4,8 +4,7 @@ import 'package:myapp/controllers/UserController.dart';
 import 'package:myapp/controllers/auctionController.dart';
 import 'package:myapp/locator.dart';
 import 'package:timer_count_down/timer_controller.dart';
-import 'package:timer_count_down/timer_count_down.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 import 'navBar.dart';
 
@@ -61,21 +60,28 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
   var user = getIt<UserController>().getUser;
   AuctionController auctionController = AuctionController();
   var auctionInfo = {};
-  final CountdownController countdownController =
-      new CountdownController(autoStart: true);
+  //final CountdownController countdownController = new CountdownController(autoStart: true);
 
   TextEditingController _controller = TextEditingController(
     text: "$counter",
   );
 
+  YoutubePlayerController _YTcontroller = YoutubePlayerController(
+    initialVideoId: 'vq3IvvNe7VY',
+    params: YoutubePlayerParams(
+      startAt: Duration(seconds: 0),
+      showControls: true,
+      showFullscreenButton: true,
+    ),
+  );
   @override
   void initState() {
     auctionController.listenLiveAuction(listenAuction: () {
       auctionController.getLiveAuction().then((value) {
-      setState(() {
-        auctionInfo = value;
+        setState(() {
+          auctionInfo = value;
+        });
       });
-    });
     });
 
     super.initState();
@@ -107,6 +113,23 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                     children: [
                       Container(
                         alignment: Alignment.center,
+                        child: ElevatedButton.icon(
+                          icon: Icon(Icons.arrow_back_sharp),
+                          label: Text("Leave"),
+                          onPressed: () {
+
+
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                            shadowColor: Colors.white,
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10, height: 3),
+                      Container(
+                        alignment: Alignment.center,
                         child: Text(
                           "Live Auction Video Stream",
                           style: TextStyle(
@@ -135,19 +158,19 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                       ),
                     ],
                   ),
-                  YoutubePlayer(
-                    width: 500,
-                    controller: YoutubePlayerController(
-                      initialVideoId: '${getVideoID()}',
-                      flags: YoutubePlayerFlags(
-                        hideControls: false,
-                        controlsVisibleAtStart: false,
-                        autoPlay: true,
-                        mute: false,
-                        isLive: true,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        height: (MediaQuery.of(context).size.height) / 2.5,
+                        width: (MediaQuery.of(context).size.width),
+                        child: YoutubePlayerIFrame(
+                          controller: _YTcontroller,
+                          aspectRatio: 3 / 2,
+                        ),
                       ),
-                    ),
-                    liveUIColor: Colors.red,
+                    ],
                   ),
                   Row(
                     children: [
@@ -228,7 +251,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                                 child: SizedBox(
                                   child: Expanded(
                                     child: Text(
-                                      "Latest Bid: $latestBid ₺",
+                                      "Latest Bid: $latestBid ₺, given by ${getLatestBidGiver()}",
                                       style: TextStyle(
                                           color: Colors.black,
                                           height: 1.5,
@@ -237,7 +260,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                                   ),
                                 ),
                               ),
-                              ElevatedButton(
+                              /* ElevatedButton(
                                 onPressed: onEnd,
                                 child: Wrap(
                                   children: <Widget>[
@@ -261,7 +284,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                                     ),
                                   ],
                                 ),
-                              ),
+                              ),*/
                             ],
                           ),
                         ],
@@ -423,9 +446,13 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
     );
   }
 
+  String getLatestBidGiver() {
+    return "XX";
+  }
+
   onEnd() {
     //10 saniyede bir databaseden yeni bid var mı diye çekmesi gerek
-    countdownController.restart();
+    //countdownController.restart();
 
     setState(() {});
   }
