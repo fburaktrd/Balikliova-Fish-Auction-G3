@@ -1,7 +1,10 @@
+import 'package:myapp/controllers/CustomerController.dart';
 import 'package:myapp/models/user.dart';
 
 class Customer extends GeneralUser {
   final String _address;
+
+  CustomerController controller = CustomerController();
   Customer(
       {required String uid,
       required String name,
@@ -12,7 +15,11 @@ class Customer extends GeneralUser {
         super(
             uid: uid, name: name, username: username, phoneNumber: phoneNumber);
 
-  void Greet() {
-    print("asdsad");
+  void makeBid(String auctionId, double amount, String seafoodId) {
+    controller.makeBid(uid, username, amount, seafoodId);
+  }
+
+  void joinAuction() {
+    controller.joinAuction(this.uid, this.username);
   }
 }
