@@ -56,8 +56,8 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
     auctionController.listenLiveAuction(listenAuction: () {
       auctionController.getLiveAuction().then((value) {
         setState(() {
-          
           auctionInfo = value;
+          print(value);
         });
       });
     });

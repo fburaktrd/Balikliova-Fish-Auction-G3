@@ -41,8 +41,16 @@ class AuctionController {
       var listSea = (resMap["seafoodProducts"] as List);
       listSea.getRange(1, listSea.length).forEach((element) {
         updatedSeafoods[element["id"].toString()] = element;
+        if (element["id"] == resMap["currentSeafood"]["id"]) {
+          try {
+            resMap["bids"] = resMap["seafoodProducts"][element["id"]]["bids"];
+          } catch (e) {
+            print(e);
+          }
+        }
       });
       resMap["seafoodProducts"] = updatedSeafoods;
+
       var currentSeafood = resMap["currentSeafood"];
       resMap["currentSeafood"] = [
         currentSeafood["id"],

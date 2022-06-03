@@ -15,7 +15,7 @@ class Customer extends GeneralUser {
         super(
             uid: uid, name: name, username: username, phoneNumber: phoneNumber);
 
-  void makeBid(String auctionId, double amount, String seafoodId) {
+  void makeBid(double amount, String seafoodId) {
     controller.makeBid(uid, username, amount, seafoodId);
   }
 

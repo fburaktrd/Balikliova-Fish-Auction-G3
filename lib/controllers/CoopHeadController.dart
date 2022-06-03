@@ -1,6 +1,5 @@
 import 'UserController.dart';
 import 'package:myapp/models/database.dart';
-import 'package:myapp/models/product.dart';
 
 class CoopHeadController extends UserController {
 

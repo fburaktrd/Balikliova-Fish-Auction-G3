@@ -17,7 +17,7 @@ class LiveAuctionCustomer extends StatefulWidget {
 }
 
 Seafood fish = new Seafood(
-    productName: "Loading...", basePrice: 10, latestBid: 0, amount: 0);
+    id: "0", productName: "Loading...", basePrice: 10, latestBid: 0, amount: 0);
 double counter = fish.getBasePrice();
 
 class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
@@ -443,6 +443,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
   }
 
   void makeBid(double bid) {
+    user.makeBid(bid, fish.id);
     fish.setLatestBid(bid);
     onEnd();
   }

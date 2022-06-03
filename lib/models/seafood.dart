@@ -1,9 +1,11 @@
 class Seafood {
+  String id;
   String productName;
   double basePrice;
   double latestBid;
   double amount;
   Seafood({
+    required this.id,
     required this.productName,
     required this.basePrice,
     required this.amount,
@@ -35,6 +37,7 @@ class Seafood {
   }
 
   void setInfo(List<dynamic> food) {
+    this.id = food[0];
     this.productName = food[1];
     this.amount = food[2];
     this.basePrice = food[3];
