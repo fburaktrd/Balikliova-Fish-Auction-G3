@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:myapp/Views/home_page.dart';
 import 'package:myapp/controllers/UserController.dart';
 import 'package:myapp/controllers/auctionController.dart';
 import 'package:myapp/locator.dart';
+import 'package:myapp/models/customer.dart';
+import 'package:myapp/models/seafood.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 import 'navBar.dart';
@@ -13,67 +16,24 @@ class LiveAuctionCustomer extends StatefulWidget {
   State<LiveAuctionCustomer> createState() => _LiveAuctionCustomerState();
 }
 
-class Fish {
-  String fishType;
-  double basePrice;
-  double latestBid;
-  double fishAmount;
-  Fish({
-    required this.fishType,
-    required this.basePrice,
-    required this.fishAmount,
-    required this.latestBid,
-  });
-
-  String getFishType() {
-    return this.fishType;
-  }
-
-  double getFishAmount() {
-    return this.fishAmount;
-  }
-
-  void setLatestBid(double bid) {
-    this.latestBid = bid;
-  }
-
-  double getBasePrice() {
-    return this.basePrice;
-  }
-
-  double getLatestBid() {
-    if (this.latestBid == null) {
-      return 0;
-    } else {
-      return this.latestBid;
-    }
-  }
-
-  void setInfo(List<dynamic> food) {
-    this.fishType = food[1];
-    this.fishAmount = food[2];
-    this.basePrice = food[3];
-  }
-}
-
-Fish fish =
-    new Fish(fishType: "Loading...", basePrice: 0, latestBid: 0, fishAmount: 0);
+Seafood fish = new Seafood(
+    productName: "Loading...", basePrice: 10, latestBid: 0, amount: 0);
 double counter = fish.getBasePrice();
 
 class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
   int _currentStep = 0;
-  var user = getIt<UserController>().getUser;
+  var user = (getIt<UserController>().getUser as Customer);
   AuctionController auctionController = AuctionController();
   var auctionInfo = {};
   //final CountdownController countdownController = new CountdownController(autoStart: true);
 
   TextEditingController _controller = TextEditingController(
-    text: "$counter",
+    text: counter.toString(),
   );
 
-  YoutubePlayerController _YTcontroller = YoutubePlayerController(
+  final YoutubePlayerController _YTcontroller = YoutubePlayerController(
     initialVideoId: 'vq3IvvNe7VY',
-    params: YoutubePlayerParams(
+    params: const YoutubePlayerParams(
       startAt: Duration(seconds: 0),
       showControls: true,
       showFullscreenButton: true,
@@ -97,7 +57,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
   @override
   Widget build(BuildContext context) {
     double latestBid = fish.getLatestBid();
-    String fishName = fish.getFishType();
+    String fishName = fish.getproductName();
     double quantity = fish.getFishAmount();
     double basePrice = fish.getBasePrice();
     int userCount = getLiveUserCount();
@@ -123,7 +83,13 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                         child: ElevatedButton.icon(
                           icon: Icon(Icons.arrow_back_sharp),
                           label: Text("Leave"),
-                          onPressed: () {},
+                          onPressed: () {
+                            user.leaveAuction();
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const HomePage()));
+                          },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.red,
                             shadowColor: Colors.white,

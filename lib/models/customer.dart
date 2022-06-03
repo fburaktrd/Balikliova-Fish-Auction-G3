@@ -22,4 +22,8 @@ class Customer extends GeneralUser {
   void joinAuction() {
     controller.joinAuction(this.uid, this.username);
   }
+
+  void leaveAuction() {
+    controller.leaveAuction(this.uid);
+  }
 }

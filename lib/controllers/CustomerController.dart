@@ -21,5 +21,7 @@ class CustomerController {
         .set({"username": username});
   }
 
-  void leaveAuction(String customerId) {}
+  void leaveAuction(String customerId) {
+    ref.child("Live_Auction").child("users").child(customerId).set({});
+  }
 }
