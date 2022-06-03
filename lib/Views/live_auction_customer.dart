@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:myapp/controllers/UserController.dart';
 import 'package:myapp/controllers/auctionController.dart';
 import 'package:myapp/locator.dart';
-import 'package:timer_count_down/timer_controller.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 import 'navBar.dart';
@@ -165,14 +164,17 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        alignment: Alignment.center,
-                        height: (MediaQuery.of(context).size.height) / 2.5,
-                        width: (MediaQuery.of(context).size.width),
-                        child: YoutubePlayerIFrame(
-                          controller: _YTcontroller,
-                          aspectRatio: 3 / 2,
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: (MediaQuery.of(context).size.height) / 2.5,
+                          width: (MediaQuery.of(context).size.width),
+                          child: YoutubePlayerIFrame(
+                            controller: _YTcontroller,
+                            aspectRatio: 3 / 2,
+                          ),
                         ),
                       ),
                     ],
