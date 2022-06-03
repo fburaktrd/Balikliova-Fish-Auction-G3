@@ -49,10 +49,16 @@ class Fish {
       return this.latestBid;
     }
   }
+
+  void setInfo(List<dynamic> food) {
+    this.fishType = food[1];
+    this.fishAmount = food[2];
+    this.basePrice = food[3];
+  }
 }
 
 Fish fish =
-    new Fish(fishType: "balik", basePrice: 10, latestBid: 10, fishAmount: 0.6);
+    new Fish(fishType: "Loading...", basePrice: 0, latestBid: 0, fishAmount: 0);
 double counter = fish.getBasePrice();
 
 class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
@@ -80,6 +86,8 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
       auctionController.getLiveAuction().then((value) {
         setState(() {
           auctionInfo = value;
+          fish.setInfo(auctionInfo["currentSeafood"]);
+          counter = fish.getBasePrice();
         });
       });
     });
@@ -116,10 +124,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                         child: ElevatedButton.icon(
                           icon: Icon(Icons.arrow_back_sharp),
                           label: Text("Leave"),
-                          onPressed: () {
-
-
-                          },
+                          onPressed: () {},
                           style: ElevatedButton.styleFrom(
                             primary: Colors.red,
                             shadowColor: Colors.white,
