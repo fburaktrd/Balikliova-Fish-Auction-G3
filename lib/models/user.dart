@@ -1,7 +1,7 @@
 class GeneralUser {
   final String uid;
   String? name;
-  String? username;
+  String username;
   String? phoneNumber;
   String? role;
 

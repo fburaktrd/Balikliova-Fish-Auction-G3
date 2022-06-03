@@ -7,8 +7,11 @@ import 'package:myapp/Views/AuctionTablePageForCoopHead.dart';
 import 'package:myapp/Views/CreateAuctionTablePage.dart';
 import 'package:myapp/Views/live_auction_coop.dart';
 import 'package:myapp/Views/update_info.dart';
+import 'package:myapp/controllers/UserController.dart';
 import 'package:myapp/controllers/auctionController.dart';
 import 'package:myapp/controllers/authService.dart';
+import 'package:myapp/locator.dart';
+import 'package:myapp/models/customer.dart';
 import 'package:myapp/models/database.dart';
 
 //import 'package:another_flushbar/flushbar.dart';
@@ -147,12 +150,13 @@ class _navBarState extends State<navBar> {
                                           const LiveAuctionCoop()));
                                 } else {
                                   showDialog(
-                                    context: context,
-                                    builder: (contex) {
-                                      return const AlertDialog(
-                                        content: Text("You have to publish an auction table first."),
-                                      );
-                                    });
+                                      context: context,
+                                      builder: (contex) {
+                                        return const AlertDialog(
+                                          content: Text(
+                                              "You have to publish an auction table first."),
+                                        );
+                                      });
                                 }
                               });
 
@@ -258,11 +262,30 @@ class _navBarState extends State<navBar> {
                             leading: const Icon(Icons.double_arrow_outlined),
                             horizontalTitleGap: 1,
                             title: const Text('Enter Live Auction'),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      const LiveAuctionCustomer()));
+                            onTap: () async {
+                              var res = await aucController.getLiveAuction();
+                              
+                              if ((res as Map).isNotEmpty) {
+                                if (userInfo["role"] == "CUSTOMER") {
+                                  var user = getIt<UserController>().getUser;
+                                  (user as Customer).joinAuction();
+                                }
+
+                                Navigator.pop(context);
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const LiveAuctionCustomer()));
+                              } else {
+                                showDialog(
+                                    context: context,
+                                    builder: (contex) {
+                                      return const AlertDialog(
+                                        title: Text("Come back later !"),
+                                        content: Text(
+                                            "There is no live auction right now."),
+                                      );
+                                    });
+                              }
                             },
                           ),
                         ),

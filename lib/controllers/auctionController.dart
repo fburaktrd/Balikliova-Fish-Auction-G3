@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:myapp/models/database.dart';
 
 class AuctionController {
@@ -15,13 +16,40 @@ class AuctionController {
     return ref.child("Auctions");
   }
 
-  DatabaseReference getAuction(auctionID) {
-    return ref.child("Auctions").child(auctionID);
+  void listenLiveAuction({VoidCallback? listenAuction}) {
+    ref.child("Live_Auction").onValue.listen((event) {
+      listenAuction!();
+    });
+  }
+
+  Future<dynamic> getLiveAuction() async {
+    var res = (await ref.child("Live_Auction").get());
+    if (res.value != null) {
+      var resMap = res.value as Map;
+      var updatedSeafoods = {};
+      var listSea = (resMap["seafoodProducts"] as List);
+      listSea.getRange(1, listSea.length).forEach((element) {
+        updatedSeafoods[element["id"].toString()] = element;
+      });
+      resMap["seafoodProducts"] = updatedSeafoods;
+      resMap["users"] = resMap["users"].length;
+      return resMap;
+    }
+    return {};
   }
 
   Future<bool> startAuction(String coopHeadId) async {
     var res = await ref.child("Published_Auction_Table").get();
+    var resMap = res.value as Map;
 
+    var updatedSeafoods = {};
+
+    var listSea = (resMap[resMap.keys.elementAt(0)]["seafoodProducts"] as List);
+    listSea.getRange(1, listSea.length).forEach((element) {
+      updatedSeafoods[element["id"].toString()] = element;
+    });
+
+    resMap[resMap.keys.elementAt(0)]["seafoodProducts"] = updatedSeafoods;
     if (res.value != null) {
       var publishedAuctionTables = (res.value as Map);
       String id = getTimeStampId();
@@ -30,7 +58,8 @@ class AuctionController {
         "isButtonsActive": false,
         "auctionTableid": publishedAuctionTables["id"],
         "coopHead": coopHeadId,
-        "createdTime": id
+        "createdTime": id,
+        "seafoodProducts": updatedSeafoods
       });
       return true;
     }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:myapp/controllers/UserController.dart';
+import 'package:myapp/controllers/auctionController.dart';
+import 'package:myapp/locator.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -55,15 +58,26 @@ double counter = fish.getBasePrice();
 
 class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
   int _currentStep = 0;
-
+  var user = getIt<UserController>().getUser;
+  AuctionController auctionController = AuctionController();
+  var auctionInfo = {};
   final CountdownController countdownController =
       new CountdownController(autoStart: true);
 
   TextEditingController _controller = TextEditingController(
     text: "$counter",
   );
+
   @override
   void initState() {
+    auctionController.listenLiveAuction(listenAuction: () {
+      auctionController.getLiveAuction().then((value) {
+      setState(() {
+        auctionInfo = value;
+      });
+    });
+    });
+
     super.initState();
   }
 
@@ -108,7 +122,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                         alignment: Alignment.center,
                         child: ElevatedButton.icon(
                           icon: Icon(Icons.person),
-                          label: Text("$userCount"),
+                          label: Text("${auctionInfo["users"]}"),
                           onPressed: () {
                             onEnd();
                           },
@@ -425,7 +439,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
   }
 
   String getVideoID() {
-    return "X_EWYemclKA";
+    return "vq3IvvNe7VY";
   }
 
   void makeBid(double bid) {
