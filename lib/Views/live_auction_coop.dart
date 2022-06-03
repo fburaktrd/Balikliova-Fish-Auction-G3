@@ -30,9 +30,9 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
   );
 
   List<dynamic> table = [
-    ["1", "Levrek", 20, 10, 10],
-    ["2", "Hamsi", 12, 23, 43],
-    ["3", "Sardalya", 45, 3, 24]
+    ["1", "Levrek", 20, 10, 0],
+    ["2", "Hamsi", 12, 23, 0],
+    ["3", "Sardalya", 45, 3, 0]
   ];
   List<dynamic> unsold_index = [];
   String newPrice = "";
@@ -50,13 +50,13 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
   String getItemInfos(int itemIndex) {
     return ("Item no: " +
         table[i][0] +
-        " Name: " +
+        "\nName: " +
         table[i][1] +
-        " Quantity: " +
+        "\nQuantity: " +
         table[i][2].toString() +
-        " Base Price: " +
+        "\nBase Price: " +
         table[i][3].toString() +
-        " Sold Price: " +
+        "\nSold Price: " +
         table[i][4].toString());
   }
 
@@ -142,7 +142,18 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                             color: Colors.blueAccent,
                             textColor: Colors.white,
                             onPressed: () {
-                              showDialog(
+                              i++;
+                              if(i >= table.length){
+                                showDialog(
+                                    context: context,
+                                    builder: (contex) {
+                                      return const AlertDialog(
+                                        title: Text("Information"),
+                                        content: Text("This is the end of the table."),
+                                      );
+                                    });
+                              }else{
+                                showDialog(
                                 context: context,
                                 builder: (BuildContext context) => AlertDialog(
                                   alignment: Alignment.bottomCenter,
@@ -151,7 +162,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                     child: ListBody(
                                       children: <Widget>[
                                         Text('Next Item info:\n'),
-                                        Text("${getItemInfos(i + 1)}"),
+                                        Text("${getItemInfos(i)}"),
                                       ],
                                     ),
                                   ),
@@ -164,30 +175,16 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                     TextButton(
                                         child: const Text('Next Item'),
                                         onPressed: () {
-                                          for (var j = 0;
-                                              j < table.length;
-                                              j++) {
-                                            unsold_index.add(j);
-                                          }
-                                          int j = 0;
-                                          while (true) {
-                                            if (unsold_index.length == 0) {
-                                              //alertbox bitti
-                                              break;
-                                            }
-
-                                            if (table[unsold_index[j]][4] !=
-                                                0) {
-                                              unsold_index.remove(j);
-                                            } else {
-                                              i++;
-                                            }
-                                          }
+                                          
+                                          print(table[i]);
+                                         
                                           Navigator.of(context).pop();
                                         }),
                                   ],
                                 ),
                               );
+                              }
+                              
                               //cp.changeProductFlow();
                             },
                             minWidth: MediaQuery.of(context).size.width - 45,

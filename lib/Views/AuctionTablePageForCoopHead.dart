@@ -127,7 +127,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
           ),
           Row(
             children: [
-              publishOrUnpublish(),
+              publishOrUnpublish(i),
               ElevatedButton(
                 child: Text("Update"),
                 onPressed: () {
@@ -157,14 +157,14 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
       columns.map((column) => DataColumn(label: Text(column))).toList();
 
 
-  ElevatedButton publishOrUnpublish(){ //dummy veriyle yazılmış method
+  ElevatedButton publishOrUnpublish(int index){ //dummy veriyle yazılmış method
 
     if(!dummyTables.contains(unpublishedTable)){
       return ElevatedButton(
           child: Text("Publish"),
             onPressed: () {
               setState(() {
-                //auctionTables[i].publishTable();
+                auctionTables[index].publishTable();
                 publishedTables.add(unpublishedTable);
               });
             });
