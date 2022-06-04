@@ -23,10 +23,6 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
 
   bool published = false;
 
-  List<List<List<dynamic>>> unpublishedTables = []; // dummy veri
-
-  List<List<List<dynamic>>> publishedTables = []; // dummy veri
-
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final _productNameController = TextEditingController();
   final _quantityController = TextEditingController();
@@ -448,24 +444,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
               ElevatedButton.icon(
                   icon: const Icon(Icons.save),
                   label: const Text("Save"),
-                  onPressed: () {
-                      setState(() {
-                         if(productName.isEmpty){
-                          productName= tables[tableNum][rowNum][1];
-                        }
-
-                        if(quantity.isEmpty){
-                          quantity = tables[tableNum][rowNum][2];
-                        }
-
-                        if(basePrice.isEmpty){
-                          basePrice = tables[tableNum][rowNum][3];
-                        }
-                        _productNameController.clear();
-                        _basePriceController.clear();
-                        _quantityController.clear();
-                      });
-                     
+                  onPressed: () {            
 
                       List<dynamic> updatedInfo = [
                         (rowNum + 1).toString(),
@@ -479,7 +458,11 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                           .updateRowTable((rowNum + 1).toString(), updatedInfo);
                       tables[tableNum][rowNum] = updatedInfo;
 
-                      
+                     setState(() {
+                        _productNameController.clear();
+                        _basePriceController.clear();
+                        _quantityController.clear();
+                      }); 
 
                       Navigator.of(context).pop();
                       Navigator.of(context).pop();
