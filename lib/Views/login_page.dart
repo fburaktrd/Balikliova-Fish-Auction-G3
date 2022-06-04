@@ -12,6 +12,8 @@ class _LoginState extends State<Login> {
   final AuthService _auth = AuthService();
   final username = TextEditingController();
   final password = TextEditingController();
+  bool isError = false;
+  String error = "";
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -40,11 +42,18 @@ class _LoginState extends State<Login> {
                 });
                 String res = await _auth.login(
                     email: username.text, password: password.text);
+                if (res != "success") {
+                  isError = true;
+                  error = res;
+                  widget.isLoading = false;
+                  setState(() {});
+                }
               },
             )
           : CircularProgressIndicator(
               color: Colors.red[800],
             ),
+      isError ? Text(error, style: TextStyle(color: Colors.red)) : Text("")
     ]);
   }
 
@@ -71,12 +80,12 @@ class _LoginState extends State<Login> {
     return Form(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: TextFormField(
-        // validator: (value) {
-        //   return value!.isNotEmpty &
-        //           value.contains(RegExp(r'^(?=.{8,20}$)[a-zA-Z0-9._]+$'))
-        //       ? null
-        //       : "Invalid User Name. Username should be 8-20 characters long and should only contain letters, numbers, underscore(_) or a dot (.)";
-        // },
+        validator: (value) {
+          return value!.isNotEmpty &
+                  value.contains(RegExp(r'^(?=.{3,20}$)[a-zA-Z0-9._]+$'))
+              ? null
+              : "Invalid User Name. Username should be 3-20 characters long and should only contain letters, numbers, underscore(_) or a dot (.)";
+        },
         controller: username,
         decoration: const InputDecoration(
             border: OutlineInputBorder(), labelText: "Username"),
