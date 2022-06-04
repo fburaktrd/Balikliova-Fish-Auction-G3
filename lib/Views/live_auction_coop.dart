@@ -305,8 +305,8 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                                       seconds: 3))
                                               .show(context);
                                         }
-                                        if (i ==
-                                            table.length - 1 && !wasSecondRound) {
+                                        if (i == table.length - 1 &&
+                                            !wasSecondRound) {
                                           currentItem = getNextItem();
 
                                           wasSecondRound = true;
@@ -520,8 +520,14 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                     getItemInfo(currentItem),
                                 duration: const Duration(seconds: 3))
                             .show(context);
+                        
                         currentItem = getNextItem();
                         cp.setCurrentFood(currentItem);
+                        if (wasSecondRound) {
+                          j++;
+                        } else {
+                          i++;
+                        }
                       } else {
                         Flushbar(
                                 title: "There is no bid!",
@@ -555,7 +561,8 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
   }
 
   bool willAuctionContinue() {
-    if ((wasSecondRound && j == unsoldsTable.length -1) || (!wasSecondRound && i == table.length - 1 && unsoldsTable.isEmpty)) {
+    if ((wasSecondRound && j == unsoldsTable.length - 1) ||
+        (!wasSecondRound && i == table.length - 1 && unsoldsTable.isEmpty)) {
       return false;
     } else {
       return true;
