@@ -67,19 +67,16 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
           auctionInfo = value;
           isActive = value["isButtonsActive"];
           fish.setInfo(auctionInfo["currentSeafood"]);
-            try {
-              latestBidMap = value["bids"][(value["bids"] as Map).keys.last];
-              latestBid = latestBidMap?["amount"];
-             
-            } catch (e) {
-              latestBid = 0;
-              
-            }
+          try {
+            latestBidMap = value["bids"][(value["bids"] as Map).keys.last];
+            latestBid = latestBidMap?["amount"];
+          } catch (e) {
+            latestBid = 0;
+          }
 
-            fishName = fish.getproductName();
-            quantity = fish.getFishAmount();
-            basePrice = fish.getBasePrice();
-          
+          fishName = fish.getproductName();
+          quantity = fish.getFishAmount();
+          basePrice = fish.getBasePrice();
         });
       });
     });
@@ -191,14 +188,12 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                           border:
                               Border.all(color: Colors.blueAccent, width: 5)),
                       child: SizedBox(
-                        child: Expanded(
-                          child: Text(
-                            latestBidMap == null
-                                ? "There is no bid yet."
-                                : "Latest Bid: $latestBid ₺, given by ${getLatestBidGiver()}",
-                            style: TextStyle(
-                                color: Colors.black, height: 1.5, fontSize: 20),
-                          ),
+                        child: Text(
+                          latestBidMap == null
+                              ? "There is no bid yet."
+                              : "Latest Bid: $latestBid ₺, given by ${getLatestBidGiver()}",
+                          style: TextStyle(
+                              color: Colors.black, height: 1.5, fontSize: 20),
                         ),
                       ),
                     ),
@@ -298,7 +293,6 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                               }
                                             }
                                             cp.setCurrentFood(currentItem);
-                                            
                                           });
                                         } else {
                                           Flushbar(
@@ -339,8 +333,6 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                               MaterialStateProperty.all(Colors.blue),
                         ),
                         onPressed: () {
-                          
-
                           showDialog(
                               context: context,
                               builder: (BuildContext context) => AlertDialog(
@@ -410,7 +402,6 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                             child: const Text("Change")),
                                         TextButton(
                                             onPressed: () => {
-                                                  
                                                   Navigator.pop(
                                                       context, 'Cancel')
                                                 },
@@ -493,10 +484,9 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                               MaterialStateProperty.all(Colors.blue),
                         ),
                         onPressed: () {
-                          
                           currentItem[4] = latestBid;
-                          
-                          cp.finaliseSoldPrice(latestBid,currentItem[0]);
+
+                          cp.finaliseSoldPrice(latestBid, currentItem[0]);
                           Flushbar(
                                   title: "Sold Price Set!",
                                   message: "Sold price set for row: " +
