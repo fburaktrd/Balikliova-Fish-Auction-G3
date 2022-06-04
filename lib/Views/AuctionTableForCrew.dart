@@ -8,8 +8,6 @@ import 'package:myapp/models/auctionTable.dart';
 import 'package:myapp/models/crewMember.dart';
 import 'package:myapp/models/user.dart';
 class ViewAuctionTableCrew extends StatefulWidget{
-  ViewAuctionTableCrew(this.userRole, {Key? key}) : super(key: key);
-  String? userRole;
 
   @override
   State<ViewAuctionTableCrew> createState() => _ViewAuctionTableCrewState();
@@ -32,21 +30,6 @@ class _ViewAuctionTableCrewState extends State<ViewAuctionTableCrew> {
 
   List<List<dynamic>> table = [];
 
-  @override
-  void initState() {
-    AuctionTableController().getTables(widget.userRole!).then((resAuctionTables) {
-      for (var table in resAuctionTables) {
-        //print(table.seafoodProducts);
-        auctionTables.add(table);
-        tables.add(table.seafoodProducts);
-      }
-      setState(() {
-        
-      });
-    });
-
-    super.initState();
-  }
 
   
 @override
