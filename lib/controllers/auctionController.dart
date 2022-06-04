@@ -43,12 +43,13 @@ class AuctionController {
         updatedSeafoods[element["id"].toString()] = element;
         if (element["id"] == resMap["currentSeafood"]["id"]) {
           try {
-            resMap["bids"] = resMap["seafoodProducts"][element["id"]]["bids"];
+            resMap["bids"] = element["bids"];
           } catch (e) {
             print(e);
           }
         }
       });
+
       resMap["seafoodProducts"] = updatedSeafoods;
 
       var currentSeafood = resMap["currentSeafood"];
