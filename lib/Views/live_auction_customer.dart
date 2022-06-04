@@ -23,6 +23,11 @@ double counter = fish.getBasePrice();
 class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
   int _currentStep = 0;
   var user = (getIt<UserController>().getUser as Customer);
+  double latestBid = fish.getLatestBid();
+  String fishName = fish.getproductName();
+  double quantity = fish.getFishAmount();
+  double basePrice = fish.getBasePrice();
+  Map? latestBidMap;
   AuctionController auctionController = AuctionController();
   var auctionInfo = {};
   //final CountdownController countdownController = new CountdownController(autoStart: true);
@@ -45,8 +50,23 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
       auctionController.getLiveAuction().then((value) {
         setState(() {
           auctionInfo = value;
+
           fish.setInfo(auctionInfo["currentSeafood"]);
-          counter = fish.getBasePrice();
+          try {
+            latestBidMap = value["bids"][(value["bids"] as Map).keys.last];
+            latestBid = latestBidMap?["amount"];
+            counter = latestBid;
+          _controller.text = latestBid.toString();
+          } catch (e) {
+            latestBid = 0;
+            counter = fish.getBasePrice();
+          _controller.text = fish.getBasePrice().toString();
+          }
+
+          fishName = fish.getproductName();
+          quantity = fish.getFishAmount();
+          basePrice = fish.getBasePrice();
+          
         });
       });
     });
@@ -56,10 +76,6 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
 
   @override
   Widget build(BuildContext context) {
-    double latestBid = fish.getLatestBid();
-    String fishName = fish.getproductName();
-    double quantity = fish.getFishAmount();
-    double basePrice = fish.getBasePrice();
     int userCount = getLiveUserCount();
     return MaterialApp(
       home: Scaffold(
@@ -224,7 +240,9 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                                 child: SizedBox(
                                   child: Expanded(
                                     child: Text(
-                                      "Latest Bid: $latestBid ₺, given by ${getLatestBidGiver()}",
+                                      latestBidMap == null
+                                          ? "There is no bid yet."
+                                          : "Latest Bid: $latestBid ₺, given by ${getLatestBidGiver()}",
                                       style: TextStyle(
                                           color: Colors.black,
                                           height: 1.5,
@@ -420,7 +438,10 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
   }
 
   String getLatestBidGiver() {
-    return "XX";
+    if (latestBidMap == null) {
+      return "null";
+    }
+    return latestBidMap?["username"];
   }
 
   onEnd() {
