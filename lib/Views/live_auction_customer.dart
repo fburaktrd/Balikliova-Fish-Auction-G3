@@ -56,17 +56,16 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
             latestBidMap = value["bids"][(value["bids"] as Map).keys.last];
             latestBid = latestBidMap?["amount"];
             counter = latestBid;
-          _controller.text = latestBid.toString();
+            _controller.text = latestBid.toString();
           } catch (e) {
             latestBid = 0;
             counter = fish.getBasePrice();
-          _controller.text = fish.getBasePrice().toString();
+            _controller.text = fish.getBasePrice().toString();
           }
 
           fishName = fish.getproductName();
           quantity = fish.getFishAmount();
           basePrice = fish.getBasePrice();
-          
         });
       });
     });
@@ -349,16 +348,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                       new ElevatedButton.icon(
                         icon: Icon(Icons.local_offer_sharp),
                         label: Text("Make Bid"),
-                        onPressed: () {
-                          if (checkBid()) {
-                            makeBid(counter);
-                            setState(() {});
-                          } else {
-                            displayMessage("Invalid Bid", context,
-                                "You can not make bid lower than or equal to current bid.");
-                            setState(() {});
-                          }
-                        },
+                        onPressed: isButtonActived() ? makeBidClicked : null,
                       ),
                     ],
                   ),
@@ -471,6 +461,21 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
 
   int getLiveUserCount() {
     return 10;
+  }
+
+  bool isButtonActived() {
+    return true;
+  }
+
+  void makeBidClicked() {
+    if (checkBid()) {
+      makeBid(counter);
+      setState(() {});
+    } else {
+      displayMessage("Invalid Bid", context,
+          "You can not make bid lower than or equal to current bid.");
+      setState(() {});
+    }
   }
 
   void displayMessage(String title, BuildContext context, String message) {
