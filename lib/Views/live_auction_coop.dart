@@ -138,283 +138,309 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                        child: FlatButton(
-                            child: const Text(
-                              'Change Product Flow',
-                              style: TextStyle(fontSize: 20.0),
-                            ),
-                            color: Colors.blueAccent,
-                            textColor: Colors.white,
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  alignment: Alignment.bottomCenter,
-                                  title: const Text('Change Product Flow'),
-                                  content: SingleChildScrollView(
-                                    child: ListBody(
-                                      children: <Widget>[
-                                        Text(
-                                            'BTW i = ${i} j = ${j} Next Item info:\n'),
-                                        Text(willAuctionContinue()
-                                            ? getItemInfo(getNextItem())
-                                            : "There are no remaining items."),
-                                      ],
-                                    ),
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text("Cancel")),
-                                    TextButton(
-                                        child: const Text('Next Item'),
-                                        onPressed: () {
-                                          //dont allow
-                                          Navigator.of(context).pop();
-                                          if (highestBid > 0) {
-                                            Flushbar(
-                                                    title:
-                                                        "Can't skip to next item!",
-                                                    message:
-                                                        "There was a bid. You should finalise the sold price.",
-                                                    duration: const Duration(
-                                                        seconds: 3))
-                                                .show(context);
-                                          } else {
-                                            if (willAuctionContinue()) {
-                                              setState(() {
-                                                if (currentItem[4] == 0 &&
-                                                    !wasSecondRound) {
-                                                  unsoldsTable.add(currentItem);
+                        child: SizedBox(
+                      height: 35,
+                      width: 300,
+                      child: TextButton(
+                        child: const Text(
+                          'Change Product Flow',
+                          style: TextStyle(fontSize: 20.0, color: Colors.white),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.blue),
+                        ),
 
-                                                  Flushbar(
-                                                          title:
-                                                              "Item was not sold",
-                                                          message:
-                                                              "Will try again 2nd round.",
-                                                          duration:
-                                                              const Duration(
-                                                                  seconds: 3))
-                                                      .show(context);
-                                                }
-                                                if (table
-                                                        .indexOf(currentItem) ==
-                                                    table.length - 1) {
-                                                  currentItem = getNextItem();
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              alignment: Alignment.bottomCenter,
+                              title: const Text('Change Product Flow'),
+                              content: SingleChildScrollView(
+                                child: ListBody(
+                                  children: <Widget>[
+                                    Text('Next Item info:\n'),
+                                    Text(willAuctionContinue()
+                                        ? getItemInfo(getNextItem())
+                                        : "There are no remaining items."),
+                                  ],
+                                ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text("Cancel")),
+                                TextButton(
+                                    child: const Text('Next Item'),
+                                    onPressed: () {
+                                      //dont allow
+                                      Navigator.of(context).pop();
+                                      if (highestBid > 0) {
+                                        Flushbar(
+                                                title:
+                                                    "Can't skip to next item!",
+                                                message:
+                                                    "There was a bid. You should finalise the sold price.",
+                                                duration:
+                                                    const Duration(seconds: 3))
+                                            .show(context);
+                                      } else {
+                                        if (willAuctionContinue()) {
+                                          setState(() {
+                                            if (currentItem[4] == 0 &&
+                                                !wasSecondRound) {
+                                              unsoldsTable.add(currentItem);
 
-                                                  wasSecondRound = true;
-
-                                                  Flushbar(
-                                                          title:
-                                                              "Second round started",
-                                                          message:
-                                                              "Second round started",
-                                                          duration:
-                                                              const Duration(
-                                                                  seconds: 3))
-                                                      .show(context);
-                                                } else {
-                                                  currentItem = getNextItem();
-
-                                                  if (wasSecondRound) {
-                                                    highestBid = 0;
-                                                    j++;
-                                                  } else {
-                                                    i++;
-                                                  }
-                                                }
-                                                AuctionController()
-                                                    .setCurrentFood(
-                                                        currentItem);
-                                              });
-                                            } else {
                                               Flushbar(
                                                       title:
-                                                          "Auction Is Finished",
+                                                          "Item was not sold",
                                                       message:
-                                                          "You cannot change the product of finished auction",
+                                                          "Will try again 2nd round.",
                                                       duration: const Duration(
                                                           seconds: 3))
                                                   .show(context);
                                             }
-                                          }
-                                        }),
-                                  ],
-                                ),
-                              );
-                              //cp.changeProductFlow();
-                            },
-                            minWidth: MediaQuery.of(context).size.width - 45,
-                            height: 50)),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                        child: FlatButton(
-                            child: const Text(
-                              'Change Base Price',
-                              style: TextStyle(fontSize: 20.0),
-                            ),
-                            color: Colors.blueAccent,
-                            textColor: Colors.white,
-                            onPressed: () {
-                              //cp.changeBasePrice();
+                                            if (table.indexOf(currentItem) ==
+                                                table.length - 1) {
+                                              currentItem = getNextItem();
 
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      AlertDialog(
-                                          alignment: Alignment.bottomCenter,
-                                          title: const Text(
-                                              "Enter your new price"),
-                                          titleTextStyle:
-                                              const TextStyle(fontSize: 24),
-                                          elevation: 10,
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: <Widget>[
-                                              Text(
-                                                  "Previous price: ${getCurrentItemPrice()}"),
-                                              TextField(
-                                                keyboardType:
-                                                    TextInputType.number,
-                                                onChanged: (String? str) =>
-                                                    setState(() {
-                                                  newPrice = str!;
-                                                }),
-                                              )
-                                            ],
-                                          ),
-                                          actions: <Widget>[
-                                            TextButton(
-                                                onPressed: () {
-                                                  if (newPrice == "") {
-                                                    Navigator.of(context).pop;
-                                                    Flushbar(
-                                                            title:
-                                                                "No value entered",
-                                                            message:
-                                                                "Please specify the next price.",
-                                                            duration:
-                                                                const Duration(
-                                                                    seconds: 3))
-                                                        .show(context);
-                                                  }
-                                                  //value entered is higher
-                                                  else if (getCurrentItemPrice() >
-                                                      int.parse(newPrice)) {
-                                                    setCurrentItemPrice(
-                                                        newPrice);
-                                                    Navigator.of(context).pop;
-                                                    Flushbar(
-                                                            title: "Done!",
-                                                            message:
-                                                                "Product value has been changed! " +
-                                                                    getItemInfo(
-                                                                        currentItem),
-                                                            duration:
-                                                                const Duration(
-                                                                    seconds: 3))
-                                                        .show(context);
-                                                  } else {
-                                                    Navigator.of(context).pop;
-                                                    Flushbar(
-                                                            title:
-                                                                "Value Beyond Limit",
-                                                            message:
-                                                                "Please enter a lower value than previous.",
-                                                            duration:
-                                                                const Duration(
-                                                                    seconds: 3))
-                                                        .show(context);
-                                                  }
+                                              wasSecondRound = true;
+
+                                              Flushbar(
+                                                      title:
+                                                          "Second round started",
+                                                      message:
+                                                          "Second round started",
+                                                      duration: const Duration(
+                                                          seconds: 3))
+                                                  .show(context);
+                                            } else {
+                                              currentItem = getNextItem();
+
+                                              if (wasSecondRound) {
+                                                highestBid = 0;
+                                                j++;
+                                              } else {
+                                                i++;
+                                              }
+                                            }
+                                            AuctionController()
+                                                .setCurrentFood(currentItem);
+                                          });
+                                        } else {
+                                          Flushbar(
+                                                  title: "Auction Is Finished",
+                                                  message:
+                                                      "You cannot change the product of finished auction",
+                                                  duration: const Duration(
+                                                      seconds: 3))
+                                              .show(context);
+                                        }
+                                      }
+                                    }),
+                              ],
+                            ),
+                          );
+                          //cp.changeProductFlow();
+                        },
+                        //minWidth: MediaQuery.of(context).size.width - 45,
+                        //height: 50
+                      ),
+                    )),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                        child: SizedBox(
+                      height: 35,
+                      width: 300,
+                      child: TextButton(
+                        child: const Text(
+                          'Change Base Price',
+                          style: TextStyle(fontSize: 20.0, color: Colors.white),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.blue),
+                        ),
+                        onPressed: () {
+                          //cp.changeBasePrice();
+
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                      alignment: Alignment.bottomCenter,
+                                      title: const Text("Enter your new price"),
+                                      titleTextStyle:
+                                          const TextStyle(fontSize: 24),
+                                      elevation: 10,
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Text(
+                                              "Previous price: ${getCurrentItemPrice()}"),
+                                          TextField(
+                                            keyboardType: TextInputType.number,
+                                            onChanged: (String? str) =>
+                                                setState(() {
+                                              newPrice = str!;
+                                            }),
+                                          )
+                                        ],
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                            onPressed: () {
+                                              if (newPrice == "") {
+                                                Navigator.of(context).pop;
+                                                Flushbar(
+                                                        title:
+                                                            "No value entered",
+                                                        message:
+                                                            "Please specify the next price.",
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 3))
+                                                    .show(context);
+                                              }
+                                              //value entered is higher
+                                              else if (getCurrentItemPrice() >
+                                                  int.parse(newPrice)) {
+                                                setCurrentItemPrice(newPrice);
+                                                Navigator.of(context).pop;
+                                                Flushbar(
+                                                        title: "Done!",
+                                                        message:
+                                                            "Product value has been changed! " +
+                                                                getItemInfo(
+                                                                    currentItem),
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 3))
+                                                    .show(context);
+                                              } else {
+                                                Navigator.of(context).pop;
+                                                Flushbar(
+                                                        title:
+                                                            "Value Beyond Limit",
+                                                        message:
+                                                            "Please enter a lower value than previous.",
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 3))
+                                                    .show(context);
+                                              }
+                                            },
+                                            //style: ButtonStyle(minimumSize: 16, maximumSize: 25),
+                                            child: const Text("Change")),
+                                        TextButton(
+                                            onPressed: () => {
+                                                  Navigator.pop(
+                                                      context, 'Cancel'),
                                                 },
-                                                //style: ButtonStyle(minimumSize: 16, maximumSize: 25),
-                                                child: const Text("Change")),
-                                            TextButton(
-                                                onPressed: () => {
-                                                      Navigator.pop(
-                                                          context, 'Cancel'),
-                                                    },
-                                                child: const Text("Cancel")),
-                                            //TODO dummy bu silinecek
-                                            TextButton(
-                                                onPressed: () => setState(() {
-                                                      highestBid = 600;
-                                                    }),
-                                                child: const Text(
-                                                    "600 diye yeni bid gelmiş olsun")),
-                                          ]));
-                            },
-                            minWidth: MediaQuery.of(context).size.width - 45,
-                            height: 50))
+                                            child: const Text("Cancel")),
+                                        //TODO dummy bu silinecek
+                                        TextButton(
+                                            onPressed: () => setState(() {
+                                                  highestBid = 600;
+                                                }),
+                                            child: const Text(
+                                                "600 diye yeni bid gelmiş olsun")),
+                                      ]));
+                        },
+                        // minWidth: MediaQuery.of(context).size.width - 45,
+                        //height: 50
+                      ),
+                    ))
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                        child: FlatButton(
-                            child: const Text(
-                              'Activate/Deactivate Buttons',
-                              style: TextStyle(fontSize: 20.0),
-                            ),
-                            color: Colors.blueAccent,
-                            textColor: Colors.white,
-                            onPressed: () {
-                              cp.activateDeactivateButtons();
-                            },
-                            minWidth: MediaQuery.of(context).size.width - 45,
-                            height: 50))
+                        child: SizedBox(
+                      height: 35,
+                      width: 300,
+                      child: TextButton(
+                        child: const Text(
+                          'Activate/Deactivate Buttons',
+                          style: TextStyle(fontSize: 20.0, color: Colors.white),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.blue),
+                        ),
+                        onPressed: () {
+                          cp.activateDeactivateButtons();
+                        },
+                        //minWidth: MediaQuery.of(context).size.width - 45,
+                        //height: 50
+                      ),
+                    ))
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                        child: FlatButton(
-                            child: const Text(
-                              'Finalise Sold Price',
-                              style: TextStyle(fontSize: 20.0),
-                            ),
-                            color: Colors.blueAccent,
-                            textColor: Colors.white,
-                            onPressed: () {
-                              //TODO cp.finaliseSoldPrice();
-                              currentItem[4] = highestBid;
-                              Navigator.of(context).pop;
-                              Flushbar(
-                                      title: "Sold Price Set!",
-                                      message: "Sold price set for row: " +
-                                          getItemInfo(currentItem),
-                                      duration: const Duration(seconds: 3))
-                                  .show(context);
-                            },
-                            minWidth: MediaQuery.of(context).size.width - 45,
-                            height: 50))
+                        child: SizedBox(
+                      height: 35,
+                      width: 300,
+                      child: TextButton(
+                        child: const Text(
+                          'Finalise Sold Price',
+                          style: TextStyle(fontSize: 20.0, color: Colors.white),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.blue),
+                        ),
+                        onPressed: () {
+                          //TODO cp.finaliseSoldPrice();
+                          currentItem[4] = highestBid;
+                          Navigator.of(context).pop;
+                          Flushbar(
+                                  title: "Sold Price Set!",
+                                  message: "Sold price set for row: " +
+                                      getItemInfo(currentItem),
+                                  duration: const Duration(seconds: 3))
+                              .show(context);
+                        },
+                        //minWidth: MediaQuery.of(context).size.width - 45,
+                        //height: 50
+                      ),
+                    ))
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                        child: FlatButton(
-                            child: const Text(
-                              'Finish Live Auction',
-                              style: TextStyle(fontSize: 20.0),
-                            ),
-                            color: Colors.blueAccent,
-                            textColor: Colors.white,
-                            onPressed: () {
-                              cp.finishLiveAuction();
-                              Navigator.of(context).pop();
-                            },
-                            minWidth: MediaQuery.of(context).size.width - 45,
-                            height: 50))
+                        child: SizedBox(
+                      height: 35,
+                      width: 300,
+                      child: TextButton(
+                        child: const Text(
+                          'Finish Live Auction',
+                          style: TextStyle(fontSize: 20.0, color: Colors.white),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.blue),
+                        ),
+                        onPressed: () {
+                          cp.finishLiveAuction();
+                          Navigator.of(context).pop();
+                        },
+                        //minWidth: MediaQuery.of(context).size.width - 45,
+                        //height: 50
+                      ),
+                    ))
                   ],
                 )
               ])),
