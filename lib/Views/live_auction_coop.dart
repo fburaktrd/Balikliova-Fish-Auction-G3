@@ -332,9 +332,9 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                       });
                                     } else {
                                       Flushbar(
-                                              title: "Auction Is Finished",
+                                              title: "All items in the auction table have been sold.",
                                               message:
-                                                  "You cannot change the product of finished auction",
+                                                  "You cannot change the product flow.",
                                               duration:
                                                   const Duration(seconds: 3))
                                           .show(context);
