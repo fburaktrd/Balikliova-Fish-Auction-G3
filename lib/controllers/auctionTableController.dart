@@ -29,6 +29,18 @@ class AuctionTableController {
         .child(auctionTableId)
         .child("isPublished")
         .set(true);
+
+    var auctionTables = (await ref.child("Auction_Table").get()).value;
+
+    for (var key in (auctionTables as Map).keys) {
+      if(key != auctionTableId){
+        ref
+          .child("Auction_Table")
+          .child(auctionTables[key]["id"])
+          .child("isPublished")
+          .set(false);
+      }
+    }
   }
 
   void addProductToTableDb(String auctionTableID, List<dynamic> productInfo) {

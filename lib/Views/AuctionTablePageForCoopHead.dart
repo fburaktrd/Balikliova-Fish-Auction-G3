@@ -20,7 +20,6 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   List<AuctionTable> auctionTables = [];
   List<List<List<dynamic>>> tables = [];
 
-
   bool published = false;
 
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
@@ -32,25 +31,23 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   String quantity = "";
   String basePrice = "";
 
-
   List<List<dynamic>> table = [];
 
   @override
   void initState() {
-    AuctionTableController().getTables(widget.userRole!).then((resAuctionTables) {
+    AuctionTableController()
+        .getTables(widget.userRole!)
+        .then((resAuctionTables) {
       for (var table in resAuctionTables) {
         //print(table.seafoodProducts);
         auctionTables.add(table);
         tables.add(table.seafoodProducts);
       }
-      setState(() {
-        
-      });
+      setState(() {});
     });
 
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -93,8 +90,10 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
       Column col = Column(
         children: [
           Padding(padding: const EdgeInsets.all(8)),
-          Padding(padding: const EdgeInsets.all(8)
-            ,child: checkIfPublished(auctionTables[i]),),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: checkIfPublished(auctionTables[i]),
+          ),
           SingleChildScrollView(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -106,21 +105,23 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
           ),
           Row(
             children: [
-             ElevatedButton(
-          child: Text("Publish"),
-            onPressed: () {
-              setState(() {
-                if(published){
-                  publishAlertDialog(context);
-                }
-                else{
-                  auctionTables[i].publishTable();
-                  published = true;
-                } 
-              
-              });
-            }),
-      
+              ElevatedButton(
+                  child: Text("Publish"),
+                  onPressed: () {
+                    setState(() {
+                      if (published) {
+                        publishAlertDialog(context);
+                      } else {
+                        auctionTables[i].publishTable();
+                        for (var tablee in auctionTables) {
+                          if (tablee.id != auctionTables[i].id) {
+                            tablee.isPublished = false;
+                          }
+                        }
+                        published = true;
+                      }
+                    });
+                  }),
               ElevatedButton(
                 child: Text("Update"),
                 onPressed: () {
@@ -140,12 +141,10 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
     return cols;
   }
 
-    Text checkIfPublished(AuctionTable table) { 
-    
-    if(table.isPublished){
+  Text checkIfPublished(AuctionTable table) {
+    if (table.isPublished) {
       return Text("Published");
-    }
-    else{
+    } else {
       return Text("Unpublished");
     }
   }
@@ -159,30 +158,34 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   List<DataColumn> getColumns(List<String> columns) =>
       columns.map((column) => DataColumn(label: Text(column))).toList();
 
-  void publishAlertDialog(BuildContext context){
-      showDialog(context: context, builder: (BuildContext build){
-        return AlertDialog(
-          title: Text("Warning!"),
-          content: Row(children: [
-             Column(children: [
-              Container(
-                  child: Text("A table is published already..."), 
-                ),
-              Padding(padding: const EdgeInsets.all(8)),
-              ElevatedButton(onPressed: () {
-                Navigator.of(context).pop();
-                }, 
-                child: const Text("OK")),
-            ],)       
-
-          ],),           
-              );
-      }).then((_){
-        setState(() {
-        });
-      } );
-     } 
-
+  void publishAlertDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext build) {
+          return AlertDialog(
+            title: Text("Warning!"),
+            content: Row(
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      child: Text("A table is published already..."),
+                    ),
+                    Padding(padding: const EdgeInsets.all(8)),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("OK")),
+                  ],
+                )
+              ],
+            ),
+          );
+        }).then((_) {
+      setState(() {});
+    });
+  }
 
   bool _isNumeric(String str) {
     if (str == null) {
@@ -209,7 +212,9 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                     },
                   ),
                 ),
-                Padding(padding: const EdgeInsets.all(8),),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                ),
                 Align(
                   alignment: Alignment.center,
                   child: ElevatedButton(
@@ -219,7 +224,9 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                     },
                   ),
                 ),
-                Padding(padding: const EdgeInsets.all(8),),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                ),
                 Align(
                     alignment: Alignment.center,
                     child: ElevatedButton(
@@ -336,16 +343,19 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
       BuildContext context, List<List<dynamic>> table, int tableNum) {
     List<Column> columns = [];
     for (var rowNum = 0; rowNum < table.length; rowNum++) {
-      Column column = Column(children: [
-        ElevatedButton(
-        child: Text("Update row ${rowNum + 1}"),
-        onPressed: () {
-          updateAuctionTableAlert(context, tables[tableNum], tableNum, rowNum);
-        },
-      ),
-      Padding(padding: const EdgeInsets.all(5)),
-      ],);
-      
+      Column column = Column(
+        children: [
+          ElevatedButton(
+            child: Text("Update row ${rowNum + 1}"),
+            onPressed: () {
+              updateAuctionTableAlert(
+                  context, tables[tableNum], tableNum, rowNum);
+            },
+          ),
+          Padding(padding: const EdgeInsets.all(5)),
+        ],
+      );
+
       columns.add(column);
     }
     showDialog(
@@ -378,9 +388,8 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
     });
   }
 
-    void updateAuctionTableAlert(BuildContext context, List<List<dynamic>> table,
+  void updateAuctionTableAlert(BuildContext context, List<List<dynamic>> table,
       int tableNum, int rowNum) {
-  
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -404,7 +413,6 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                       },
                       onChanged: (value) =>
                           setState(() => productName = value)),
-      
                   TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller: _quantityController,
@@ -429,7 +437,6 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                       }
                     },
                     onChanged: (value) => setState(() => basePrice = value),
-                    
                   ),
                 ],
               ),
@@ -444,37 +451,33 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
               ElevatedButton.icon(
                   icon: const Icon(Icons.save),
                   label: const Text("Save"),
-                  onPressed: () {            
+                  onPressed: () {
+                    List<dynamic> updatedInfo = [
+                      (rowNum + 1).toString(),
+                      productName,
+                      int.parse(quantity),
+                      int.parse(basePrice),
+                      0
+                    ];
 
-                      List<dynamic> updatedInfo = [
-                        (rowNum + 1).toString(),
-                        productName,
-                        int.parse(quantity),
-                        int.parse(basePrice),
-                        0
-                      ];
+                    auctionTables[tableNum]
+                        .updateRowTable((rowNum + 1).toString(), updatedInfo);
+                    tables[tableNum][rowNum] = updatedInfo;
 
-                      auctionTables[tableNum]
-                          .updateRowTable((rowNum + 1).toString(), updatedInfo);
-                      tables[tableNum][rowNum] = updatedInfo;
+                    setState(() {
+                      _productNameController.clear();
+                      _basePriceController.clear();
+                      _quantityController.clear();
+                    });
 
-                     setState(() {
-                        _productNameController.clear();
-                        _basePriceController.clear();
-                        _quantityController.clear();
-                      }); 
-
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                    }
-                  ),
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  }),
             ],
           );
         }).then((_) {
       setState(() {});
     });
   }
-
-
 }
