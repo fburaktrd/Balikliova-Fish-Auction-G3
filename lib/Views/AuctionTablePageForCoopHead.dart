@@ -58,6 +58,10 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   String quantity = '';
   String basePrice = '';
 
+  bool productChanged = false;
+  bool quantityChanged = false;
+  bool basePriceChanged = false;
+
   List<List<dynamic>> table = [];
 
   @override
@@ -75,6 +79,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
 
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +135,21 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
           ),
           Row(
             children: [
-              publishOrUnpublish(i),
+             ElevatedButton(
+          child: Text("Publish"),
+            onPressed: () {
+              setState(() {
+                if(published){
+                  publishAlertDialog(context);
+                }
+                else{
+                  auctionTables[i].publishTable();
+                  published = true;
+                } 
+              
+              });
+            }),
+      
               ElevatedButton(
                 child: Text("Update"),
                 onPressed: () {
@@ -169,9 +188,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   List<DataColumn> getColumns(List<String> columns) =>
       columns.map((column) => DataColumn(label: Text(column))).toList();
 
-
-  ElevatedButton publishOrUnpublish(int index){
-    if(published){
+  void publishAlertDialog(BuildContext context){
       showDialog(context: context, builder: (BuildContext build){
         return AlertDialog(
           title: Text("Warning!"),
@@ -193,31 +210,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
         setState(() {
         });
       } );
-    }
-
-    if(!dummyTables.contains(unpublishedTable)){
-      return ElevatedButton(
-          child: Text("Publish"),
-            onPressed: () {
-              setState(() {
-                auctionTables[index].publishTable();
-                publishedTables.add(unpublishedTable);
-              });
-            });
-    } 
-    else {
-      return ElevatedButton(
-          child: Text("Unpublish"),
-            onPressed: () {
-              setState(() {
-                //auctionTables[i].publishTable();
-                unpublishedTables.add(publishedTable);
-              });
-            });
-    }
-    
-
-  }
+     } 
 
   void updateAuctionTableRowView(
       BuildContext context, List<List<dynamic>> table) {
@@ -470,7 +463,10 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                         }
                       },
                       onChanged: (value) =>
-                          setState(() => productName = value)),
+                          setState(() {
+                            productName = value;
+                            productChanged = true;
+                          })),
                   TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller: _updateQuantityController,
@@ -482,7 +478,10 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                           return null;
                         }
                       },
-                      onChanged: (value) => setState(() => quantity = value)),
+                      onChanged: (value) => setState(() {
+                        quantity = value;
+                        quantityChanged = true;
+                      })),
                   TextFormField(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: _updateBasePriceController,
@@ -494,7 +493,10 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                         return null;
                       }
                     },
-                    onChanged: (value) => setState(() => basePrice = value),
+                    onChanged: (value) => setState(() {
+                      basePrice = value;
+                      basePriceChanged = true;
+                      }),
                   ),
                 ],
               ),
@@ -512,6 +514,28 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                   onPressed: () {
                     if (_updateKey.currentState!.validate()) {
                       _updateKey.currentState!.save();
+
+                      
+
+                      setState(() {
+                        if(productChanged == false){
+                        productName = tables[tableNum][rowNum][1];
+                      }
+
+                      if(quantityChanged = false){
+                        quantity = tables[tableNum][rowNum][2].toString();
+                      }
+
+                      if(basePriceChanged == false){
+                        basePrice = tables[tableNum][rowNum][3].toString();
+                      }
+                        _updateProductNameController.clear();
+                        _updateBasePriceController.clear();
+                        _updateQuantityController.clear();
+                      });
+
+
+                      
                       List<dynamic> updatedInfo = [
                         (rowNum + 1).toString(),
                         productName,
@@ -519,15 +543,12 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                         int.parse(basePrice),
                         0
                       ];
+
                       auctionTables[tableNum]
                           .updateRowTable((rowNum + 1).toString(), updatedInfo);
                       tables[tableNum][rowNum] = updatedInfo;
 
-                      setState(() {
-                        _updateProductNameController.clear();
-                        _updateBasePriceController.clear();
-                        _updateQuantityController.clear();
-                      });
+
 
                       Navigator.of(context).pop();
                       Navigator.of(context).pop();
