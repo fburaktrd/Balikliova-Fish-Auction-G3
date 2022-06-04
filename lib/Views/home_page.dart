@@ -21,11 +21,6 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
     //AuctionController().getCurrentAuctionTableAsList();
     
-    BidController().listenBids(set_state: () {
-      setState(() {
-        count++;
-      });
-    });
     super.initState();
   }
 
