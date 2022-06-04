@@ -20,28 +20,6 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   List<AuctionTable> auctionTables = [];
   List<List<List<dynamic>>> tables = [];
 
-  List<List<List<dynamic>>> dummyTables = [
-                                              [ 
-                                                ["0","unpublished1",1,23,4],
-                                                ["1","unpublished2",23,23,1]
-                                              ],
-
-                                              [
-                                                ["0","Balıkfalan",12,12,0],
-                                                ["1","bitanedahabalık",23,23,23],
-                                              ]
-                                          ];
-
-  List<List<dynamic>> unpublishedTable =[
-                                          ["0","unpublished1",1,23,4],
-                                          ["1","unpublished2",23,23,1]
-                                        ]; //dummy veri
-
-  List<List<dynamic>> publishedTable = 
-                                        [
-                                          ["0","Balıkfalan",12,12,0],
-                                          ["1","bitanedahabalık",23,23,23],
-                                        ]; // dummy veri
 
   bool published = false;
 
@@ -54,9 +32,9 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   final _quantityController = TextEditingController();
   final _basePriceController = TextEditingController();
   GeneralUser user = getIt<UserController>().getUser;
-  String productName = '';
-  String quantity = '';
-  String basePrice = '';
+  String productName = "";
+  String quantity = "";
+  String basePrice = "";
 
 
   List<List<dynamic>> table = [];
@@ -404,108 +382,116 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
     });
   }
 
-  void updateAuctionTableAlert(BuildContext context, List<List<dynamic>> table,int tableNum ,int rowNum) {
-  final GlobalKey<FormState> _updateKey = GlobalKey<FormState>();
-  final _updateProductNameController = TextEditingController(text: tables[tableNum][rowNum][1]);
-  final _updateQuantityController = TextEditingController(text: tables[tableNum][rowNum][2].toString());
-  final _updateBasePriceController = TextEditingController(text: tables[tableNum][rowNum][3].toString());
+    void updateAuctionTableAlert(BuildContext context, List<List<dynamic>> table,
+      int tableNum, int rowNum) {
   
-      showDialog(context: context, builder: (BuildContext context){
-      return AlertDialog(
-        title: Text("Update product"),
-        content: Form(
-          key: _updateKey,
-          child: Column(
-            children: [
-              TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: _updateProductNameController,
-                decoration: const InputDecoration(labelText: 'Product Name'),
-                validator: (value) { 
-                  if (value!.isEmpty || _isNumeric(value)) {
-                    return 'Please enter a product name with letters';}
-                  else{
-                    return null;}
-                },
-                  onChanged: (value) => setState(() => productName = value)
-              ),
-
-              TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: _updateQuantityController,
-                decoration: const InputDecoration(labelText: 'Quantity'),
-                validator: (value) {
-                  
-                  if (value!.isEmpty || !(_isNumeric(value))) {
-                    return 'Please enter a quantity with numbers';}
-                  else{
-                    return null;}
-                  
-                },
-                onChanged: (value) => setState(() => quantity = value)
-                  
-                ),
-
-              TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: _updateBasePriceController,
-                decoration: const InputDecoration(labelText: 'Base Price'),
-                validator: (value) {
-                  
-                  if (value!.isEmpty || !(_isNumeric(value))) {
-                    return 'Please enter a base price with numbers';}
-                  else{
-                    return null;}
-                },       
-                onChanged: (value) => setState(() => basePrice = value),
-              ),            
-            ],
-          ),
-          ),
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Update product"),
+            content: Form(
+              key: _key,
+              child: Column(
+                children: [
+                  TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _productNameController,
+                      decoration:
+                          const InputDecoration(labelText: 'Product Name'),
+                      validator: (value) {
+                        if (value!.isEmpty || _isNumeric(value)) {
+                          return 'Please enter a product name with letters';
+                        } else {
+                          return null;
+                        }
+                      },
+                      onChanged: (value) =>
+                          setState(() => productName = value)),
       
-       actions: <Widget>[
-         ElevatedButton.icon(
-          icon: const Icon(Icons.cancel),
-          label: const Text("Cancel"),
-          onPressed: () {
-            Navigator.of(context).pop();
+                  TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _quantityController,
+                      decoration: const InputDecoration(labelText: 'Quantity'),
+                      validator: (value) {
+                        if (value!.isEmpty || !(_isNumeric(value))) {
+                          return 'Please enter a quantity with numbers';
+                        } else {
+                          return null;
+                        }
+                      },
+                      onChanged: (value) => setState(() => quantity = value)),
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    controller: _basePriceController,
+                    decoration: const InputDecoration(labelText: 'Base Price'),
+                    validator: (value) {
+                      if (value!.isEmpty || !(_isNumeric(value))) {
+                        return 'Please enter a base price with numbers';
+                      } else {
+                        return null;
+                      }
+                    },
+                    onChanged: (value) => setState(() => basePrice = value),
+                    
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              ElevatedButton.icon(
+                  icon: const Icon(Icons.cancel),
+                  label: const Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+              ElevatedButton.icon(
+                  icon: const Icon(Icons.save),
+                  label: const Text("Save"),
+                  onPressed: () {
+                      setState(() {
+                         if(productName.isEmpty){
+                          productName= tables[tableNum][rowNum][1];
+                        }
 
-          }
-         ),
-          
+                        if(quantity.isEmpty){
+                          quantity = tables[tableNum][rowNum][2];
+                        }
 
-          ElevatedButton.icon(
-            icon: const Icon(Icons.save),
-            label: const Text("Save"),
-            onPressed: () {
-              if (_updateKey.currentState!.validate()){
-                _updateKey.currentState!.save();
+                        if(basePrice.isEmpty){
+                          basePrice = tables[tableNum][rowNum][3];
+                        }
+                        _productNameController.clear();
+                        _basePriceController.clear();
+                        _quantityController.clear();
+                      });
+                     
 
-                tables[tableNum][rowNum] = [(rowNum+1).toString(),
-                          productName,
-                          int.parse(quantity),
-                          int.parse(basePrice),
-                          0
-                ];
-          
-                setState(() {
-                  _updateProductNameController.clear();
-                  _updateBasePriceController.clear();
-                  _updateQuantityController.clear();
-                });
+                      List<dynamic> updatedInfo = [
+                        (rowNum + 1).toString(),
+                        productName,
+                        int.parse(quantity),
+                        int.parse(basePrice),
+                        0
+                      ];
 
-                Navigator.of(context).pop();
+                      auctionTables[tableNum]
+                          .updateRowTable((rowNum + 1).toString(), updatedInfo);
+                      tables[tableNum][rowNum] = updatedInfo;
 
-              }
-            }
-          ),
-       ],
-      );
-    }).then((_) {
+                      
+
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                    }
+                  ),
+            ],
+          );
+        }).then((_) {
       setState(() {});
     });
   }
-  
 
 
 }

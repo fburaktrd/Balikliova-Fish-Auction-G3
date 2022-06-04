@@ -1,8 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/Views/AuctionTableForCrew.dart';
-import 'package:myapp/Views/AuctionTableForCustomerMember.dart';
+import 'package:myapp/Views/AuctionTableForCustomer.dart';
 import 'package:myapp/Views/AuctionTablePageForCoopHead.dart';
 import 'package:myapp/Views/CreateAuctionTablePage.dart';
 import 'package:myapp/Views/live_auction_coop.dart';
@@ -314,21 +313,7 @@ class _navBarState extends State<navBar> {
                             },
                           ),
                         ),
-                        Visibility(
-                          visible: _crewMember,
-                          child: ListTile(
-                            // if user is coop member, coop crew, customer
-                            leading: const Icon(Icons.view_day),
-                            horizontalTitleGap: 1,
-                            title: const Text('View Auction Table'),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      ViewAuctionTableCrew())); //AuctionTableScreen()
-                            },
-                          ),
-                        ),
+                        
                         Visibility(
                           // if user is customer
                           visible: _customer,

@@ -105,6 +105,7 @@ class AuctionTableController {
       var auctionTable = AuctionTable(
           coopHeadId: resMap[key]["CoopHeadId"],
           seafoodProducts: seafoodsAsList,
+          isPublished: resMap[key]["isPublished"],
           id: resMap[key]["id"]);
       auctionTables.add(auctionTable);
     }
