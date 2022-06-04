@@ -52,9 +52,9 @@ class AuctionController {
         currentSeafood["soldPrice"]
       ];
       try {
-        resMap["users"] = resMap["users"].length;
+        resMap["usersCount"] = resMap["users"].length;
       } catch (e) {
-        resMap["users"] = 0;
+        resMap["usersCount"] = 0;
       }
       //resMap["users"] = resMap["users"].length;
       return resMap;

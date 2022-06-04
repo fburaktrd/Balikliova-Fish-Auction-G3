@@ -39,7 +39,6 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
       showFullscreenButton: true,
     ),
   );
-
   //1. row no 2. name 3. quantity 4. base price 5. sold price
   List<dynamic> table = [
     ["1", "Levrek", 20, 10, 0],
@@ -121,7 +120,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                       alignment: Alignment.center,
                       child: ElevatedButton.icon(
                         icon: Icon(Icons.person),
-                        label: Text("${auctionInfo["users"]}"),
+                        label: Text("${auctionInfo["usersCount"]}"),
                         onPressed: () {
                           onEnd();
                         },
@@ -368,7 +367,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                         TextButton(
                                             onPressed: () {
                                               if (newPrice == "") {
-                                                Navigator.of(context).pop;
+                                                Navigator.of(context).pop();
                                                 Flushbar(
                                                         title:
                                                             "No value entered",
@@ -383,7 +382,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                               else if (getCurrentItemPrice() >
                                                   int.parse(newPrice)) {
                                                 setCurrentItemPrice(newPrice);
-                                                Navigator.of(context).pop;
+                                                Navigator.of(context).pop();
                                                 Flushbar(
                                                         title: "Done!",
                                                         message:
@@ -395,7 +394,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                                                 seconds: 3))
                                                     .show(context);
                                               } else {
-                                                Navigator.of(context).pop;
+                                                Navigator.of(context).pop();
                                                 Flushbar(
                                                         title:
                                                             "Value Beyond Limit",
@@ -411,8 +410,9 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                             child: const Text("Change")),
                                         TextButton(
                                             onPressed: () => {
+                                                  
                                                   Navigator.pop(
-                                                      context, 'Cancel'),
+                                                      context, 'Cancel')
                                                 },
                                             child: const Text("Cancel"))
                                       ]));
@@ -495,7 +495,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                         onPressed: () {
                           
                           currentItem[4] = latestBid;
-                          //Navigator.of(context).pop;
+                          Navigator.of(context).pop();
                           cp.finaliseSoldPrice(latestBid,currentItem[0]);
                           Flushbar(
                                   title: "Sold Price Set!",
@@ -574,7 +574,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
   }
 
   int getCurrentItemPrice() {
-    return currentItem[3];
+    return auctionInfo["currentSeafood"][3];
   }
 
   bool willAuctionContinue() {
@@ -597,8 +597,8 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
   }
 
   void setCurrentItemPrice(String newValue) {
-    currentItem[3] = int.parse(newValue);
-    
+    currentItem[3] = double.parse(newValue);
+    cp.changeBasePrice(currentItem[3]);
   }
 
   String getItemInfo(dynamic item) {

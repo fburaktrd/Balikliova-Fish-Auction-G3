@@ -6,7 +6,7 @@ import 'package:myapp/models/database.dart';
 class CoopHeadController {
   final ref = FirebaseDatabase.instance.ref();
 
-  void changeBasePrice(int price) {
+  void changeBasePrice(double price) {
     ref
         .child("Live_Auction")
         .child("currentSeafood")

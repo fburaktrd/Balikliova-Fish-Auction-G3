@@ -148,7 +148,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                         alignment: Alignment.center,
                         child: ElevatedButton.icon(
                           icon: Icon(Icons.person),
-                          label: Text("${auctionInfo["users"]}"),
+                          label: Text("${auctionInfo["usersCount"]}"),
                           onPressed: () {
                             onEnd();
                           },
