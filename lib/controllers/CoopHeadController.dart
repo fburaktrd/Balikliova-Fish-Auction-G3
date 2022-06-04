@@ -29,7 +29,10 @@ class CoopHeadController {
     ref.child("Live_Auction").child("isButtonsActive").set(!(isActive));
   }
 
-  void finaliseSoldPrice(double price, String productId) {
+  void finaliseSoldPrice(double price, String productId) async {
+    var tabl = await ref.child("Published_Auction_Table").get();
+    var keyy = (tabl.value as Map).keys.first;
+
     ref
         .child("Live_Auction")
         .child("currentSeafood")
@@ -41,7 +44,21 @@ class CoopHeadController {
         .child(productId)
         .child("soldPrice")
         .set(price);
-    
+
+    ref
+        .child("Auction_Table")
+        .child(keyy)
+        .child("seafoodProducts")
+        .child(productId)
+        .child("soldPrice")
+        .set(price);
+    ref
+        .child("Published_Auction_Table")
+        .child(keyy)
+        .child("seafoodProducts")
+        .child(productId)
+        .child("soldPrice")
+        .set(price);
   }
 
   void finishLiveAuction(Map auctionInfo) {
