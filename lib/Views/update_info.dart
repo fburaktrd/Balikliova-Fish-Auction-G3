@@ -200,6 +200,19 @@ class _InformationScreenState extends State<InformationScreen> {
                           height: 5,
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "e-mail: ${getEmail()}",
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(
+                                fontSize: 23.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                        /* Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -213,7 +226,7 @@ class _InformationScreenState extends State<InformationScreen> {
                               label: const Text("Update Password"),
                             ),
                           ],
-                        ),
+                        ),*/
                         SizedBox(
                           width: 8,
                           height: 5,
@@ -371,6 +384,10 @@ class _InformationScreenState extends State<InformationScreen> {
         .child(user_info["uid"])
         .child(infoLabel)
         .set(value);
+  }
+
+  String getEmail() {
+    return "email";
   }
 
   void updatePhoneAlertDialog(BuildContext context) {
