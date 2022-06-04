@@ -56,13 +56,16 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
           } else {
             fish.setInfo(auctionInfo["currentSeafood"]);
             try {
+
               latestBidMap = value["bids"][(value["bids"] as Map).keys.last];
               latestBid = latestBidMap?["amount"];
+              fish.setLatestBid(latestBid);
               counter = latestBid;
               _controller.text = latestBid.toString();
             } catch (e) {
               latestBid = 0;
               counter = fish.getBasePrice();
+              fish.setLatestBid(latestBid);
               _controller.text = fish.getBasePrice().toString();
             }
 

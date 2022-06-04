@@ -16,6 +16,7 @@ class Seafood {
     return this.productName;
   }
 
+
   double getFishAmount() {
     return this.amount;
   }
