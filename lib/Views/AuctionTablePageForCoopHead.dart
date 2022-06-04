@@ -58,9 +58,6 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
   String quantity = '';
   String basePrice = '';
 
-  bool productChanged = false;
-  bool quantityChanged = false;
-  bool basePriceChanged = false;
 
   List<List<dynamic>> table = [];
 
@@ -192,58 +189,26 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
       showDialog(context: context, builder: (BuildContext build){
         return AlertDialog(
           title: Text("Warning!"),
-          content: SizedBox(
-            child: Column(
-              children: [
-                Container(
+          content: Row(children: [
+             Column(children: [
+              Container(
                   child: Text("A table is published already..."), 
                 ),
-                ElevatedButton(onPressed: () {
-                  Navigator.of(context).pop();
+              Padding(padding: const EdgeInsets.all(8)),
+              ElevatedButton(onPressed: () {
+                Navigator.of(context).pop();
                 }, 
-                child: Icon(Icons.arrow_back))
+                child: const Text("OK")),
+            ],)       
 
-              ]),
-          ),
-        );
+          ],),           
+              );
       }).then((_){
         setState(() {
         });
       } );
      } 
 
-  void updateAuctionTableRowView(
-      BuildContext context, List<List<dynamic>> table) {
-    List<ListTile> tiles = [];
-
-    for (var i = 0; i < table.length; i++) {
-      ListTile tile = ListTile(
-        title: Text("Update row ${i + 1}"),
-        onTap: () {
-          //updateAuctionTableAlert(context, table,i);
-        },
-      );
-      tiles.add(tile);
-    }
-
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              title: Text("Choose row"),
-              content: Container(
-                width: double.minPositive,
-                child: ListView.builder(
-                    itemCount: tiles.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return tiles[index];
-                    }),
-              ));
-        }).then((_) {
-      setState(() {});
-    });
-  }
 
   bool _isNumeric(String str) {
     if (str == null) {
@@ -270,6 +235,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                     },
                   ),
                 ),
+                Padding(padding: const EdgeInsets.all(8),),
                 Align(
                   alignment: Alignment.center,
                   child: ElevatedButton(
@@ -279,6 +245,7 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
                     },
                   ),
                 ),
+                Padding(padding: const EdgeInsets.all(8),),
                 Align(
                     alignment: Alignment.center,
                     child: ElevatedButton(
@@ -393,15 +360,19 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
 
   void updateRowAlert(
       BuildContext context, List<List<dynamic>> table, int tableNum) {
-    List<ElevatedButton> buttons = [];
+    List<Column> columns = [];
     for (var rowNum = 0; rowNum < table.length; rowNum++) {
-      ElevatedButton button = ElevatedButton(
+      Column column = Column(children: [
+        ElevatedButton(
         child: Text("Update row ${rowNum + 1}"),
         onPressed: () {
           updateAuctionTableAlert(context, tables[tableNum], tableNum, rowNum);
         },
-      );
-      buttons.add(button);
+      ),
+      Padding(padding: const EdgeInsets.all(5)),
+      ],);
+      
+      columns.add(column);
     }
     showDialog(
         context: context,
@@ -411,10 +382,10 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
             content: Container(
               width: double.minPositive,
               child: ListView.builder(
-                  itemCount: buttons.length,
+                  itemCount: columns.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return buttons[index];
+                    return columns[index];
                   }),
             ),
             actions: <Widget>[
@@ -433,151 +404,108 @@ class _ViewAuctionTableCoopHeadState extends State<ViewAuctionTableCoopHead> {
     });
   }
 
-  void updateAuctionTableAlert(BuildContext context, List<List<dynamic>> table,
-      int tableNum, int rowNum) {
-
-      final GlobalKey<FormState> _updateKey = GlobalKey<FormState>();
-      final _updateProductNameController = TextEditingController(text: tables[tableNum][rowNum][1]);
-      final _updateQuantityController = TextEditingController(text: tables[tableNum][rowNum][2].toString());
-      final _updateBasePriceController = TextEditingController(text: tables[tableNum][rowNum][3].toString());
+  void updateAuctionTableAlert(BuildContext context, List<List<dynamic>> table,int tableNum ,int rowNum) {
+  final GlobalKey<FormState> _updateKey = GlobalKey<FormState>();
+  final _updateProductNameController = TextEditingController(text: tables[tableNum][rowNum][1]);
+  final _updateQuantityController = TextEditingController(text: tables[tableNum][rowNum][2].toString());
+  final _updateBasePriceController = TextEditingController(text: tables[tableNum][rowNum][3].toString());
   
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Update product"),
-            content: Form(
-              key: _updateKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      controller: _updateProductNameController,
-                      decoration:
-                          const InputDecoration(labelText: 'Product Name'),
-                      validator: (value) {
-                        if (value!.isEmpty || _isNumeric(value)) {
-                          return 'Please enter a product name with letters';
-                        } else {
-                          return null;
-                        }
-                      },
-                      onChanged: (value) =>
-                          setState(() {
-                            productName = value;
-                            productChanged = true;
-                          })),
-                  TextFormField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      controller: _updateQuantityController,
-                      decoration: const InputDecoration(labelText: 'Quantity'),
-                      validator: (value) {
-                        if (value!.isEmpty || !(_isNumeric(value))) {
-                          return 'Please enter a quantity with numbers';
-                        } else {
-                          return null;
-                        }
-                      },
-                      onChanged: (value) => setState(() {
-                        quantity = value;
-                        quantityChanged = true;
-                      })),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: _updateBasePriceController,
-                    decoration: const InputDecoration(labelText: 'Base Price'),
-                    validator: (value) {
-                      if (value!.isEmpty || !(_isNumeric(value))) {
-                        return 'Please enter a base price with numbers';
-                      } else {
-                        return null;
-                      }
-                    },
-                    onChanged: (value) => setState(() {
-                      basePrice = value;
-                      basePriceChanged = true;
-                      }),
-                  ),
-                ],
+      showDialog(context: context, builder: (BuildContext context){
+      return AlertDialog(
+        title: Text("Update product"),
+        content: Form(
+          key: _updateKey,
+          child: Column(
+            children: [
+              TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                controller: _updateProductNameController,
+                decoration: const InputDecoration(labelText: 'Product Name'),
+                validator: (value) { 
+                  if (value!.isEmpty || _isNumeric(value)) {
+                    return 'Please enter a product name with letters';}
+                  else{
+                    return null;}
+                },
+                  onChanged: (value) => setState(() => productName = value)
               ),
-            ),
-            actions: <Widget>[
-              ElevatedButton.icon(
-                  icon: const Icon(Icons.cancel),
-                  label: const Text("Cancel"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  }),
-              ElevatedButton.icon(
-                  icon: const Icon(Icons.save),
-                  label: const Text("Save"),
-                  onPressed: () {
-                    if (_updateKey.currentState!.validate()) {
-                      _updateKey.currentState!.save();
 
-                      
+              TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                controller: _updateQuantityController,
+                decoration: const InputDecoration(labelText: 'Quantity'),
+                validator: (value) {
+                  
+                  if (value!.isEmpty || !(_isNumeric(value))) {
+                    return 'Please enter a quantity with numbers';}
+                  else{
+                    return null;}
+                  
+                },
+                onChanged: (value) => setState(() => quantity = value)
+                  
+                ),
 
-                      setState(() {
-                        if(productChanged == false){
-                        productName = tables[tableNum][rowNum][1];
-                      }
-
-                      if(quantityChanged = false){
-                        quantity = tables[tableNum][rowNum][2].toString();
-                      }
-
-                      if(basePriceChanged == false){
-                        basePrice = tables[tableNum][rowNum][3].toString();
-                      }
-                        _updateProductNameController.clear();
-                        _updateBasePriceController.clear();
-                        _updateQuantityController.clear();
-                      });
-
-
-                      
-                      List<dynamic> updatedInfo = [
-                        (rowNum + 1).toString(),
-                        productName,
-                        int.parse(quantity),
-                        int.parse(basePrice),
-                        0
-                      ];
-
-                      auctionTables[tableNum]
-                          .updateRowTable((rowNum + 1).toString(), updatedInfo);
-                      tables[tableNum][rowNum] = updatedInfo;
-
-
-
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                    }
-                  }),
+              TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                controller: _updateBasePriceController,
+                decoration: const InputDecoration(labelText: 'Base Price'),
+                validator: (value) {
+                  
+                  if (value!.isEmpty || !(_isNumeric(value))) {
+                    return 'Please enter a base price with numbers';}
+                  else{
+                    return null;}
+                },       
+                onChanged: (value) => setState(() => basePrice = value),
+              ),            
             ],
-          );
-        }).then((_) {
+          ),
+          ),
+      
+       actions: <Widget>[
+         ElevatedButton.icon(
+          icon: const Icon(Icons.cancel),
+          label: const Text("Cancel"),
+          onPressed: () {
+            Navigator.of(context).pop();
+
+          }
+         ),
+          
+
+          ElevatedButton.icon(
+            icon: const Icon(Icons.save),
+            label: const Text("Save"),
+            onPressed: () {
+              if (_updateKey.currentState!.validate()){
+                _updateKey.currentState!.save();
+
+                tables[tableNum][rowNum] = [(rowNum+1).toString(),
+                          productName,
+                          int.parse(quantity),
+                          int.parse(basePrice),
+                          0
+                ];
+          
+                setState(() {
+                  _updateProductNameController.clear();
+                  _updateBasePriceController.clear();
+                  _updateQuantityController.clear();
+                });
+
+                Navigator.of(context).pop();
+
+              }
+            }
+          ),
+       ],
+      );
+    }).then((_) {
       setState(() {});
     });
   }
-
-  void showPopUpDialog(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          Widget okButton = TextButton(
-            child: Text("OK"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          );
-          return AlertDialog(
-              title: Text("Oops..."),
-              content: Text("This table is already published"),
-              actions: [okButton]);
-        });
-  }
+  
 
 
 }
