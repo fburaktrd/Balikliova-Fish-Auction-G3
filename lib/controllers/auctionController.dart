@@ -12,6 +12,30 @@ class AuctionController {
     return id;
   }
 
+  Future<dynamic> getCurrentAuctionTableAsList() async {
+    var res = await ref.child("Live_Auction").child("seafoodProducts").get();
+    Map<String, int> mapKeysAsIndex = {
+      "id": 0,
+      "productName": 1,
+      "quantity": 2,
+      "basePrice": 3,
+      "soldPrice": 4
+    };
+    var returnedList = [];
+    var list = (res.value as List).getRange(1, (res.value as List).length);
+    list.forEach((element) {
+      returnedList.add([
+        element["id"],
+        element["productName"],
+        element["quantity"],
+        element["basePrice"],
+        element["soldPrice"]
+      ]);
+    });
+    print(returnedList);
+    return returnedList;
+  }
+
   DatabaseReference getAuctions() {
     return ref.child("Auctions");
   }
@@ -21,8 +45,6 @@ class AuctionController {
       listenAuction!();
     });
   }
-
-  
 
   Future<dynamic> getLiveAuction() async {
     var res = (await ref.child("Live_Auction").get());
@@ -56,6 +78,7 @@ class AuctionController {
       } catch (e) {
         resMap["usersCount"] = 0;
       }
+      resMap["seafoodProducts"] = await getCurrentAuctionTableAsList();
       //resMap["users"] = resMap["users"].length;
       return resMap;
     }

@@ -41,11 +41,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
   );
   //1. row no 2. name 3. quantity 4. base price 5. sold price
   List<dynamic> table = [
-    ["1", "Levrek", 20, 10, 0],
-    ["2", "Hamsi", 12, 23, 0],
-    ["3", "Sardalya", 45, 3, 0],
-    ["4", "Alabalık", 34, 45, 0],
-    ["5", "Sardalya", 45, 3, 0]
+    ["1", "Loading..0", 0, 0, 0]
   ];
   List<dynamic> unsoldsTable = [];
 
@@ -60,9 +56,13 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
 
   @override
   void initState() {
-    currentItem = table[0];
     auctionController.listenLiveAuction(listenAuction: () {
       auctionController.getLiveAuction().then((value) {
+        table = value["seafoodProducts"];
+          auctionInfo = value;
+          isActive = value["isButtonsActive"];
+          currentItem = auctionInfo["currentSeafood"];
+          fish.setInfo(currentItem);
         setState(() {
           auctionInfo = value;
           isActive = value["isButtonsActive"];
@@ -486,13 +486,25 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                         onPressed: () {
                           currentItem[4] = latestBid;
 
-                          cp.finaliseSoldPrice(latestBid, currentItem[0]);
-                          Flushbar(
-                                  title: "Sold Price Set!",
-                                  message: "Sold price set for row: " +
-                                      getItemInfo(currentItem),
-                                  duration: const Duration(seconds: 3))
-                              .show(context);
+                          if (latestBid > 0) {
+                            cp.finaliseSoldPrice(latestBid, currentItem[0]);
+
+                            Flushbar(
+                                    title: "Sold Price Set!",
+                                    message: "Sold price set for row: " +
+                                        getItemInfo(currentItem),
+                                    duration: const Duration(seconds: 3))
+                                .show(context);
+                            currentItem = getNextItem();
+                            cp.setCurrentFood(currentItem);
+                          } else {
+                            Flushbar(
+                                    title: "There is no bid!",
+                                    message: "You can not finalise the price.",
+                                    duration: const Duration(seconds: 3))
+                                .show(context);
+                            
+                          }
                         },
                         //minWidth: MediaQuery.of(context).size.width - 45,
                         //height: 50

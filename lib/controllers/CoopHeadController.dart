@@ -32,7 +32,7 @@ class CoopHeadController {
   void finaliseSoldPrice(double price, String productId) {
     ref
         .child("Live_Auction")
-        .child("currentFood")
+        .child("currentSeafood")
         .child("soldPrice")
         .set(price);
     ref

@@ -140,7 +140,9 @@ class _navBarState extends State<navBar> {
                             horizontalTitleGap: 1,
                             title: const Text('Start Live Auction'),
                             onTap: () async {
-                              var response =
+                              var res = await aucController.getLiveAuction();
+                              if((res as Map).isEmpty){
+                                var response =
                                   (aucController.startAuction(userInfo["uid"]))
                                       .then((value) {
                                 if (value) {
@@ -159,6 +161,13 @@ class _navBarState extends State<navBar> {
                                       });
                                 }
                               });
+                              }else{
+                                Navigator.pop(context);
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          const LiveAuctionCoop()));
+                              }
+                              
 
                               //TIMER
 
