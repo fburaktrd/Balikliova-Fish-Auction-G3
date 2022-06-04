@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Views/navBar.dart';
-import 'package:myapp/controllers/BidController.dart';
 import 'package:myapp/controllers/UserController.dart';
 import 'package:myapp/controllers/auctionController.dart';
 import 'package:myapp/controllers/authService.dart';
