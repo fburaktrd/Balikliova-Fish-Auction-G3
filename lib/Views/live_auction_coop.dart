@@ -1,13 +1,13 @@
+import 'package:another_flushbar/flushbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/controllers/CoopHeadController.dart';
 import 'package:myapp/controllers/auctionController.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
-import 'package:another_flushbar/flushbar.dart';
-import '../models/auctionTable.dart';
-import 'package:flutter/cupertino.dart';
 
+import '../models/seafood.dart';
 import 'navBar.dart';
 
 class LiveAuctionCoop extends StatefulWidget {
@@ -17,8 +17,17 @@ class LiveAuctionCoop extends StatefulWidget {
   State<LiveAuctionCoop> createState() => _LiveAuctionCoopState();
 }
 
+Seafood fish = new Seafood(
+    id: "0", productName: "Loading...", basePrice: 10, latestBid: 0, amount: 0);
+
 class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
   CoopHeadController cp = new CoopHeadController();
+
+  double latestBid = fish.getLatestBid();
+  String fishName = fish.getproductName();
+  double quantity = fish.getFishAmount();
+  double basePrice = fish.getBasePrice();
+  Map? latestBidMap;
   final CountdownController countdownController =
       new CountdownController(autoStart: true);
   YoutubePlayerController _controller = YoutubePlayerController(
@@ -132,6 +141,54 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                         aspectRatio: 3 / 2,
                       ),
                     )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.blueAccent, width: 5)),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Current Seafood: ",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                height: 2,
+                                fontSize: 20,
+                              ),
+                            ),
+                            Text(
+                              "$fishName, Quantity: $quantity kg, Base Price: $basePrice",
+                              style: TextStyle(
+                                  color: Colors.black, height: 2, fontSize: 20),
+                            ),
+                          ],
+                        ))
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(color: Colors.blueAccent, width: 5)),
+                      child: SizedBox(
+                        child: Expanded(
+                          child: Text(
+                            latestBidMap == null
+                                ? "There is no bid yet."
+                                : "Latest Bid: $latestBid ₺, given by ${getLatestBidGiver()}",
+                            style: TextStyle(
+                                color: Colors.black, height: 1.5, fontSize: 20),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 Row(
@@ -493,6 +550,13 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
         item[3].toString() +
         " Sold Price: " +
         item[4].toString());
+  }
+
+  String getLatestBidGiver() {
+    if (latestBidMap == null) {
+      return "null";
+    }
+    return latestBidMap?["username"];
   }
 
   onEnd() {
