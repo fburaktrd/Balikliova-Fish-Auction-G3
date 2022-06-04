@@ -495,7 +495,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                         onPressed: () {
                           
                           currentItem[4] = latestBid;
-                          Navigator.of(context).pop();
+                          
                           cp.finaliseSoldPrice(latestBid,currentItem[0]);
                           Flushbar(
                                   title: "Sold Price Set!",

@@ -94,7 +94,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
                 mainAxisSize: MainAxisSize.max,
                 children: isFinished ? <Widget>[Center(
                     child:  AlertDialog(
-                            title: new Text("Auciton is finished."),
+                            title: new Text("Auction is finished."),
                             content: new Text("You have to return to home page."),
                             actions: <Widget>[
                               new ElevatedButton(
