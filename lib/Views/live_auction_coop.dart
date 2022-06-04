@@ -56,6 +56,8 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
 
   @override
   void initState() {
+    i = 0;
+    j = 0;
     auctionController.listenLiveAuction(listenAuction: () {
       auctionController.getLiveAuction().then((value) {
         table = value["seafoodProducts"];
@@ -303,8 +305,8 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                                       seconds: 3))
                                               .show(context);
                                         }
-                                        if (table.indexOf(currentItem) ==
-                                            table.length - 1) {
+                                        if (i ==
+                                            table.length - 1 && !wasSecondRound) {
                                           currentItem = getNextItem();
 
                                           wasSecondRound = true;
@@ -553,7 +555,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
   }
 
   bool willAuctionContinue() {
-    if (wasSecondRound && j == unsoldsTable.length - 1) {
+    if ((wasSecondRound && j == unsoldsTable.length -1) || (!wasSecondRound && i == table.length - 1 && unsoldsTable.isEmpty)) {
       return false;
     } else {
       return true;
