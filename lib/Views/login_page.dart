@@ -81,14 +81,11 @@ class _LoginState extends State<Login> {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       child: TextFormField(
         validator: (value) {
-          return value!.isNotEmpty &
-                  value.contains(RegExp(r'^(?=.{3,20}$)[a-zA-Z0-9._]+$'))
-              ? null
-              : "Invalid User Name. Username should be 3-20 characters long and should only contain letters, numbers, underscore(_) or a dot (.)";
+          return value!.contains("@") & value.contains(".com") ? null:"Please write an email address.";
         },
         controller: username,
         decoration: const InputDecoration(
-            border: OutlineInputBorder(), labelText: "Username"),
+            border: OutlineInputBorder(), labelText: "Email"),
       ),
     );
   }

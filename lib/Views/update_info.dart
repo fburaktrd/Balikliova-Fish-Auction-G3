@@ -33,6 +33,7 @@ class _InformationScreenState extends State<InformationScreen> {
   String name = "";
   String username = "";
   String phone = "";
+  String email = "";
   List<String> addresses = ["MORDOĞAN", "BALIKLIOVA", "URLA", "ILDIR"];
   String password = "";
   String role_node = "";
@@ -60,6 +61,7 @@ class _InformationScreenState extends State<InformationScreen> {
         name = user_info["name"];
         phone = user_info["phoneNumber"];
         username = user_info["username"];
+        email = user_info["email"];
 
         if (user_info["role"] == "CUSTOMER") {
           role_node = "Customer";
@@ -204,7 +206,7 @@ class _InformationScreenState extends State<InformationScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "e-mail: ${getEmail()}",
+                              "E-mail: ${getEmail()}",
                               textAlign: TextAlign.left,
                               style: const TextStyle(
                                 fontSize: 23.0,
@@ -387,7 +389,7 @@ class _InformationScreenState extends State<InformationScreen> {
   }
 
   String getEmail() {
-    return "email";
+    return email;
   }
 
   void updatePhoneAlertDialog(BuildContext context) {

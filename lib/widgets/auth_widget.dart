@@ -58,6 +58,7 @@ class _AuthWidgetState extends State<AuthWidget> {
         res = await Database().ref.child("Customer").child(inScopeUser).get();
         res = res.value;
         var user = Customer(
+            email:res["email"],
             uid: res["uid"],
             name: res["name"],
             username: res["username"],
@@ -72,6 +73,7 @@ class _AuthWidgetState extends State<AuthWidget> {
         res = await Database().ref.child("Cooperative_Head").child(inScopeUser).get();
         res = res.value;
          var user = CoopHead(
+           email:res["email"],
             uid: res["uid"],
             name: res["name"],
             username: res["username"],

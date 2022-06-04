@@ -31,6 +31,7 @@ class _SignUpState extends State<SignUp> {
   final AuthService _auth = AuthService();
   final fullName = TextEditingController();
   final username = TextEditingController();
+  final email = TextEditingController();
   final password = TextEditingController();
   final address = TextEditingController();
   final phoneNumber = TextEditingController();
@@ -52,6 +53,10 @@ class _SignUpState extends State<SignUp> {
         Padding(
           padding: const EdgeInsets.only(left: 50, right: 50),
           child: buildFormFullName(),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
+          child: buildEmail(),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
@@ -89,7 +94,8 @@ class _SignUpState extends State<SignUp> {
             } else if (found) {
               var customer = await _auth.signUp(
                   password: password.text,
-                  email: username.text,
+                  email: email.text,
+                  username: username.text,
                   name: fullName.text,
                   address: address.text,
                   phoneNumber: phoneNumber.text);
@@ -137,9 +143,9 @@ class _SignUpState extends State<SignUp> {
       child: TextFormField(
         validator: (value) {
           return value!.isNotEmpty &
-                  value.contains(RegExp(r'^(?=.{8,20}$)[a-zA-Z0-9._]+$'))
+                  value.contains(RegExp(r'^(?=.{3,20}$)[a-zA-Z0-9._]+$'))
               ? null
-              : "Invalid User Name. Username should be 8-20 characters long and should only contain letters, numbers, underscore(_) or a dot (.)";
+              : "Invalid User Name. Username should be 3-20 characters long and should only contain letters, numbers, underscore(_) or a dot (.)";
         },
         controller: username,
         keyboardType: TextInputType.name,
@@ -167,6 +173,20 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
+  Form buildEmail() {
+    return Form(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      child: TextFormField(
+        validator: (value) {
+          return value!.contains("@") & value.contains(".com") ? null:"Please write an email address.";
+        },
+        controller: email,
+        keyboardType: TextInputType.emailAddress,
+        decoration: const InputDecoration(
+            border: OutlineInputBorder(), labelText: "Email"),
+      ),
+    );
+  }
   Form buildFormPhoneNumber() {
     return Form(
       autovalidateMode: AutovalidateMode.onUserInteraction,

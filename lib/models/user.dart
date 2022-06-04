@@ -10,6 +10,7 @@ class GeneralUser {
   GeneralUser({
     required this.uid,
     required this.username,
+    required String email,
     this.name,
     this.phoneNumber,
     this.role

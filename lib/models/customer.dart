@@ -10,10 +10,11 @@ class Customer extends GeneralUser {
       required String name,
       required String username,
       required String phoneNumber,
-      required String address})
+      required String address,
+      required String email})
       : _address = address,
         super(
-            uid: uid, name: name, username: username, phoneNumber: phoneNumber);
+            uid: uid, name: name, username: username, phoneNumber: phoneNumber, email:email);
 
   void makeBid(double amount, String seafoodId) {
     controller.makeBid(uid, username, amount, seafoodId);
