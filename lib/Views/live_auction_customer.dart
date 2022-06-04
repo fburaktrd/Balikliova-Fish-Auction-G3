@@ -30,6 +30,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
   Map? latestBidMap;
   AuctionController auctionController = AuctionController();
   var auctionInfo = {};
+  bool isFinished = false;
   //final CountdownController countdownController = new CountdownController(autoStart: true);
 
   TextEditingController _controller = TextEditingController(
@@ -50,22 +51,25 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
       auctionController.getLiveAuction().then((value) {
         setState(() {
           auctionInfo = value;
+          if (auctionInfo.isEmpty) {
+            isFinished = true;
+          } else {
+            fish.setInfo(auctionInfo["currentSeafood"]);
+            try {
+              latestBidMap = value["bids"][(value["bids"] as Map).keys.last];
+              latestBid = latestBidMap?["amount"];
+              counter = latestBid;
+              _controller.text = latestBid.toString();
+            } catch (e) {
+              latestBid = 0;
+              counter = fish.getBasePrice();
+              _controller.text = fish.getBasePrice().toString();
+            }
 
-          fish.setInfo(auctionInfo["currentSeafood"]);
-          try {
-            latestBidMap = value["bids"][(value["bids"] as Map).keys.last];
-            latestBid = latestBidMap?["amount"];
-            counter = latestBid;
-            _controller.text = latestBid.toString();
-          } catch (e) {
-            latestBid = 0;
-            counter = fish.getBasePrice();
-            _controller.text = fish.getBasePrice().toString();
+            fishName = fish.getproductName();
+            quantity = fish.getFishAmount();
+            basePrice = fish.getBasePrice();
           }
-
-          fishName = fish.getproductName();
-          quantity = fish.getFishAmount();
-          basePrice = fish.getBasePrice();
         });
       });
     });
@@ -88,7 +92,21 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
               builder: (context) => Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
+                children: isFinished ? <Widget>[Center(
+                    child:  AlertDialog(
+                            title: new Text("Auciton is finished."),
+                            content: new Text("You have to return to home page."),
+                            actions: <Widget>[
+                              new ElevatedButton(
+                                child: new Text("Return Home"),
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(builder:(context) => const HomePage()));
+                                },
+                              ),
+                            ],
+                          ),
+                  ),] : <Widget>[
+                  
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -464,7 +482,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
   }
 
   bool isButtonActived() {
-    return true;
+    return auctionInfo["isButtonsActive"];
   }
 
   void makeBidClicked() {

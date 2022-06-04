@@ -27,6 +27,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
   String fishName = fish.getproductName();
   double quantity = fish.getFishAmount();
   double basePrice = fish.getBasePrice();
+  bool isActive = true;
   Map? latestBidMap;
   final CountdownController countdownController =
       new CountdownController(autoStart: true);
@@ -52,7 +53,6 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
   String newPrice = "";
   int i = 0;
   int j = 0;
-  int highestBid = 0;
   bool wasSecondRound = false;
   AuctionController auctionController = AuctionController();
   dynamic currentItem;
@@ -66,7 +66,21 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
       auctionController.getLiveAuction().then((value) {
         setState(() {
           auctionInfo = value;
-          print(value);
+          isActive = value["isButtonsActive"];
+          fish.setInfo(auctionInfo["currentSeafood"]);
+            try {
+              latestBidMap = value["bids"][(value["bids"] as Map).keys.last];
+              latestBid = latestBidMap?["amount"];
+             
+            } catch (e) {
+              latestBid = 0;
+              
+            }
+
+            fishName = fish.getproductName();
+            quantity = fish.getFishAmount();
+            basePrice = fish.getBasePrice();
+          
         });
       });
     });
@@ -235,7 +249,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                     onPressed: () {
                                       //dont allow
                                       Navigator.of(context).pop();
-                                      if (highestBid > 0) {
+                                      if (latestBid > 0) {
                                         Flushbar(
                                                 title:
                                                     "Can't skip to next item!",
@@ -278,14 +292,14 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                               currentItem = getNextItem();
 
                                               if (wasSecondRound) {
-                                                highestBid = 0;
+                                                latestBid = 0;
                                                 j++;
                                               } else {
                                                 i++;
                                               }
                                             }
-                                            AuctionController()
-                                                .setCurrentFood(currentItem);
+                                            cp.setCurrentFood(currentItem);
+                                            
                                           });
                                         } else {
                                           Flushbar(
@@ -326,7 +340,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                               MaterialStateProperty.all(Colors.blue),
                         ),
                         onPressed: () {
-                          //cp.changeBasePrice();
+                          
 
                           showDialog(
                               context: context,
@@ -400,14 +414,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                                   Navigator.pop(
                                                       context, 'Cancel'),
                                                 },
-                                            child: const Text("Cancel")),
-                                        //TODO dummy bu silinecek
-                                        TextButton(
-                                            onPressed: () => setState(() {
-                                                  highestBid = 600;
-                                                }),
-                                            child: const Text(
-                                                "600 diye yeni bid gelmiş olsun")),
+                                            child: const Text("Cancel"))
                                       ]));
                         },
                         // minWidth: MediaQuery.of(context).size.width - 45,
@@ -433,7 +440,35 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                               MaterialStateProperty.all(Colors.blue),
                         ),
                         onPressed: () {
-                          cp.activateDeactivateButtons();
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                alignment: Alignment.bottomCenter,
+                                title: Text((isActive
+                                    ? "Deactivate buttons"
+                                    : "Activate buttons")),
+                                content: Text(isActive
+                                    ? "Do you want to deactivate the buttons ?"
+                                    : "Do you want to activate the buttons ?"),
+                                actions: <Widget>[
+                                  ElevatedButton(
+                                    child: const Text("Yes"),
+                                    onPressed: () {
+                                      cp.activateDeactivateButtons(isActive);
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  ElevatedButton(
+                                    child: const Text("No"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  )
+                                ],
+                              );
+                            },
+                          );
                         },
                         //minWidth: MediaQuery.of(context).size.width - 45,
                         //height: 50
@@ -458,9 +493,10 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                               MaterialStateProperty.all(Colors.blue),
                         ),
                         onPressed: () {
-                          //TODO cp.finaliseSoldPrice();
-                          currentItem[4] = highestBid;
-                          Navigator.of(context).pop;
+                          
+                          currentItem[4] = latestBid;
+                          //Navigator.of(context).pop;
+                          cp.finaliseSoldPrice(latestBid,currentItem[0]);
                           Flushbar(
                                   title: "Sold Price Set!",
                                   message: "Sold price set for row: " +
@@ -491,8 +527,33 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                               MaterialStateProperty.all(Colors.blue),
                         ),
                         onPressed: () {
-                          cp.finishLiveAuction();
-                          Navigator.of(context).pop();
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                alignment: Alignment.bottomCenter,
+                                title: const Text("Finish Auction"),
+                                content: const Text(
+                                    "Do you really want to finish this auction ?"),
+                                actions: <Widget>[
+                                  ElevatedButton(
+                                    child: const Text("Yes"),
+                                    onPressed: () {
+                                      cp.finishLiveAuction(auctionInfo);
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  ElevatedButton(
+                                    child: const Text("No"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  )
+                                ],
+                              );
+                            },
+                          );
                         },
                         //minWidth: MediaQuery.of(context).size.width - 45,
                         //height: 50
@@ -537,6 +598,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
 
   void setCurrentItemPrice(String newValue) {
     currentItem[3] = int.parse(newValue);
+    
   }
 
   String getItemInfo(dynamic item) {

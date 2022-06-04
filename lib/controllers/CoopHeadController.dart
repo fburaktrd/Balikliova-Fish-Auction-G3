@@ -1,53 +1,53 @@
+import 'package:firebase_database/firebase_database.dart';
+
 import 'UserController.dart';
 import 'package:myapp/models/database.dart';
 
-class CoopHeadController extends UserController {
+class CoopHeadController {
+  final ref = FirebaseDatabase.instance.ref();
 
+  void changeBasePrice(int price) {
+    ref
+        .child("Live_Auction")
+        .child("currentSeafood")
+        .child("basePrice")
+        .set(price);
+  }
 
+  void setCurrentFood(List<dynamic> food) async {
+    var seafoodMap = {
+      "id": food[0],
+      "productName": food[1],
+      "quantity": food[2],
+      "basePrice": food[3],
+      "soldPrice": 0
+    };
+    ref.child("Live_Auction").child("currentSeafood").set(seafoodMap);
+  }
 
-    viewAuctionTables() {
-        //Bunun için zaten ayrı sayfa var
-        // TODO: implement changeProductFlow
-        throw UnimplementedError();
-    }
+  void activateDeactivateButtons(bool isActive) {
+    ref.child("Live_Auction").child("isButtonsActive").set(!(isActive));
+  }
 
-    void changeProductFlow() {
-        //Şimdi db yi product ın içince import
+  void finaliseSoldPrice(double price, String productId) {
+    ref
+        .child("Live_Auction")
+        .child("currentFood")
+        .child("soldPrice")
+        .set(price);
+    ref
+        .child("Live_Auction")
+        .child("seafoodProducts")
+        .child(productId)
+        .child("soldPrice")
+        .set(price);
+    
+  }
 
-      // TODO: implement changeProductFlow
-      throw UnimplementedError();
-    }
+  void finishLiveAuction(Map auctionInfo) {
+    auctionInfo.remove("currentSeafood");
+    ref.child("Auction").child(auctionInfo["id"]).set(auctionInfo);
 
-    changeBasePrice() {
-        //Bu fonksiyon için product importlanmalı,product database den veriyi alacak yani onun içinde db importu var variable lara eşitleyecek
-        //Sonra product instance ından çekilen basePrice kısmı değiştirilecek
-        // TODO: implement changeProductFlow
-        throw UnimplementedError();
-    }
-
-    finishLiveAuction() {
-        //Live auction sayfasından navigasyon ile ana ekrana atacak
-        //Alttaki gibi bi kod düşündüm
-        //Sadece db ye yansıması var
-        //Daha sonra biten auction bitmiş olarak bool bir variable ile marklanıp db.ref().child('Finished Auctions').push(Auctions[AuctionID])
-        // TODO: implement changeProductFlow
-        throw UnimplementedError();
-    }
-
-    activateDeactivateButtons(){
-        //Bu direk flatbutton üstünü çizecek,buna basılacak sonra bi pop up çıkacak,aktive etmek istediğin butonun ismini gir gibi
-        //Aslında activate ve deactivate tek bi buton çıkan pop up içinde iki seçenek olsun,activate ve deactivate diye onlardan birine basılınca buton adı
-        //Buton ların adları gelsin ekrana ve seçilen buton deaktive olsun ya da aktive olsun,
-        // TODO: implement changeProductFlow
-        throw UnimplementedError();
-    }
-
-    finaliseSoldPrice(){
-        //? Kafam durdu
-        // TODO: implement changeProductFlow
-        throw UnimplementedError();
-    }
-
-
+    ref.child("Live_Auction").remove();
+  }
 }
-
