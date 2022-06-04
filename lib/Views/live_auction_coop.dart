@@ -282,7 +282,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                 onPressed: () {
                                   //dont allow
                                   Navigator.of(context).pop();
-                                  if (latestBid > 0) {
+                                  if (latestBid > currentItem[4]) {
                                     Flushbar(
                                             title: "Can't skip to next item!",
                                             message:
@@ -520,14 +520,10 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
                                     getItemInfo(currentItem),
                                 duration: const Duration(seconds: 3))
                             .show(context);
-                        
-                        currentItem = getNextItem();
-                        cp.setCurrentFood(currentItem);
-                        if (wasSecondRound) {
-                          j++;
-                        } else {
-                          i++;
-                        }
+
+                        cp.activateDeactivateButtons(isActive);
+                        //todo burada bidi kapat!
+
                       } else {
                         Flushbar(
                                 title: "There is no bid!",
