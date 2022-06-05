@@ -32,7 +32,7 @@ class _LiveAuctionCoopState extends State<LiveAuctionCoop> {
   final CountdownController countdownController =
       new CountdownController(autoStart: true);
   YoutubePlayerController _controller = YoutubePlayerController(
-    initialVideoId: 'vq3IvvNe7VY',
+    initialVideoId: 'PEA1R0FMctM',
     params: YoutubePlayerParams(
       startAt: Duration(seconds: 0),
       showControls: true,

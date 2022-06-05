@@ -38,7 +38,7 @@ class _LiveAuctionCustomerState extends State<LiveAuctionCustomer> {
   );
 
   final YoutubePlayerController _YTcontroller = YoutubePlayerController(
-    initialVideoId: 'vq3IvvNe7VY',
+    initialVideoId: 'PEA1R0FMctM',
     params: const YoutubePlayerParams(
       startAt: Duration(seconds: 0),
       showControls: true,
